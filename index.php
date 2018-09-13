@@ -1,5 +1,5 @@
 <?php
-  // Показывать или нет выполненные задачи.
+  // Показывать выполненные задачи? Рандомный ответ TRUE или FALSE.
   $showCompleteTasks = (boolean) rand(0, 1);
 ?>
 
@@ -100,7 +100,7 @@
 
             <label class="checkbox">
               <input class="checkbox__input visually-hidden show_completed"
-                      type="checkbox" <?php print(($showCompleteTasks) ? 'checked' : '') ?>>
+                      type="checkbox" <?php print(($showCompleteTasks) ? 'checked' : ''); ?>>
               <span class="checkbox__text">Показывать выполненные</span>
             </label>
           </div>
