@@ -1,7 +1,8 @@
 <?php
 // Показывать или нет выполненные задачи.
-$show_complete_tasks = rand(0, 1);
+$showCompleteTasks = rand(0, 1);
 ?>
+
 <!DOCTYPE html>
 <html lang="ru">
 
