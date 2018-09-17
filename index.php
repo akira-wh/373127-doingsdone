@@ -2,49 +2,49 @@
   // Показывать выполненные задачи? 1 || 0
   $shouldShowCompletedTasks = rand(0, 1);
 
-  $projects = [
-    'Входящие',
-    'Учеба',
-    'Работа',
-    'Домашние дела',
-    'Авто'
+  $categories = [
+    'incoming' => 'Входящие',
+    'education' => 'Учеба',
+    'work' => 'Работа',
+    'housework' => 'Домашние дела',
+    'auto' => 'Авто'
   ];
 
   $tasks = [
     [
       'name' => 'Собеседование в IT компании',
       'deadline' => '01.12.2018',
-      'category' => 'Работа',
+      'category' => $categories['work'],
       'isComplete' => false
     ],
     [
       'name' => 'Выполнить тестовое задание',
       'deadline' => '25.12.2018',
-      'category' => 'Работа',
+      'category' => $categories['work'],
       'isComplete' => false
     ],
     [
       'name' => 'Сделать задание первого раздела',
       'deadline' => '21.12.2018',
-      'category' => 'Учеба',
+      'category' => $categories['education'],
       'isComplete' => true
     ],
     [
       'name' => 'Встреча с другом',
       'deadline' => '22.12.2018',
-      'category' => 'Входящие',
+      'category' => $categories['incoming'],
       'isComplete' => false
     ],
     [
       'name' => 'Купить корм для кота',
       'deadline' => '',
-      'category' => 'Домашние дела',
+      'category' => $categories['housework'],
       'isComplete' => false
     ],
     [
       'name' => 'Заказать пиццу',
       'deadline' => '',
-      'category' => 'Домашние дела',
+      'category' => $categories['housework'],
       'isComplete' => false
     ]
   ];
@@ -96,10 +96,10 @@
             <nav class="main-navigation">
               <ul class="main-navigation__list">
 
-                <?php foreach ($projects as $projectName): ?>
+                <?php foreach ($categories as $categoryName): ?>
                   <li class="main-navigation__list-item">
                     <a class="main-navigation__list-item-link" href="#">
-                      <?= $projectName; ?>
+                      <?= $categoryName; ?>
                     </a>
                     <span class="main-navigation__list-item-count">0</span>
                   </li>
