@@ -48,6 +48,25 @@
       'isComplete' => false
     ]
   ];
+
+  /**
+   * Подсчет количества задач, входящих в определенную категорию (проект).
+   *
+   * @param string $requiredCategory — название категории
+   * @param array $tasks — список задач
+   * @return number — подсчитанное количество задач
+   */
+  function countCategoryTasks($requiredCategory, $tasks) {
+    $counter = 0;
+
+    foreach ($tasks as $task) {
+      if ($task['category'] === $requiredCategory) {
+        $counter++;
+      }
+    }
+
+    return $counter;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -96,12 +115,14 @@
             <nav class="main-navigation">
               <ul class="main-navigation__list">
 
-                <?php foreach ($categories as $categoryName): ?>
+                <?php foreach ($categories as $category): ?>
                   <li class="main-navigation__list-item">
                     <a class="main-navigation__list-item-link" href="#">
-                      <?= $categoryName; ?>
+                      <?= $category; ?>
                     </a>
-                    <span class="main-navigation__list-item-count">0</span>
+                    <span class="main-navigation__list-item-count">
+                      <?= countCategoryTasks($category, $tasks); ?>
+                    </span>
                   </li>
                 <?php endforeach; ?>
 
