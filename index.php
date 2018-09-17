@@ -156,7 +156,7 @@
 
                     <td class="task__date"><?= $task['deadline'] ?></td>
                   </tr>
-                <?php elseif ($task['isComplete'] && $shouldShowCompletedTasks): ?>
+                <?php elseif ($shouldShowCompletedTasks): ?>
                   <tr class="tasks__item task task--completed">
                     <td class="task__select">
                       <label class="checkbox task__checkbox">
