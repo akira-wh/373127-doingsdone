@@ -3,34 +3,41 @@
 
   <h2 class="modal__heading">Добавление задачи</h2>
 
-  <form class="form"  action="index.html" method="post">
+  <form class="form" action="index.html" method="post">
     <div class="form__row">
       <label class="form__label" for="name">Название <sup>*</sup></label>
-
-      <input class="form__input" type="text" name="name" id="name" value="" placeholder="Введите название">
+      <input class="form__input"
+              id="name"
+              type="text"
+              name="name"
+              placeholder="Введите название"
+              value="">
     </div>
 
     <div class="form__row">
       <label class="form__label" for="project">Проект <sup>*</sup></label>
-
-      <select class="form__input form__input--select" name="project" id="project">
+      <select class="form__input form__input--select" id="project" name="project">
         <option value="">Входящие</option>
       </select>
     </div>
 
     <div class="form__row">
       <label class="form__label" for="date">Срок выполнения</label>
-
-      <input class="form__input form__input--date" type="text" name="date" id="date"
-             placeholder="Введите дату и время">
+      <input class="form__input form__input--date"
+              id="date"
+              type="text"
+              name="date"
+              placeholder="Введите дату и время">
     </div>
 
     <div class="form__row">
       <label class="form__label" for="preview">Файл</label>
-
       <div class="form__input-file">
-        <input class="visually-hidden" type="file" name="preview" id="preview" value="">
-
+        <input class="visually-hidden"
+                id="preview"
+                type="file"
+                name="preview"
+                value="">
         <label class="button button--transparent" for="preview">
             <span>Выберите файл</span>
         </label>
