@@ -1,75 +1,13 @@
-<!DOCTYPE html>
-<html lang="ru">
-
-<head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <link rel="stylesheet" href="../css/normalize.css">
-  <link rel="stylesheet" href="../css/style.css">
-</head>
-
-<body>
-  <h1 class="visually-hidden">Дела в порядке</h1>
-
-  <div class="page-wrapper">
-    <div class="container container--with-sidebar">
-      <header class="main-header">
-        <a href="#">
-          <img src="../img/logo.png" width="153" height="42" alt="Логитип Дела в порядке">
-        </a>
-
-        <div class="main-header__side">
-          <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a>
-        </div>
-      </header>
-
-      <div class="content">
-
-        <section class="content__side">
-          <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
-          <a class="button button--transparent content__side-button" href="form-authorization.html">Войти</a>
-        </section>
-
-        <main class="content__main">
-          <h2 class="content__main-heading">Вход на сайт</h2>
-
-          <form class="form" action="index.html" method="post">
-            <div class="form__row">
-              <label class="form__label" for="email">E-mail <sup>*</sup></label>
-              <input class="form__input form__input--error"
-                      id="email"
-                      type="text"
-                      name="email"
-                      placeholder="Введите e-mail"
-                      value="">
-              <p class="form__message">E-mail введён некорректно</p>
-            </div>
-
-            <div class="form__row">
-              <label class="form__label" for="password">Пароль <sup>*</sup></label>
-              <input class="form__input"
-                      id="password"
-                      type="password"
-                      name="password"
-                      placeholder="Введите пароль"
-                      value="">
-            </div>
-
-            <div class="form__row form__row--controls">
-              <input class="button" type="submit" name="" value="Войти">
-            </div>
-          </form>
-        </main>
-      </div>
-    </div>
-  </div>
-
 <footer class="main-footer">
   <div class="container">
     <div class="main-footer__copyright">
       <p>© 2018, «Дела в порядке»</p>
       <p>Веб-приложение для удобного ведения списка дел.</p>
     </div>
+
+    <a class="main-footer__button button button--plus" href="pages/form-task.html">
+      Добавить задачу
+    </a>
 
     <div class="main-footer__social social">
       <span class="visually-hidden">Мы в соцсетях:</span>
@@ -80,8 +18,8 @@
           <path fill="#879296"
                 d="M14.26 20.983h-2.816v-6.626H10.04v-2.28h1.404v-1.364c0-1.862.79-2.922 3.04-2.922h1.87v2.28h-1.17c-.876 0-.972.322-.972.916v1.14h2.212l-.245 2.28h-1.92v6.625z"/>
         </svg>
-      </a><span class="visually-hidden">
-        ,</span>
+      </a>
+      <span class="visually-hidden">,</span>
       <a class="social__link social__link--twitter" href="#">
         <span class="visually-hidden">Twitter</span>
         <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
@@ -89,8 +27,8 @@
           <path fill="#879296"
                 d="M18.38 10.572c.525-.336.913-.848 1.092-1.445-.485.305-1.02.52-1.58.635-.458-.525-1.12-.827-1.816-.83-1.388.063-2.473 1.226-2.44 2.615-.002.2.02.4.06.596-2.017-.144-3.87-1.16-5.076-2.78-.22.403-.335.856-.332 1.315-.01.865.403 1.68 1.104 2.188-.397-.016-.782-.13-1.123-.333-.03 1.207.78 2.272 1.95 2.567-.21.06-.43.09-.653.088-.155.015-.313.015-.47 0 .3 1.045 1.238 1.777 2.324 1.815-.864.724-1.956 1.12-3.083 1.122-.198.013-.397.013-.595 0 1.12.767 2.447 1.18 3.805 1.182 4.57 0 7.066-3.992 7.066-7.456v-.34c.49-.375.912-.835 1.24-1.357-.465.218-.963.36-1.473.42z"/>
         </svg>
-      </a><span class="visually-hidden">
-        ,</span>
+      </a>
+      <span class="visually-hidden">,</span>
       <a class="social__link social__link--instagram" href="#">
         <span class="visually-hidden">Instagram</span>
         <svg width="27" height="27" viewBox="0 0 27 27" xmlns="http://www.w3.org/2000/svg">
@@ -112,13 +50,9 @@
 
     <div class="main-footer__developed-by">
       <span class="visually-hidden">Разработано:</span>
-
       <a href="https://htmlacademy.ru/intensive/php">
-        <img src="../img/htmlacademy.svg" alt="HTML Academy" width="118" height="40">
+        <img src="img/htmlacademy.svg" alt="HTML Academy" width="118" height="40">
       </a>
     </div>
   </div>
 </footer>
-
-</body>
-</html>
