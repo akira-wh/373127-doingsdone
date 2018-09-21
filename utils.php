@@ -29,15 +29,15 @@
   /**
    * Подсчет количества задач, входящих в определенную категорию (проект).
    *
-   * @param string $requiredCategory — название категории
+   * @param string $category — название категории
    * @param array $tasks — список задач
    * @return number — подсчитанное количество задач
    */
-  function countCategoryTasks($requiredCategory, $tasks) {
+  function countCategoryTasks($category, $tasks) {
     $counter = 0;
 
     foreach ($tasks as $task) {
-      if ($task['category'] === $requiredCategory) {
+      if ($task['category'] === $category) {
         $counter++;
       }
     }
