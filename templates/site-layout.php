@@ -1,3 +1,8 @@
+<?php
+  // Содержит ли страница сайдбар? TRUE || FALSE.
+  $doesPageContainsSidebar = isset($pageSidebar);
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -13,13 +18,13 @@
     <h1 class="visually-hidden">Дела в порядке</h1>
 
     <div class="page-wrapper">
-      <div class="container container--with-sidebar">
+      <div class="container <?= ($doesPageContainsSidebar) ? 'container--with-sidebar' : ''; ?>">
         <!-- HEADER HERE -->
         <?= $pageHeader; ?>
 
         <div class="content">
           <!-- SIDEBAR HERE (OPTIONAL) -->
-          <?= $pageSidebar; ?>
+          <?= ($doesPageContainsSidebar) ? $pageSidebar : ''; ?>
 
           <!-- CONTENT HERE -->
           <?= $pageContent; ?>
