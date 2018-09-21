@@ -1,4 +1,5 @@
 <?php
+
   // Пути и названия шаблонов view (пути относительные).
   $views = [
     'contentIndex' => './templates/content-index.php',

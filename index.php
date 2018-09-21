@@ -1,4 +1,5 @@
 <?php
+
   // Показывать выполненные задачи? 1 || 0
   $shouldShowCompletedTasks = rand(0, 1);
 
