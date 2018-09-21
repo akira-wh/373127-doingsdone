@@ -14,7 +14,7 @@
       </div>
 
       <div class="user-menu__data">
-        <p>Константин</p>
+        <p><?= strip_tags('Константин'); ?></p>
         <a href="#">Выйти</a>
       </div>
     </div>

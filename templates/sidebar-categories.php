@@ -5,12 +5,19 @@
     <ul class="main-navigation__list">
 
       <?php foreach ($categories as $category): ?>
+        <?php
+          // Защита от вредоносного пользовательского ввода.
+          $categoryName = strip_tags($category);
+
+          // Количество задач, входящих в категорию.
+          $categoryTasksNumber = countCategoryTasks($category, $tasks);
+        ?>
         <li class="main-navigation__list-item">
           <a class="main-navigation__list-item-link" href="#">
-            <?= $category; ?>
+            <?= $categoryName; ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?= countCategoryTasks($category, $tasks); ?>
+            <?= $categoryTasksNumber; ?>
           </span>
         </li>
       <?php endforeach; ?>
