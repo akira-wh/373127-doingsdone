@@ -22,25 +22,25 @@
   $pageTitle = $pagesTitles['index'];
 
   // Сборка header.
-  $pageHeader = fillView($views['siteHeader']);
+  $pageHeader = fillView($viewsPaths['siteHeader']);
 
   // Сборка sidebar (список категорий).
-  $pageSidebar = fillView($views['sidebarCategories'], [
+  $pageSidebar = fillView($viewsPaths['sidebarCategories'], [
     'categories' => $categories,
     'tasks' => $tasks
   ]);
 
   // Сборка основного контента.
-  $pageContent = fillView($views['contentIndex'], [
+  $pageContent = fillView($viewsPaths['contentIndex'], [
     'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
     'tasks' => $tasks
   ]);
 
   // Сборка footer.
-  $pageFooter = fillView($views['siteFooter']);
+  $pageFooter = fillView($viewsPaths['siteFooter']);
 
   // Сборка основной раскладки и метаинформации страницы.
-  $pageLayout = fillView($views['siteLayout'], [
+  $pageLayout = fillView($viewsPaths['siteLayout'], [
     'pageTitle' => $pageTitle,
     'pageHeader' => $pageHeader,
     'pageSidebar' => $pageSidebar,

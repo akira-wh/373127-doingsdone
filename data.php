@@ -1,7 +1,7 @@
 <?php
 
   // Пути и названия шаблонов view (пути относительные).
-  $views = [
+  $viewsPaths = [
     'contentIndex' => './templates/content-index.php',
     'sidebarCategories' => './templates/sidebar-categories.php',
     'siteLayout' => './templates/site-layout.php',

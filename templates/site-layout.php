@@ -19,7 +19,7 @@
 
         <div class="content">
           <!-- SIDEBAR HERE (OPTIONAL) -->
-          <?= (isset($pageSidebar)) ? $pageSidebar : ''; ?>
+          <?= $pageSidebar ?? ''; ?>
 
           <!-- CONTENT HERE -->
           <?= $pageContent; ?>
