@@ -23,10 +23,6 @@
 
   <table class="tasks">
     <?php foreach ($tasks as $task): ?>
-      <?php
-        // Защита от вредоносного пользовательского ввода.
-        $taskName = strip_tags($task['name']);
-      ?>
       <?php if (!$task['isComplete']): ?>
         <tr class="tasks__item task <?= shouldTaskBeHighlighted($task['deadline']) ? 'task--important' : ''; ?>">
           <td class="task__select">
@@ -34,7 +30,7 @@
               <input class="checkbox__input visually-hidden task__checkbox"
                       type="checkbox"
                       value="1">
-              <span class="checkbox__text"><?= $taskName; ?></span>
+              <span class="checkbox__text"><?= strip_tags($task['name']); ?></span>
             </label>
           </td>
 
@@ -51,7 +47,7 @@
               <input class="checkbox__input visually-hidden"
                       type="checkbox"
                       checked>
-              <span class="checkbox__text"><?= $taskName; ?></span>
+              <span class="checkbox__text"><?= strip_tags($task['name']); ?></span>
             </label>
           </td>
 
