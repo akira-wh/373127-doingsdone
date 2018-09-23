@@ -44,4 +44,26 @@
 
     return $counter;
   }
+
+  /**
+   * Проверка необходимости выделить|подсветить задачу с приближающимся дедлайном.
+   * Если до дедлайна <= 24 часа, задача должна быть выделена|подсвечена.
+   *
+   * @param string $deadline — дата/время дедлайна
+   * @return boolean — выделить задачу над остальными? true || false
+   */
+  function shouldTaskBeHighlighted($deadline) {
+    if (!$deadline) {
+      return false;
+    }
+
+    $deadline = strtotime($deadline);
+    $currentTime = time();
+
+    $secondsInHour = 3600;
+
+    $timeReserveInHours = floor(($deadline - $currentTime) / $secondsInHour);
+
+    return ($timeReserveInHours <= 24);
+  }
 ?>

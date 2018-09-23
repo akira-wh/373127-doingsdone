@@ -28,7 +28,7 @@
         $taskName = strip_tags($task['name']);
       ?>
       <?php if (!$task['isComplete']): ?>
-        <tr class="tasks__item task">
+        <tr class="tasks__item task <?= shouldTaskBeHighlighted($task['deadline']) ? 'task--important' : ''; ?>">
           <td class="task__select">
             <label class="checkbox task__checkbox">
               <input class="checkbox__input visually-hidden task__checkbox"

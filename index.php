@@ -1,4 +1,6 @@
 <?php
+  // Установка таймзоны для Казахстана, г.Алматы.
+  date_default_timezone_set('Asia/Almaty');
 
   // Показывать выполненные задачи? 1 || 0
   $shouldShowCompletedTasks = rand(0, 1);
