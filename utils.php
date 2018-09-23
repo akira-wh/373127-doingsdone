@@ -52,7 +52,7 @@
    * @param string $deadline — дата/время дедлайна
    * @return boolean — выделить задачу над остальными? true || false
    */
-  function shouldTaskBeHighlighted($deadline) {
+  function shouldHighlightTask($deadline) {
     if (!$deadline) {
       return false;
     }
@@ -66,4 +66,3 @@
 
     return ($timeReserveInHours <= 24);
   }
-?>
