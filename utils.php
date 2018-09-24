@@ -34,11 +34,9 @@
    * @return number — подсчитанное количество задач
    */
   function countCategoryTasks($category, $tasks) {
-    $counter = array_reduce($tasks, function($accum, $task) use ($category) {
-      return ($task['category'] === $category) ? ++$accum : $accum;
+    return array_reduce($tasks, function($counter, $task) use ($category) {
+      return ($task['category'] === $category) ? ++$counter : $counter;
     }, 0);
-
-    return $counter;
   }
 
   /**
