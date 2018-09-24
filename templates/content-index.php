@@ -22,6 +22,7 @@
   </div>
 
   <table class="tasks">
+
     <?php
       foreach ($tasks as $task) {
         if(!$task['isComplete']) {
@@ -61,5 +62,6 @@
         }
       }
     ?>
+
   </table>
 </main>

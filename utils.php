@@ -5,7 +5,7 @@
    *
    * 1. Проверка на существование и доступность шаблона view.
    * 2. Начало буферизации контента.
-   * 3. Импорт переменных с данными из массива $data.
+   * 3. Распаковка переменных с данными из массива $data.
    * 4. Подключение и сборка view по импортированным данным.
    * 5. Выгрузка собранного контента.
    *
@@ -34,13 +34,9 @@
    * @return number — подсчитанное количество задач
    */
   function countCategoryTasks($category, $tasks) {
-    $counter = 0;
-
-    foreach ($tasks as $task) {
-      if ($task['category'] === $category) {
-        $counter++;
-      }
-    }
+    $counter = array_reduce($tasks, function($accum, $task) use ($category) {
+      return ($task['category'] === $category) ? ++$accum : $accum;
+    }, 0);
 
     return $counter;
   }
@@ -49,7 +45,7 @@
    * Проверка необходимости выделить|подсветить задачу с приближающимся дедлайном.
    * Если до дедлайна <= 24 часа, задача должна быть выделена|подсвечена.
    *
-   * @param string $deadline — дата/время дедлайна
+   * @param string $deadline — дата/время дедлайна в человекочитаемом формате
    * @return boolean — выделить задачу над остальными? true || false
    */
   function shouldHighlightTask($deadline) {
@@ -57,12 +53,11 @@
       return false;
     }
 
-    $deadline = strtotime($deadline);
+    $deadlineTime = strtotime($deadline);
     $currentTime = time();
 
     $secondsInHour = 3600;
-
-    $timeReserveInHours = floor(($deadline - $currentTime) / $secondsInHour);
+    $timeReserveInHours = floor(($deadlineTime - $currentTime) / $secondsInHour);
 
     return ($timeReserveInHours <= 24);
   }
