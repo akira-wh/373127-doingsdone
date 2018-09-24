@@ -1,5 +1,8 @@
 <?php
 
+  // Подключение списка глобальных констант.
+  require_once('./constants.php');
+
   /**
    * Сборка разметки View по переданному шаблону.
    *
@@ -53,9 +56,7 @@
 
     $deadlineTime = strtotime($deadline);
     $currentTime = time();
+    $timeReserveInHours = floor(($deadlineTime - $currentTime) / SECONDS_IN_HOUR);
 
-    $secondsInHour = 3600;
-    $timeReserveInHours = floor(($deadlineTime - $currentTime) / $secondsInHour);
-
-    return ($timeReserveInHours <= 24);
+    return ($timeReserveInHours <= TWENTY_FOUR_HOURS);
   }
