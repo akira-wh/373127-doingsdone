@@ -1,10 +1,16 @@
 <?php
+  // Установка таймзоны для Казахстана, г.Алматы.
+  date_default_timezone_set('Asia/Almaty');
 
   // Показывать выполненные задачи? 1 || 0
   $shouldShowCompletedTasks = rand(0, 1);
 
-  // Подключение вспомогательной библиотеки данных:
-  // названия страниц, пути шаблонов view, категории, задачи etc.
+  // Подключение библиотеки констант:
+  // названия страниц, пути шаблонов view, etc.
+  require_once('./constants.php');
+
+  // Подключение библиотеки данных:
+  // категории, задачи, пользователи, etc.
   require_once('./data.php');
 
   // Подключение библиотеки функций-утилит.
@@ -17,28 +23,28 @@
   /////////////////////////////////////////////////////////////////////////
 
   // Получение названия страницы.
-  $pageTitle = $pagesTitles['index'];
+  $pageTitle = PAGES_TITLES['index'];
 
   // Сборка header.
-  $pageHeader = fillView($views['siteHeader']);
+  $pageHeader = fillView(VIEWS_PATHS['siteHeader']);
 
   // Сборка sidebar (список категорий).
-  $pageSidebar = fillView($views['sidebarCategories'], [
+  $pageSidebar = fillView(VIEWS_PATHS['sidebarCategories'], [
     'categories' => $categories,
     'tasks' => $tasks
   ]);
 
   // Сборка основного контента.
-  $pageContent = fillView($views['contentIndex'], [
+  $pageContent = fillView(VIEWS_PATHS['contentIndex'], [
     'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
     'tasks' => $tasks
   ]);
 
   // Сборка footer.
-  $pageFooter = fillView($views['siteFooter']);
+  $pageFooter = fillView(VIEWS_PATHS['siteFooter']);
 
   // Сборка основной раскладки и метаинформации страницы.
-  $pageLayout = fillView($views['siteLayout'], [
+  $pageLayout = fillView(VIEWS_PATHS['siteLayout'], [
     'pageTitle' => $pageTitle,
     'pageHeader' => $pageHeader,
     'pageSidebar' => $pageSidebar,
@@ -48,4 +54,3 @@
 
   // Рендер страницы.
   print($pageLayout);
-?>

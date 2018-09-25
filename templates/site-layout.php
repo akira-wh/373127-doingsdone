@@ -1,13 +1,3 @@
-<?php
-
-  // Содержит ли страница сайдбар? TRUE || FALSE.
-  //
-  // Данный параметр влияет на сетку страницы:
-  // 1. Дополнительный класс-модификатор для div.container,
-  // 2. Вывод самого сайдбара в контейнер div.content.
-  $doesPageContainsSidebar = isset($pageSidebar);
-?>
-
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -23,13 +13,13 @@
     <h1 class="visually-hidden">Дела в порядке</h1>
 
     <div class="page-wrapper">
-      <div class="container <?= ($doesPageContainsSidebar) ? 'container--with-sidebar' : ''; ?>">
+      <div class="container <?= (isset($pageSidebar)) ? 'container--with-sidebar' : ''; ?>">
         <!-- HEADER HERE -->
         <?= $pageHeader; ?>
 
         <div class="content">
           <!-- SIDEBAR HERE (OPTIONAL) -->
-          <?= ($doesPageContainsSidebar) ? $pageSidebar : ''; ?>
+          <?= $pageSidebar ?? ''; ?>
 
           <!-- CONTENT HERE -->
           <?= $pageContent; ?>
