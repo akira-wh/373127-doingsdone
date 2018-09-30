@@ -35,7 +35,6 @@ CREATE TABLE tasks (
   id               INT AUTO_INCREMENT,
   name             CHAR(255),
   category_id      INT,
-  creator_id       INT,
   creation         DATETIME,
   deadline         DATETIME,
   attachment_path  CHAR(255),
