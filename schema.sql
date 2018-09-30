@@ -27,9 +27,6 @@ CREATE TABLE categories (
 
   PRIMARY KEY (id),
 
-  FOREIGN KEY (creator_id) REFERENCES users(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-
   INDEX (creator_id)
 );
 
@@ -45,12 +42,6 @@ CREATE TABLE tasks (
   is_complete      TINYINT(1), -- 1 || 0 (true || false)
 
   PRIMARY KEY (id),
-
-  FOREIGN KEY (category_id) REFERENCES categories(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-
-  FOREIGN KEY (creator_id) REFERENCES users(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
 
   INDEX (deadline)
 );
