@@ -23,7 +23,7 @@ CREATE TABLE users (
 CREATE TABLE categories (
   id          INT AUTO_INCREMENT,
   name        CHAR(255),
-  creator_id  INT REFERENCES users(id),
+  creator_id  INT,
 
   PRIMARY KEY (id),
 
