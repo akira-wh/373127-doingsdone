@@ -6,7 +6,7 @@
   $shouldShowCompletedTasks = rand(0, 1);
 
   // Подключение библиотеки констант:
-  // названия страниц, пути шаблонов view, etc.
+  // названия страниц, пути и названия шаблонов view, etc.
   require_once('./constants.php');
 
   // Подключение библиотеки данных:
@@ -26,25 +26,25 @@
   $pageTitle = PAGES_TITLES['index'];
 
   // Сборка header.
-  $pageHeader = fillView(VIEWS_PATHS['siteHeader']);
+  $pageHeader = fillView(VIEWS['siteHeader']);
 
   // Сборка sidebar (список категорий).
-  $pageSidebar = fillView(VIEWS_PATHS['sidebarCategories'], [
+  $pageSidebar = fillView(VIEWS['sidebarCategories'], [
     'categories' => $categories,
     'tasks' => $tasks
   ]);
 
   // Сборка основного контента.
-  $pageContent = fillView(VIEWS_PATHS['contentIndex'], [
+  $pageContent = fillView(VIEWS['contentIndex'], [
     'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
     'tasks' => $tasks
   ]);
 
   // Сборка footer.
-  $pageFooter = fillView(VIEWS_PATHS['siteFooter']);
+  $pageFooter = fillView(VIEWS['siteFooter']);
 
   // Сборка основной раскладки и метаинформации страницы.
-  $pageLayout = fillView(VIEWS_PATHS['siteLayout'], [
+  $pageLayout = fillView(VIEWS['siteLayout'], [
     'pageTitle' => $pageTitle,
     'pageHeader' => $pageHeader,
     'pageSidebar' => $pageSidebar,

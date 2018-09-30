@@ -1,23 +1,28 @@
 <?php
 
   /**
-   * Пути и названия шаблонов view (пути относительные).
+   * Путь к директории с шаблонами view (путь относительный).
    */
-  define('VIEWS_PATHS', [
+  define('VIEWS_DIRECTORY_PATH', './templates/');
+
+  /**
+   * Названия шаблонов view.
+   */
+  define('VIEWS', [
     // Основной контент index.html.
-    'contentIndex' => './templates/content-index.php',
+    'contentIndex' => 'content-index.php',
 
     // Сайдбар со списком категорий (проектов).
-    'sidebarCategories' => './templates/sidebar-categories.php',
+    'sidebarCategories' => 'sidebar-categories.php',
 
     // Сетка-каркас всех страниц сайта.
-    'siteLayout' => './templates/site-layout.php',
+    'siteLayout' => 'site-layout.php',
 
     // Header сайта.
-    'siteHeader' => './templates/site-header.php',
+    'siteHeader' => 'site-header.php',
 
     // Footer сайта.
-    'siteFooter' => './templates/site-footer.php'
+    'siteFooter' => 'site-footer.php'
   ]);
 
   /**
