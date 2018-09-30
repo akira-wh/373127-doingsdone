@@ -1,7 +1,7 @@
 <?php
 
   // Подключение библиотеки констант:
-  // названия страниц, пути шаблонов view, etc.
+  // названия страниц, пути и названия шаблонов view, etc.
   require_once('./constants.php');
 
   /**
@@ -13,11 +13,12 @@
    * 4. Подключение и сборка view по импортированным данным.
    * 5. Выгрузка собранного контента.
    *
-   * @param string $viewPath — путь к файлу с шаблоном view
+   * @param string $viewFilename — название файла с шаблоном view
    * @param array $data — входные данные, упакованные в массив
    * @return string — собранная разметка view
    */
-  function fillView($viewPath, $data = []) {
+  function fillView($viewFilename, $data = []) {
+    $viewPath = VIEWS_DIRECTORY_PATH.$viewFilename;
     $view = '';
 
     if (is_readable($viewPath)) {
