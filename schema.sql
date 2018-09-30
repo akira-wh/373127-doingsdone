@@ -10,7 +10,7 @@ CREATE TABLE users (
   id            INT AUTO_INCREMENT,
   name          CHAR(64),
   email         CHAR(64),
-  password      CHAR(64),
+  password      CHAR(255),
   registration  DATETIME,
   contact_info  CHAR(255),
 
