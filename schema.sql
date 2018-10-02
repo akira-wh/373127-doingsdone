@@ -7,50 +7,38 @@ USE doingsdone;
 
 /** Таблица пользователей. */
 CREATE TABLE users (
-  id            INT AUTO_INCREMENT,
-  name          CHAR(64),
-  email         CHAR(64),
-  password      CHAR(64),
-  registration  DATETIME,
-  contact_info  CHAR(255),
+  id            INT         AUTO_INCREMENT,
+  name          CHAR(64)    NOT NULL,
+  email         CHAR(64)    NOT NULL,
+  password      CHAR(255)   NOT NULL,
+  registration  DATETIME    DEFAULT CURRENT_TIMESTAMP,
+  contact_info  CHAR(255)   DEFAULT NULL,
 
   PRIMARY KEY (id),
-
   UNIQUE INDEX (email)
 );
 
 /** Таблица категорий (проектов). */
 CREATE TABLE categories (
-  id          INT AUTO_INCREMENT,
-  name        CHAR(255),
-  creator_id  INT REFERENCES users(id),
+  id          INT         AUTO_INCREMENT,
+  name        CHAR(255)   NOT NULL,
+  creator_id  INT         NOT NULL,
 
   PRIMARY KEY (id),
-
-  FOREIGN KEY (creator_id) REFERENCES users(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-
   INDEX (creator_id)
 );
 
 /** Таблица задач. */
 CREATE TABLE tasks (
-  id               INT AUTO_INCREMENT,
-  name             CHAR(255),
-  category_id      INT,
-  creator_id       INT,
-  creation         DATETIME,
-  deadline         DATETIME,
-  attachment_path  CHAR(255),
-  is_complete      TINYINT(1), -- 1 || 0 (true || false)
+  id               INT          AUTO_INCREMENT,
+  name             CHAR(255)    NOT NULL,
+  category_id      INT          NOT NULL,
+  creation         DATETIME     DEFAULT CURRENT_TIMESTAMP,
+  deadline         DATETIME     DEFAULT NULL,
+  attachment_path  CHAR(255)    DEFAULT NULL,
+  is_complete      TINYINT(1)   DEFAULT '0', -- 1 || 0 (true || false)
 
   PRIMARY KEY (id),
-
-  FOREIGN KEY (category_id) REFERENCES categories(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-
-  FOREIGN KEY (creator_id) REFERENCES users(id)
-    ON UPDATE CASCADE ON DELETE CASCADE,
-
-  INDEX (deadline)
+  INDEX (deadline),
+  INDEX (category_id)
 );
