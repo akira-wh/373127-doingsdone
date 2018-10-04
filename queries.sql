@@ -93,7 +93,8 @@ INSERT INTO tasks
 INSERT INTO tasks
   SET name = 'Заменить Open Server на реальные инструменты',
       category_id = 2, -- Учеба
-      deadline = '2018-10-15 10:00';
+      deadline = '2018-10-15 10:00',
+      attachment_name = 'manual.pdf';
 
 INSERT INTO tasks
   SET name = 'Настроить xdebug для Atom и VS Code',
@@ -129,7 +130,8 @@ INSERT INTO tasks
 INSERT INTO tasks
   SET name = 'Обновление осенней коллекции',
       category_id = 5, -- Мой магазин
-      deadline = '2018-10-10 09:00';
+      deadline = '2018-10-10 09:00',
+      attachment_name = 'sketches.pdf';
 
 INSERT INTO tasks
   SET name = 'Провести инвентаризацию',
@@ -151,6 +153,7 @@ INSERT INTO tasks
   SET name = 'Позвонить Илье, заказать макеты',
       category_id = 7, -- Сервис ProjectX
       deadline = '2018-09-20 11:00',
+      attachment_name = 'specification.pdf',
       is_complete = 1;
 
 INSERT INTO tasks
@@ -166,7 +169,8 @@ INSERT INTO tasks
 INSERT INTO tasks
   SET name = 'Собеседование в посольстве (виза)',
       category_id = 8, -- Тур по Европе
-      deadline = '2018-11-01 09:00';
+      deadline = '2018-11-01 09:00',
+      attachment_name = 'documents.zip';
 
 INSERT INTO tasks
   SET name = 'Подобрать отели (Барселона, Рим, Париж, Дублин)',
@@ -189,21 +193,21 @@ INSERT INTO tasks
       deadline = '2018-12-04 21:00';
 
 INSERT INTO tasks
-  SET name = 'Безжалостная сила',
+  SET name = 'Изучить "Безжалостную силу"',
       category_id = 10, -- Изучение криков (туумов)
       is_complete = 1;
 
 INSERT INTO tasks
-  SET name = 'Гармония Кин',
+  SET name = 'Изучить "Гармонию Кин"',
       category_id = 10, -- Изучение криков (туумов)
       is_complete = 1;
 
 INSERT INTO tasks
-  SET name = 'Смертный приговор',
+  SET name = 'Изучить "Смертный приговор"',
       category_id = 10; -- Изучение криков (туумов)
 
 INSERT INTO tasks
-  SET name = 'Драконобой',
+  SET name = 'Изучить "Драконобой"',
       category_id = 10; -- Изучение криков (туумов)
 
 INSERT INTO tasks
@@ -219,7 +223,8 @@ INSERT INTO tasks
 INSERT INTO tasks
   SET name = 'Летим в Африку',
       category_id = 11, -- Umbrella Corp.
-      deadline = '2019-02-01 11:00';
+      deadline = '2019-02-01 11:00',
+      attachment_name = 'coords.txt';
 
 INSERT INTO tasks
   SET name = 'Заклинивает гильзу (проверить боек)',

@@ -4,13 +4,13 @@
   <nav class="main-navigation">
     <ul class="main-navigation__list">
 
-      <?php foreach ($categories as $category): ?>
+      <?php foreach ($categories as $categoryData): ?>
         <li class="main-navigation__list-item">
           <a class="main-navigation__list-item-link" href="#">
-            <?= strip_tags($category); ?>
+            <?= strip_tags($categoryData['name']); ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?= countCategoryTasks($category, $tasks); ?>
+            <?= countCategoryTasks($categoryData, $tasks); ?>
           </span>
         </li>
       <?php endforeach; ?>
