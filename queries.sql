@@ -27,226 +27,226 @@ INSERT INTO users
 /** Моделирование таблицы категорий. */
 INSERT INTO categories
   SET name = 'Входящие',
-      creatorID = 1; -- Игнат
+      creator_id = 1; -- Игнат
 
 INSERT INTO categories
   SET name = 'Учеба',
-      creatorID = 1; -- Игнат
+      creator_id = 1; -- Игнат
 
 INSERT INTO categories
   SET name = 'Работа',
-      creatorID = 1; -- Игнат
+      creator_id = 1; -- Игнат
 
 INSERT INTO categories
   SET name = 'Дом',
-      creatorID = 2; -- Леночка
+      creator_id = 2; -- Леночка
 
 INSERT INTO categories
   SET name = 'Мой магазин',
-      creatorID = 2; -- Леночка
+      creator_id = 2; -- Леночка
 
 INSERT INTO categories
   SET name = 'Авто',
-      creatorID = 3; -- Руслан
+      creator_id = 3; -- Руслан
 
 INSERT INTO categories
   SET name = 'Сервис ProjectX',
-      creatorID = 3; -- Руслан
+      creator_id = 3; -- Руслан
 
 INSERT INTO categories
   SET name = 'Тур по Европе',
-      creatorID = 3; -- Руслан
+      creator_id = 3; -- Руслан
 
 INSERT INTO categories
   SET name = 'Дела в Скайриме',
-      creatorID = 4; -- Довакин
+      creator_id = 4; -- Довакин
 
 INSERT INTO categories
   SET name = 'Изучение криков (туумов)',
-      creatorID = 4; -- Довакин
+      creator_id = 4; -- Довакин
 
 INSERT INTO categories
   SET name = 'Umbrella Corp.',
-      creatorID = 5; -- Канэда
+      creator_id = 5; -- Канэда
 
 INSERT INTO categories
   SET name = 'Ремонт',
-      creatorID = 5; -- Канэда
+      creator_id = 5; -- Канэда
 
 /** Моделирование таблицы задач. */
 INSERT INTO tasks
   SET name = 'Встреча с другом',
-      categoryID = 1, -- Входящие
+      category_id = 1, -- Входящие
       deadline = '2018-10-20 19:00';
 
 INSERT INTO tasks
   SET name = 'Зайти в банк по поводу доп.счета',
-      categoryID = 1, -- Входящие
+      category_id = 1, -- Входящие
       deadline = '2018-11-15 09:00';
 
 INSERT INTO tasks
   SET name = 'Сделать задание первого раздела',
-      categoryID = 2, -- Учеба
+      category_id = 2, -- Учеба
       deadline = '2018-09-12 10:00',
-      isComplete = 1;
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Заменить Open Server на реальные инструменты',
-      categoryID = 2, -- Учеба
+      category_id = 2, -- Учеба
       deadline = '2018-10-15 10:00';
 
 INSERT INTO tasks
   SET name = 'Настроить xdebug для Atom и VS Code',
-      categoryID = 2, -- Учеба
+      category_id = 2, -- Учеба
       deadline = '2018-09-25 13:00',
-      isComplete = 1;
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Подготовить портфолио',
-      categoryID = 3, -- Работа
+      category_id = 3, -- Работа
       deadline = '2018-11-29 17:00';
 
 INSERT INTO tasks
   SET name = 'Собеседование (куратор Марина)',
-      categoryID = 3, -- Работа
+      category_id = 3, -- Работа
       deadline = '2018-12-01 09:00';
 
 INSERT INTO tasks
   SET name = 'Выполнить тестовое задание',
-      categoryID = 3, -- Работа
+      category_id = 3, -- Работа
       deadline = '2018-12-05 09:00';
 
 INSERT INTO tasks
   SET name = 'Купить корм для кота',
-      categoryID = 4, -- Дом
+      category_id = 4, -- Дом
       deadline = '2018-11-15 19:00';
 
 INSERT INTO tasks
   SET name = 'Заказать пиццу на ужин',
-      categoryID = 4, -- Дом
+      category_id = 4, -- Дом
       deadline = '2018-11-11 17:00';
 
 INSERT INTO tasks
   SET name = 'Обновление осенней коллекции',
-      categoryID = 5, -- Мой магазин
+      category_id = 5, -- Мой магазин
       deadline = '2018-10-10 09:00';
 
 INSERT INTO tasks
   SET name = 'Провести инвентаризацию',
-      categoryID = 5, -- Мой магазин
+      category_id = 5, -- Мой магазин
       deadline = '2018-10-12 09:00';
 
 INSERT INTO tasks
   SET name = 'Заменить ремкомплект стеклоподъемника',
-      categoryID = 6, -- Авто
+      category_id = 6, -- Авто
       deadline = '2018-09-10 14:00',
-      isComplete = 1;
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Замена масла и резины',
-      categoryID = 6, -- Авто
+      category_id = 6, -- Авто
       deadline = '2018-12-01 10:00';
 
 INSERT INTO tasks
   SET name = 'Позвонить Илье, заказать макеты',
-      categoryID = 7, -- Сервис ProjectX
+      category_id = 7, -- Сервис ProjectX
       deadline = '2018-09-20 11:00',
-      isComplete = 1;
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Выбор стека технологий',
-      categoryID = 7, -- Сервис ProjectX
+      category_id = 7, -- Сервис ProjectX
       deadline = '2018-10-20 08:00';
 
 INSERT INTO tasks
   SET name = 'Начало работы над проектом',
-      categoryID = 8, -- Сервис ProjectX
+      category_id = 8, -- Сервис ProjectX
       deadline = '2018-10-20 11:00';
 
 INSERT INTO tasks
   SET name = 'Собеседование в посольстве (виза)',
-      categoryID = 8, -- Тур по Европе
+      category_id = 8, -- Тур по Европе
       deadline = '2018-11-01 09:00';
 
 INSERT INTO tasks
   SET name = 'Подобрать отели (Барселона, Рим, Париж, Дублин)',
-      categoryID = 8, -- Тур по Европе
+      category_id = 8, -- Тур по Европе
       deadline = '2018-11-05 13:00';
 
 INSERT INTO tasks
   SET name = 'Договориться с гидом',
-      categoryID = 8, -- Тур по Европе
+      category_id = 8, -- Тур по Европе
       deadline = '2018-11-05 17:00';
 
 INSERT INTO tasks
   SET name = 'Занести товар в гильдию',
-      categoryID = 9, -- Дела в Скайриме
+      category_id = 9, -- Дела в Скайриме
       deadline = '2018-11-05 13:00';
 
 INSERT INTO tasks
   SET name = 'Достать бивень мамонта для Сульги',
-      categoryID = 9, -- Дела в Скайриме
+      category_id = 9, -- Дела в Скайриме
       deadline = '2018-12-04 21:00';
 
 INSERT INTO tasks
   SET name = 'Безжалостная сила',
-      categoryID = 10, -- Изучение криков (туумов)
-      isComplete = 1;
+      category_id = 10, -- Изучение криков (туумов)
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Гармония Кин',
-      categoryID = 10, -- Изучение криков (туумов)
-      isComplete = 1;
+      category_id = 10, -- Изучение криков (туумов)
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Смертный приговор',
-      categoryID = 10; -- Изучение криков (туумов)
+      category_id = 10; -- Изучение криков (туумов)
 
 INSERT INTO tasks
   SET name = 'Драконобой',
-      categoryID = 10; -- Изучение криков (туумов)
+      category_id = 10; -- Изучение криков (туумов)
 
 INSERT INTO tasks
   SET name = 'Стрельнуть номер Шевы',
-      categoryID = 11, -- Umbrella Corp.
-      isComplete = 1;
+      category_id = 11, -- Umbrella Corp.
+      is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Пиво с Рэдфилдом',
-      categoryID = 11, -- Umbrella Corp.
+      category_id = 11, -- Umbrella Corp.
       deadline = '2019-01-05';
 
 INSERT INTO tasks
   SET name = 'Летим в Африку',
-      categoryID = 11, -- Umbrella Corp.
+      category_id = 11, -- Umbrella Corp.
       deadline = '2019-02-01 11:00';
 
 INSERT INTO tasks
   SET name = 'Заклинивает гильзу (проверить боек)',
-      categoryID = 12, -- Ремонт
+      category_id = 12, -- Ремонт
       deadline = '2019-01-01 15:00';
 
 INSERT INTO tasks
   SET name = 'Низкая компрессия в цилиндре мотоцикла',
-      categoryID = 12, -- Ремонт
+      category_id = 12, -- Ремонт
       deadline = '2019-01-01 20:00';
 
 /** Моделирование запросов к БД. */
 /** Получение списка всех проектов одного пользователя. */
 SELECT categories.name AS category, users.name AS creator FROM categories
-  JOIN users ON categories.creatorID = users.id
+  JOIN users ON categories.creator_id = users.id
   WHERE users.name = 'Довакин';
 
 /** Получение списка всех задач одного проекта. */
 SELECT tasks.name AS task, categories.name AS category FROM tasks
-  JOIN categories ON tasks.categoryID = categories.id
+  JOIN categories ON tasks.category_id = categories.id
   WHERE categories.id = 8;
 
 /** Смена статуса задачи на "ВЫПОЛНЕНА", отображение результата. */
-UPDATE tasks SET isComplete = 1
+UPDATE tasks SET is_complete = 1
   WHERE id = 1;
 
-SELECT name AS task, isComplete FROM tasks
+SELECT name AS task, is_complete FROM tasks
   WHERE id = 1;
 
 /** Получение задач на определенные сутки. */
@@ -254,7 +254,7 @@ SELECT * FROM tasks
   WHERE deadline BETWEEN '2019-01-01' AND '2019-01-02';
 
 /** Обновление названия задачи и статуса по идентификатору. */
-UPDATE tasks SET name = 'Обновить название задачи по идентификатору', isComplete = 1
+UPDATE tasks SET name = 'Обновить название задачи по идентификатору', is_complete = 1
   WHERE id = 2;
 
 SELECT * FROM tasks

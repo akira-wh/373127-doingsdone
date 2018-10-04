@@ -12,7 +12,7 @@ CREATE TABLE users (
   email         CHAR(64)    NOT NULL,
   password      CHAR(255)   NOT NULL,
   registration  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  contactInfo   CHAR(255)   DEFAULT NULL,
+  contact_info  CHAR(255)   DEFAULT NULL,
 
   PRIMARY KEY (id),
   UNIQUE INDEX (email)
@@ -20,25 +20,25 @@ CREATE TABLE users (
 
 /** Таблица категорий (проектов). */
 CREATE TABLE categories (
-  id         INT         AUTO_INCREMENT,
-  name       CHAR(255)   NOT NULL,
-  creatorID  INT         NOT NULL,
+  id          INT         AUTO_INCREMENT,
+  name        CHAR(255)   NOT NULL,
+  creator_id  INT         NOT NULL,
 
   PRIMARY KEY (id),
-  INDEX (creatorID)
+  INDEX (creator_id)
 );
 
 /** Таблица задач. */
 CREATE TABLE tasks (
-  id              INT          AUTO_INCREMENT,
-  name            CHAR(255)    NOT NULL,
-  categoryID      INT          NOT NULL,
-  creation        DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  deadline        DATETIME     DEFAULT NULL,
-  attachmentPath  CHAR(255)    DEFAULT NULL,
-  isComplete      TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
+  id               INT          AUTO_INCREMENT,
+  name             CHAR(255)    NOT NULL,
+  category_id      INT          NOT NULL,
+  creation         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deadline         DATETIME     DEFAULT NULL,
+  attachment_path  CHAR(255)    DEFAULT NULL,
+  is_complete      TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
 
   PRIMARY KEY (id),
   INDEX (deadline),
-  INDEX (categoryID)
+  INDEX (category_id)
 );
