@@ -34,14 +34,20 @@
   /**
    * Подсчет количества задач, входящих в определенную категорию (проект).
    *
-   * @param string $category — название категории
+   * @param array $categoryData — данные категории
    * @param array $tasks — список задач
    * @return number — подсчитанное количество задач
    */
-  function countCategoryTasks($category, $tasks) {
-    return array_reduce($tasks, function($counter, $task) use ($category) {
-      return ($task['category'] === $category) ? ++$counter : $counter;
-    }, 0);
+  function countCategoryTasks($categoryData, $tasks) {
+    $counter = 0;
+
+    foreach ($tasks as $taskData) {
+      if ($taskData['category_id'] === $categoryData['id']) {
+        $counter++;
+      }
+    }
+
+    return $counter;
   }
 
   /**
