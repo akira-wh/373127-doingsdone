@@ -266,32 +266,3 @@ INSERT INTO tasks
       creator_id = 5, -- Канэда
       category_id = 12, -- Ремонт
       deadline = '2019-01-01 20:00';
-
-/** Моделирование запросов к БД. */
-/** Получение списка всех проектов одного пользователя. */
-SELECT categories.name AS category, users.name AS creator FROM categories
-  JOIN users ON categories.creator_id = users.id
-  WHERE users.name = 'Довакин';
-
-/** Получение списка всех задач одного проекта. */
-SELECT tasks.name AS task, categories.name AS category FROM tasks
-  JOIN categories ON tasks.category_id = categories.id
-  WHERE categories.id = 8;
-
-/** Смена статуса задачи на "ВЫПОЛНЕНА", отображение результата. */
-UPDATE tasks SET is_complete = 1
-  WHERE id = 1;
-
-SELECT name AS task, is_complete FROM tasks
-  WHERE id = 1;
-
-/** Получение задач на определенные сутки. */
-SELECT * FROM tasks
-  WHERE deadline BETWEEN '2019-01-01' AND '2019-01-02';
-
-/** Обновление названия задачи и статуса по идентификатору. */
-UPDATE tasks SET name = 'Обновить название задачи по идентификатору', is_complete = 1
-  WHERE id = 2;
-
-SELECT * FROM tasks
-  WHERE id = 2;
