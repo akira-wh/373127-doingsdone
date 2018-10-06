@@ -18,14 +18,14 @@
   //
   /////////////////////////////////////////////////////////////////////////
 
-  // Соединение с БД.
-  $databaseConnection = mysqli_connect('doingsdone', 'root', '', 'doingsdone');
-  mysqli_set_charset($databaseConnection, 'uft8');
+  // Соединение с СУБД.
+  $databaseConnection = new mysqli('doingsdone', 'root', '', 'doingsdone');
+  $databaseConnection->set_charset('utf-8');
 
-  // Формирование запросов на получение списка категорий и задач из БД.
-  $requestForCategories = 'SELECT categories.id, categories.name FROM categories
-                          JOIN users ON categories.creator_id = users.id
-                          WHERE users.id = 4; ';
+  // Формирование запросов на получение категорий и задач из БД.
+  // Получение, обработка и сохранение результата запросов к СУБД.
+  $requestForCategories = 'SELECT id, name FROM categories WHERE creator_id = 4';
+  $categories = getDatabaseData($databaseConnection, $requestForCategories);
 
   $requestForTasks = 'SELECT tasks.name,
                               tasks.category_id,
@@ -34,30 +34,8 @@
                               tasks.is_complete FROM tasks
                       JOIN categories ON tasks.category_id = categories.id
                       JOIN users ON categories.creator_id = users.id
-                      WHERE users.id = 4; ';
-
-  // Отправка запроса.
-  $request = mysqli_multi_query($databaseConnection, $requestForCategories.$requestForTasks);
-
-  // Получение, обработка и сохранение результата запроса.
-  $expectedResults = 2;
-  while ($expectedResults) {
-    mysqli_next_result($databaseConnection);
-    $receivedData = mysqli_store_result($databaseConnection);
-
-    if ($receivedData) {
-      switch ($expectedResults) {
-        case 2:
-          $categories = mysqli_fetch_all($receivedData, MYSQLI_ASSOC);
-          break;
-        case 1:
-          $tasks = mysqli_fetch_all($receivedData, MYSQLI_ASSOC);
-          break;
-      }
-    }
-
-    $expectedResults--;
-  }
+                      WHERE users.id = 4';
+  $tasks = getDatabaseData($databaseConnection, $requestForTasks);
 
   // Получение названия страницы.
   $pageTitle = PAGES_TITLES['index'];
