@@ -18,17 +18,20 @@
   //
   /////////////////////////////////////////////////////////////////////////
 
+  // Получение идентификатора пользователя.
+  $userID = intval($_GET['user_id'] ?? 0);
+
   // Соединение с СУБД.
   $databaseConnection = new mysqli('doingsdone', 'root', '', 'doingsdone');
   $databaseConnection->set_charset('utf-8');
 
   // Формирование запросов на получение категорий и задач из БД.
   // Получение, обработка и сохранение результата запросов к СУБД.
-  $requestForCategories = 'SELECT id, name FROM categories WHERE creator_id = 4';
+  $requestForCategories = "SELECT id, name FROM categories WHERE creator_id = {$userID}";
   $categories = getDatabaseData($databaseConnection, $requestForCategories);
 
-  $requestForTasks = 'SELECT name, category_id, deadline, attachment_name, is_complete
-                      FROM tasks WHERE creator_id = 4';
+  $requestForTasks = "SELECT id, name, category_id, deadline, attachment_name, is_complete
+                      FROM tasks WHERE creator_id = {$userID}";
   $tasks = getDatabaseData($databaseConnection, $requestForTasks);
 
   // Получение названия страницы.
