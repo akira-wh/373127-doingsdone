@@ -76,81 +76,96 @@ INSERT INTO categories
 /** Моделирование таблицы задач. */
 INSERT INTO tasks
   SET name = 'Встреча с другом',
+      creator_id = 1, -- Игнат
       category_id = 1, -- Входящие
       deadline = '2018-10-20 19:00';
 
 INSERT INTO tasks
   SET name = 'Зайти в банк по поводу доп.счета',
+      creator_id = 1, -- Игнат
       category_id = 1, -- Входящие
       deadline = '2018-11-15 09:00';
 
 INSERT INTO tasks
   SET name = 'Сделать задание первого раздела',
+      creator_id = 1, -- Игнат
       category_id = 2, -- Учеба
       deadline = '2018-09-12 10:00',
       is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Заменить Open Server на реальные инструменты',
+      creator_id = 1, -- Игнат
       category_id = 2, -- Учеба
       deadline = '2018-10-15 10:00',
       attachment_name = 'manual.pdf';
 
 INSERT INTO tasks
   SET name = 'Настроить xdebug для Atom и VS Code',
+      creator_id = 1, -- Игнат
       category_id = 2, -- Учеба
       deadline = '2018-09-25 13:00',
       is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Подготовить портфолио',
+      creator_id = 1, -- Игнат
       category_id = 3, -- Работа
       deadline = '2018-11-29 17:00';
 
 INSERT INTO tasks
   SET name = 'Собеседование (куратор Марина)',
+      creator_id = 1, -- Игнат
       category_id = 3, -- Работа
       deadline = '2018-12-01 09:00';
 
 INSERT INTO tasks
   SET name = 'Выполнить тестовое задание',
+      creator_id = 1, -- Игнат
       category_id = 3, -- Работа
       deadline = '2018-12-05 09:00';
 
 INSERT INTO tasks
   SET name = 'Купить корм для кота',
+      creator_id = 2, -- Леночка
       category_id = 4, -- Дом
       deadline = '2018-11-15 19:00';
 
 INSERT INTO tasks
   SET name = 'Заказать пиццу на ужин',
+      creator_id = 2, -- Леночка
       category_id = 4, -- Дом
       deadline = '2018-11-11 17:00';
 
 INSERT INTO tasks
   SET name = 'Обновление осенней коллекции',
+      creator_id = 2, -- Леночка
       category_id = 5, -- Мой магазин
       deadline = '2018-10-10 09:00',
       attachment_name = 'sketches.pdf';
 
 INSERT INTO tasks
   SET name = 'Провести инвентаризацию',
+      creator_id = 2, -- Леночка
       category_id = 5, -- Мой магазин
       deadline = '2018-10-12 09:00';
 
 INSERT INTO tasks
   SET name = 'Заменить ремкомплект стеклоподъемника',
+      creator_id = 3, -- Руслан
       category_id = 6, -- Авто
       deadline = '2018-09-10 14:00',
       is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Замена масла и резины',
+      creator_id = 3, -- Руслан
       category_id = 6, -- Авто
       deadline = '2018-12-01 10:00';
 
 INSERT INTO tasks
   SET name = 'Позвонить Илье, заказать макеты',
+      creator_id = 3, -- Руслан
       category_id = 7, -- Сервис ProjectX
       deadline = '2018-09-20 11:00',
       attachment_name = 'specification.pdf',
@@ -158,81 +173,97 @@ INSERT INTO tasks
 
 INSERT INTO tasks
   SET name = 'Выбор стека технологий',
+      creator_id = 3, -- Руслан
       category_id = 7, -- Сервис ProjectX
       deadline = '2018-10-20 08:00';
 
 INSERT INTO tasks
   SET name = 'Начало работы над проектом',
+      creator_id = 3, -- Руслан
       category_id = 8, -- Сервис ProjectX
       deadline = '2018-10-20 11:00';
 
 INSERT INTO tasks
   SET name = 'Собеседование в посольстве (виза)',
+      creator_id = 3, -- Руслан
       category_id = 8, -- Тур по Европе
       deadline = '2018-11-01 09:00',
       attachment_name = 'documents.zip';
 
 INSERT INTO tasks
   SET name = 'Подобрать отели (Барселона, Рим, Париж, Дублин)',
+      creator_id = 3, -- Руслан
       category_id = 8, -- Тур по Европе
       deadline = '2018-11-05 13:00';
 
 INSERT INTO tasks
   SET name = 'Договориться с гидом',
+      creator_id = 3, -- Руслан
       category_id = 8, -- Тур по Европе
       deadline = '2018-11-05 17:00';
 
 INSERT INTO tasks
   SET name = 'Занести товар в гильдию',
+      creator_id = 4, -- Довакин
       category_id = 9, -- Дела в Скайриме
       deadline = '2018-11-05 13:00';
 
 INSERT INTO tasks
   SET name = 'Достать бивень мамонта для Сульги',
+      creator_id = 4, -- Довакин
       category_id = 9, -- Дела в Скайриме
       deadline = '2018-12-04 21:00';
 
 INSERT INTO tasks
   SET name = 'Изучить "Безжалостную силу"',
+      creator_id = 4, -- Довакин
       category_id = 10, -- Изучение криков (туумов)
       is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Изучить "Гармонию Кин"',
+      creator_id = 4, -- Довакин
       category_id = 10, -- Изучение криков (туумов)
       is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Изучить "Смертный приговор"',
+      creator_id = 4, -- Довакин
       category_id = 10; -- Изучение криков (туумов)
 
 INSERT INTO tasks
   SET name = 'Изучить "Драконобой"',
+      creator_id = 4, -- Довакин
       category_id = 10; -- Изучение криков (туумов)
 
 INSERT INTO tasks
   SET name = 'Стрельнуть номер Шевы',
+      creator_id = 5, -- Канэда
       category_id = 11, -- Umbrella Corp.
       is_complete = 1;
 
 INSERT INTO tasks
   SET name = 'Пиво с Рэдфилдом',
+      creator_id = 5, -- Канэда
       category_id = 11, -- Umbrella Corp.
       deadline = '2019-01-05';
 
 INSERT INTO tasks
   SET name = 'Летим в Африку',
+      creator_id = 5, -- Канэда
       category_id = 11, -- Umbrella Corp.
       deadline = '2019-02-01 11:00',
       attachment_name = 'coords.txt';
 
 INSERT INTO tasks
   SET name = 'Заклинивает гильзу (проверить боек)',
+      creator_id = 5, -- Канэда
       category_id = 12, -- Ремонт
       deadline = '2019-01-01 15:00';
 
 INSERT INTO tasks
   SET name = 'Низкая компрессия в цилиндре мотоцикла',
+      creator_id = 5, -- Канэда
       category_id = 12, -- Ремонт
       deadline = '2019-01-01 20:00';
 

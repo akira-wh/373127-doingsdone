@@ -27,14 +27,8 @@
   $requestForCategories = 'SELECT id, name FROM categories WHERE creator_id = 4';
   $categories = getDatabaseData($databaseConnection, $requestForCategories);
 
-  $requestForTasks = 'SELECT tasks.name,
-                              tasks.category_id,
-                              tasks.deadline,
-                              tasks.attachment_name,
-                              tasks.is_complete FROM tasks
-                      JOIN categories ON tasks.category_id = categories.id
-                      JOIN users ON categories.creator_id = users.id
-                      WHERE users.id = 4';
+  $requestForTasks = 'SELECT name, category_id, deadline, attachment_name, is_complete
+                      FROM tasks WHERE creator_id = 4';
   $tasks = getDatabaseData($databaseConnection, $requestForTasks);
 
   // Получение названия страницы.
