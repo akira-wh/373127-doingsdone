@@ -19,7 +19,7 @@
   /////////////////////////////////////////////////////////////////////////
 
   // Получение идентификатора пользователя.
-  $userID = intval($_GET['user_id'] ?? 0);
+  $userID = intval($_GET['user_id'] ?? 1);
 
   // Соединение с СУБД.
   $databaseConnection = new mysqli('doingsdone', 'root', '', 'doingsdone');
