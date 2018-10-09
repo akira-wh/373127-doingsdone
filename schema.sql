@@ -30,17 +30,16 @@ CREATE TABLE categories (
 
 /** Таблица задач. */
 CREATE TABLE tasks (
-  id               INT          AUTO_INCREMENT,
-  name             CHAR(255)    NOT NULL,
-  creator_id       INT          NOT NULL,
-  category_id      INT          NOT NULL,
-  creation         DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  deadline         DATETIME     DEFAULT NULL,
-  attachment_name  CHAR(255)    DEFAULT NULL,
-  is_complete      TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
+  id                   INT          AUTO_INCREMENT,
+  name                 CHAR(255)    NOT NULL,
+  category_id          INT          NOT NULL,
+  creation             DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  deadline             DATETIME     DEFAULT NULL,
+  attachment_name      CHAR(255)    DEFAULT NULL,
+  attachment_filename  CHAR(255)    DEFAULT NULL,
+  is_complete          TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
 
   PRIMARY KEY (id),
-  INDEX (creator_id),
   INDEX (category_id),
   INDEX (deadline)
 );

@@ -10,14 +10,7 @@
             <?= strip_tags($categoryData['name']); ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?php
-              foreach ($statistics as $statistic) {
-                if ($statistic['category_id'] === $categoryData['id']) {
-                  print($statistic['tasks_number']);
-                  break;
-                }
-              }
-            ?>
+            <?= $categoryData['tasks_included'] ?>
           </span>
         </li>
       <?php endforeach; ?>
