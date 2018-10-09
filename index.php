@@ -9,7 +9,10 @@
   // названия страниц, пути и названия шаблонов view, etc.
   require_once('./constants.php');
 
-  // Подключение библиотеки функций-утилит.
+  // Подключение конфигурации СУБД, объекта соединения и связанных утилит.
+  require_once('./database-connection-helper.php');
+
+  // Подключение библиотеки функций-утилит общего назначения.
   require_once('./utils.php');
 
   /////////////////////////////////////////////////////////////////////////
@@ -20,10 +23,6 @@
 
   // Получение идентификатора пользователя.
   $userID = intval($_GET['user_id'] ?? 1);
-
-  // Соединение с СУБД.
-  $databaseConnection = new mysqli('doingsdone', 'root', '', 'doingsdone');
-  $databaseConnection->set_charset('utf-8');
 
   // Формирование запросов на получение категорий, задач, и статистики по ним из СУБД.
   $requestForCategories = "SELECT categories.id,
