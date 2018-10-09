@@ -6,11 +6,18 @@
 
       <?php foreach ($categories as $categoryData): ?>
         <li class="main-navigation__list-item">
-          <a class="main-navigation__list-item-link" href="#">
+          <a class="main-navigation__list-item-link" href="./?category_id=<?= $categoryData['id']; ?>">
             <?= strip_tags($categoryData['name']); ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?= countCategoryTasks($categoryData, $tasks); ?>
+            <?php
+              foreach ($statistics as $statistic) {
+                if ($statistic['category_id'] === $categoryData['id']) {
+                  print($statistic['tasks_number']);
+                  break;
+                }
+              }
+            ?>
           </span>
         </li>
       <?php endforeach; ?>

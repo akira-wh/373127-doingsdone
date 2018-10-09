@@ -32,25 +32,6 @@
   }
 
   /**
-   * Подсчет количества задач, входящих в определенную категорию (проект).
-   *
-   * @param array $categoryData — данные категории
-   * @param array $tasks — список задач
-   * @return number — подсчитанное количество задач
-   */
-  function countCategoryTasks($categoryData, $tasks) {
-    $counter = 0;
-
-    foreach ($tasks as $taskData) {
-      if ($taskData['category_id'] === $categoryData['id']) {
-        $counter++;
-      }
-    }
-
-    return $counter;
-  }
-
-  /**
    * Проверка необходимости выделить|подсветить задачу с приближающимся дедлайном.
    * Если до дедлайна <= 24 часа, задача должна быть выделена|подсвечена.
    *

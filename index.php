@@ -25,14 +25,20 @@
   $databaseConnection = new mysqli('doingsdone', 'root', '', 'doingsdone');
   $databaseConnection->set_charset('utf-8');
 
-  // Формирование запросов на получение категорий и задач из БД.
-  // Получение, обработка и сохранение результата запросов к СУБД.
+  // Формирование запросов на получение категорий, задач и статистики по ним из СУБД.
   $requestForCategories = "SELECT id, name FROM categories WHERE creator_id = {$userID}";
-  $categories = getDatabaseData($databaseConnection, $requestForCategories);
 
   $requestForTasks = "SELECT id, name, category_id, deadline, attachment_name, is_complete
                       FROM tasks WHERE creator_id = {$userID}";
+
+  $requestForStatistics = "SELECT category_id, COUNT(category_id) as tasks_number
+                            FROM tasks WHERE creator_id = {$userID}
+                            GROUP BY category_id";
+
+  // Получение, обработка и сохранение результата запросов к СУБД.
+  $categories = getDatabaseData($databaseConnection, $requestForCategories);
   $tasks = getDatabaseData($databaseConnection, $requestForTasks);
+  $statistics = getDatabaseData($databaseConnection, $requestForStatistics);
 
   // Получение названия страницы.
   $pageTitle = PAGES_TITLES['index'];
@@ -43,7 +49,7 @@
   // Сборка sidebar (список категорий).
   $pageSidebar = fillView(VIEWS['sidebarCategories'], [
     'categories' => $categories,
-    'tasks' => $tasks
+    'statistics' => $statistics
   ]);
 
   // Сборка основного контента.
