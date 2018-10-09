@@ -24,47 +24,34 @@
   <table class="tasks">
 
     <?php
-      foreach ($tasks as $taskData) {
-        if(!$taskData['is_complete']) {
+      foreach ($tasks as $taskData):
+        if (!$taskData['is_complete'] || $shouldShowCompletedTasks):
     ?>
-          <tr class="tasks__item task <?= shouldHighlightTask($taskData['deadline']) ? 'task--important' : ''; ?>">
+          <tr class="tasks__item task
+                    <?= shouldHighlightTask($taskData['deadline']) ? 'task--important' : ''; ?>
+                    <?= ($taskData['is_complete']) ? 'task--completed' : ''; ?>">
             <td class="task__select">
               <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden task__checkbox"
                         type="checkbox"
-                        value="1">
+                        value="1"
+                        <?= ($taskData['is_complete']) ? 'checked' : ''; ?>>
                 <span class="checkbox__text"><?= strip_tags($taskData['name']); ?></span>
               </label>
             </td>
 
             <td class="task__file">
               <?php if (isset($taskData['attachment_name'])): ?>
-                <a class="download-link" href="/attachments/<?= $taskData['attachment_name']; ?>">
+                <a class="download-link" href="attachments/<?= $taskData['attachment_name']; ?>">
                   <?= $taskData['attachment_name']; ?>
                 </a>
               <?php endif; ?>
             </td>
             <td class="task__date"><?= $taskData['deadline'] ?></td>
           </tr>
-
-        <?php } elseif ($shouldShowCompletedTasks) { ?>
-
-          <tr class="tasks__item task task--completed">
-            <td class="task__select">
-              <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden"
-                        type="checkbox"
-                        checked>
-                <span class="checkbox__text"><?= strip_tags($taskData['name']); ?></span>
-              </label>
-            </td>
-
-            <td class="task__date"><?= $taskData['deadline'] ?></td>
-            <td class="task__controls"></td>
-          </tr>
     <?php
-        }
-      }
+        endif;
+      endforeach;
     ?>
 
   </table>
