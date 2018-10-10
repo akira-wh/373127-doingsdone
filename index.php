@@ -48,6 +48,26 @@
   $categories = getDatabaseData($databaseConnection, $requestForCategories);
   $tasks = getDatabaseData($databaseConnection, $requestForTasks);
 
+  // Проверка ключа 'category_id' в массиве $_GET.
+  //
+  // Если пользователь выбрал конкретную категорию —
+  // проверка существования данной категории и отрисовка связанных задач.
+  //
+  // Если не выбрал — отрисовка всех задач.
+  // Если задача не существует — статус 404 и завершение скрипта.
+  if (isset($_GET['category_id'])) {
+    $selectedCategoryID = (integer) $_GET['category_id'];
+    $allID = array_column($categories, 'id');
+
+    $hasSelectedCategoryExist = in_array($selectedCategoryID, $allID);
+    if (!$hasSelectedCategoryExist) {
+      http_response_code(404);
+      exit();
+    }
+  } else {
+    $selectedCategoryID = null;
+  }
+
   // Получение названия страницы.
   $pageTitle = PAGES_TITLES['index'];
 
@@ -59,6 +79,7 @@
 
   // Сборка основного контента.
   $pageContent = fillView(VIEWS['contentIndex'], [
+    'selectedCategoryID' => $selectedCategoryID,
     'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
     'tasks' => $tasks
   ]);

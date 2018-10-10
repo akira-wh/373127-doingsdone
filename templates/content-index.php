@@ -25,7 +25,8 @@
 
     <?php
       foreach ($tasks as $taskData):
-        if (!$taskData['is_complete'] || $shouldShowCompletedTasks):
+        if (($selectedCategoryID === null || $taskData['category_id'] === $selectedCategoryID) &&
+            (!$taskData['is_complete'] || $shouldShowCompletedTasks)):
     ?>
           <tr class="tasks__item task
                     <?= shouldHighlightTask($taskData['deadline']) ? 'task--important' : ''; ?>
