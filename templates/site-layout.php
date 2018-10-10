@@ -13,7 +13,7 @@
     <h1 class="visually-hidden">Дела в порядке</h1>
 
     <div class="page-wrapper">
-      <div class="container <?= (isset($pageSidebar)) ? 'container--with-sidebar' : ''; ?>">
+      <div class="container <?= isset($pageSidebar) ? 'container--with-sidebar' : ''; ?>">
         <!-- HEADER HERE -->
         <?= $pageHeader; ?>
 

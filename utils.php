@@ -47,5 +47,5 @@
     $currentTime = time();
     $timeReserveInHours = floor(($deadlineTime - $currentTime) / SECONDS_IN_HOUR);
 
-    return ($timeReserveInHours <= TWENTY_FOUR_HOURS);
+    return $timeReserveInHours <= TWENTY_FOUR_HOURS;
   }

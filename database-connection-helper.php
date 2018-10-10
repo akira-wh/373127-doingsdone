@@ -58,7 +58,7 @@
 
       // Если в строке находится число — преобразование к реальному числу.
       if (is_numeric($item)) {
-        return (is_integer($item + 0)) ? (integer) $item : (float) $item;
+        return is_integer($item + 0) ? (integer) $item : (float) $item;
       }
 
       // В иных случаях конвертация не производится.

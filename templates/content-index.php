@@ -16,7 +16,7 @@
 
     <label class="checkbox">
       <input class="checkbox__input visually-hidden show_completed"
-             type="checkbox" <?= ($shouldShowCompletedTasks) ? 'checked' : ''; ?>>
+             type="checkbox" <?= $shouldShowCompletedTasks ? 'checked' : ''; ?>>
       <span class="checkbox__text">Показывать выполненные</span>
     </label>
   </div>
@@ -29,13 +29,13 @@
     ?>
           <tr class="tasks__item task
                     <?= shouldHighlightTask($taskData['deadline']) ? 'task--important' : ''; ?>
-                    <?= ($taskData['is_complete']) ? 'task--completed' : ''; ?>">
+                    <?= $taskData['is_complete'] ? 'task--completed' : ''; ?>">
             <td class="task__select">
               <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden task__checkbox"
                         type="checkbox"
                         value="1"
-                        <?= ($taskData['is_complete']) ? 'checked' : ''; ?>>
+                        <?= $taskData['is_complete'] ? 'checked' : ''; ?>>
                 <span class="checkbox__text"><?= strip_tags($taskData['name']); ?></span>
               </label>
             </td>
@@ -47,7 +47,8 @@
                 </a>
               <?php endif; ?>
             </td>
-            <td class="task__date"><?= $taskData['deadline'] ?></td>
+
+            <td class="task__date"><?= $taskData['deadline']; ?></td>
           </tr>
     <?php
         endif;
