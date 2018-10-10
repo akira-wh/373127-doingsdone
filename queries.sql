@@ -94,7 +94,8 @@ INSERT INTO tasks
   SET name = 'Заменить Open Server на реальные инструменты',
       category_id = 2, -- Учеба
       deadline = '2018-10-15 10:00',
-      attachment_name = 'manual.pdf';
+      attachment_name = 'manual.pdf',
+      attachment_filename = 'manual.pdf';
 
 INSERT INTO tasks
   SET name = 'Настроить xdebug для Atom и VS Code',
@@ -131,7 +132,8 @@ INSERT INTO tasks
   SET name = 'Обновление осенней коллекции',
       category_id = 5, -- Мой магазин
       deadline = '2018-10-10 09:00',
-      attachment_name = 'sketches.pdf';
+      attachment_name = 'sketches.pdf',
+      attachment_filename = 'sketches.pdf';
 
 INSERT INTO tasks
   SET name = 'Провести инвентаризацию',
@@ -154,6 +156,7 @@ INSERT INTO tasks
       category_id = 7, -- Сервис ProjectX
       deadline = '2018-09-20 11:00',
       attachment_name = 'specification.pdf',
+      attachment_filename = 'specification.pdf',
       is_complete = 1;
 
 INSERT INTO tasks
@@ -170,7 +173,8 @@ INSERT INTO tasks
   SET name = 'Собеседование в посольстве (виза)',
       category_id = 8, -- Тур по Европе
       deadline = '2018-11-01 09:00',
-      attachment_name = 'documents.zip';
+      attachment_name = 'documents.zip',
+      attachment_filename = 'documents.zip';
 
 INSERT INTO tasks
   SET name = 'Подобрать отели (Барселона, Рим, Париж, Дублин)',
@@ -224,7 +228,8 @@ INSERT INTO tasks
   SET name = 'Летим в Африку',
       category_id = 11, -- Umbrella Corp.
       deadline = '2019-02-01 11:00',
-      attachment_name = 'coords.txt';
+      attachment_name = 'coords.txt',
+      attachment_filename = 'coords.txt';
 
 INSERT INTO tasks
   SET name = 'Заклинивает гильзу (проверить боек)',
@@ -235,32 +240,3 @@ INSERT INTO tasks
   SET name = 'Низкая компрессия в цилиндре мотоцикла',
       category_id = 12, -- Ремонт
       deadline = '2019-01-01 20:00';
-
-/** Моделирование запросов к БД. */
-/** Получение списка всех проектов одного пользователя. */
-SELECT categories.name AS category, users.name AS creator FROM categories
-  JOIN users ON categories.creator_id = users.id
-  WHERE users.name = 'Довакин';
-
-/** Получение списка всех задач одного проекта. */
-SELECT tasks.name AS task, categories.name AS category FROM tasks
-  JOIN categories ON tasks.category_id = categories.id
-  WHERE categories.id = 8;
-
-/** Смена статуса задачи на "ВЫПОЛНЕНА", отображение результата. */
-UPDATE tasks SET is_complete = 1
-  WHERE id = 1;
-
-SELECT name AS task, is_complete FROM tasks
-  WHERE id = 1;
-
-/** Получение задач на определенные сутки. */
-SELECT * FROM tasks
-  WHERE deadline BETWEEN '2019-01-01' AND '2019-01-02';
-
-/** Обновление названия задачи и статуса по идентификатору. */
-UPDATE tasks SET name = 'Обновить название задачи по идентификатору', is_complete = 1
-  WHERE id = 2;
-
-SELECT * FROM tasks
-  WHERE id = 2;

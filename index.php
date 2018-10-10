@@ -9,7 +9,10 @@
   // названия страниц, пути и названия шаблонов view, etc.
   require_once('./constants.php');
 
-  // Подключение библиотеки функций-утилит.
+  // Подключение конфигурации СУБД, объекта соединения и связанных утилит.
+  require_once('./database-connection-helper.php');
+
+  // Подключение библиотеки функций-утилит общего назначения.
   require_once('./utils.php');
 
   /////////////////////////////////////////////////////////////////////////
@@ -18,45 +21,51 @@
   //
   /////////////////////////////////////////////////////////////////////////
 
-  // Соединение с БД.
-  $databaseConnection = mysqli_connect('doingsdone', 'root', '', 'doingsdone');
-  mysqli_set_charset($databaseConnection, 'uft8');
+  // Получение идентификатора пользователя.
+  $userID = intval($_GET['user_id'] ?? 1);
 
-  // Формирование запросов на получение списка категорий и задач из БД.
-  $requestForCategories = 'SELECT categories.id, categories.name FROM categories
-                          JOIN users ON categories.creator_id = users.id
-                          WHERE users.id = 4; ';
+  // Формирование запросов на получение категорий, задач, и статистики по ним из СУБД.
+  $requestForCategories = "SELECT categories.id,
+                                  categories.name,
+                                  COUNT(tasks.category_id) as tasks_included
+                            FROM categories
+                            JOIN tasks ON categories.id = tasks.category_id
+                            WHERE categories.creator_id = {$userID}
+                            GROUP BY tasks.category_id";
 
-  $requestForTasks = 'SELECT tasks.name,
+  $requestForTasks = "SELECT tasks.id,
+                              tasks.name,
                               tasks.category_id,
                               tasks.deadline,
                               tasks.attachment_name,
-                              tasks.is_complete FROM tasks
+                              tasks.attachment_filename,
+                              tasks.is_complete
+                      FROM tasks
                       JOIN categories ON tasks.category_id = categories.id
-                      JOIN users ON categories.creator_id = users.id
-                      WHERE users.id = 4; ';
+                      WHERE categories.creator_id = {$userID}";
 
-  // Отправка запроса.
-  $request = mysqli_multi_query($databaseConnection, $requestForCategories.$requestForTasks);
+  // Получение, обработка и сохранение результата запросов к СУБД.
+  $categories = getDatabaseData($databaseConnection, $requestForCategories);
+  $tasks = getDatabaseData($databaseConnection, $requestForTasks);
 
-  // Получение, обработка и сохранение результата запроса.
-  $expectedResults = 2;
-  while ($expectedResults) {
-    mysqli_next_result($databaseConnection);
-    $receivedData = mysqli_store_result($databaseConnection);
+  // Проверка ключа 'category_id' в массиве $_GET.
+  //
+  // Если пользователь выбрал конкретную категорию —
+  // проверка существования данной категории и отрисовка связанных задач.
+  //
+  // Если не выбрал — отрисовка всех задач.
+  // Если задача не существует — статус 404 и завершение скрипта.
+  if (isset($_GET['category_id'])) {
+    $selectedCategoryID = (integer) $_GET['category_id'];
+    $allID = array_column($categories, 'id');
 
-    if ($receivedData) {
-      switch ($expectedResults) {
-        case 2:
-          $categories = mysqli_fetch_all($receivedData, MYSQLI_ASSOC);
-          break;
-        case 1:
-          $tasks = mysqli_fetch_all($receivedData, MYSQLI_ASSOC);
-          break;
-      }
+    $hasSelectedCategoryExist = in_array($selectedCategoryID, $allID);
+    if (!$hasSelectedCategoryExist) {
+      http_response_code(404);
+      exit();
     }
-
-    $expectedResults--;
+  } else {
+    $selectedCategoryID = null;
   }
 
   // Получение названия страницы.
@@ -66,13 +75,11 @@
   $pageHeader = fillView(VIEWS['siteHeader']);
 
   // Сборка sidebar (список категорий).
-  $pageSidebar = fillView(VIEWS['sidebarCategories'], [
-    'categories' => $categories,
-    'tasks' => $tasks
-  ]);
+  $pageSidebar = fillView(VIEWS['sidebarCategories'], ['categories' => $categories]);
 
   // Сборка основного контента.
   $pageContent = fillView(VIEWS['contentIndex'], [
+    'selectedCategoryID' => $selectedCategoryID,
     'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
     'tasks' => $tasks
   ]);

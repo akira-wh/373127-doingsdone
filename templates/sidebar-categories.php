@@ -6,11 +6,11 @@
 
       <?php foreach ($categories as $categoryData): ?>
         <li class="main-navigation__list-item">
-          <a class="main-navigation__list-item-link" href="#">
+          <a class="main-navigation__list-item-link" href="index.php?category_id=<?= $categoryData['id']; ?>">
             <?= strip_tags($categoryData['name']); ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?= countCategoryTasks($categoryData, $tasks); ?>
+            <?= $categoryData['tasks_included']; ?>
           </span>
         </li>
       <?php endforeach; ?>
