@@ -8,7 +8,7 @@
   /**
    * Названия шаблонов view.
    */
-  define('VIEWS', [
+  define('VIEW', [
     // Основной контент index.html.
     'contentIndex' => 'content-index.php',
 
@@ -28,7 +28,7 @@
   /**
    * Названия страниц сайта.
    */
-  define('PAGES_TITLES', [
+  define('PAGE_TITLE', [
     // Название index.html.
     'index' => 'Дела в порядке — Главная'
   ]);

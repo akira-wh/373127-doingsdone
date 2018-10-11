@@ -72,26 +72,26 @@
   }
 
   // Получение названия страницы.
-  $pageTitle = PAGES_TITLES['index'];
+  $pageTitle = PAGE_TITLE['index'];
 
   // Сборка header.
-  $pageHeader = fillView(VIEWS['siteHeader']);
+  $pageHeader = fillView(VIEW['siteHeader']);
 
   // Сборка sidebar (список категорий).
-  $pageSidebar = fillView(VIEWS['sidebarCategories'], ['categories' => $categories]);
+  $pageSidebar = fillView(VIEW['sidebarCategories'], ['categories' => $categories]);
 
   // Сборка основного контента.
-  $pageContent = fillView(VIEWS['contentIndex'], [
+  $pageContent = fillView(VIEW['contentIndex'], [
     'selectedCategoryID' => $selectedCategoryID,
     'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
     'tasks' => $tasks
   ]);
 
   // Сборка footer.
-  $pageFooter = fillView(VIEWS['siteFooter']);
+  $pageFooter = fillView(VIEW['siteFooter']);
 
   // Сборка основной раскладки и метаинформации страницы.
-  $pageLayout = fillView(VIEWS['siteLayout'], [
+  $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => $pageTitle,
     'pageHeader' => $pageHeader,
     'pageSidebar' => $pageSidebar,
