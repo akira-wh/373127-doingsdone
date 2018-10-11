@@ -42,3 +42,11 @@
    * Количество часов в сутках (24).
    */
   define('TWENTY_FOUR_HOURS', 24);
+
+  /**
+   * Названия виртуальных разделов (категорий задач).
+   */
+  define('VIRTUAL_CATEGORY_ID', [
+    'inbox' => 'inbox',
+    'all' => 'all'
+  ]);

@@ -49,3 +49,32 @@
 
     return $timeReserveInHours <= TWENTY_FOUR_HOURS;
   }
+
+  /**
+   * Внедрение в данные виртуального раздела INBOX (под задачи без категорий).
+   *
+   * 1. Вычисление задач без категорий.
+   * 2. Назначение таким задачам специального ID 'INBOX'.
+   * 3. Добавление в список категорий специального раздела 'INBOX'.
+   *
+   * NB! Входные данные передаются в функцию ПО ССЫЛКЕ (префикс &), а не по значению.
+   *
+   * @param array $categories — массив категорий пользователя
+   * @param array $tasks — массив задач пользователя
+   */
+  function plugVirtualInbox(&$categories, &$tasks) {
+    $inboxTasksIncluded = 0;
+
+    foreach ($tasks as &$taskData) {
+      if ($taskData['category_id'] === null) {
+        $taskData['category_id'] = VIRTUAL_CATEGORY_ID['inbox'];
+        $inboxTasksIncluded++;
+      }
+    }
+
+    array_unshift($categories, [
+      'id' => VIRTUAL_CATEGORY_ID['inbox'],
+      'name' => 'Входящие',
+      'tasks_included' => $inboxTasksIncluded
+    ]);
+  }

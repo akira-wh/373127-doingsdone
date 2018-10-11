@@ -25,7 +25,7 @@
 
     <?php
       foreach ($tasks as $taskData):
-        if (($selectedCategoryID === null || $taskData['category_id'] === $selectedCategoryID) &&
+        if (($selectedCategoryID === VIRTUAL_CATEGORY_ID['all'] || $selectedCategoryID === $taskData['category_id']) &&
             (!$taskData['is_complete'] || $shouldShowCompletedTasks)):
     ?>
           <tr class="tasks__item task

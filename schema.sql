@@ -32,7 +32,8 @@ CREATE TABLE categories (
 CREATE TABLE tasks (
   id                   INT          AUTO_INCREMENT,
   name                 CHAR(255)    NOT NULL,
-  category_id          INT          NOT NULL,
+  category_id          INT          DEFAULT NULL,
+  creator_id           INT          NOT NULL,
   creation             DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   deadline             DATETIME     DEFAULT NULL,
   attachment_name      CHAR(255)    DEFAULT NULL,
@@ -41,5 +42,6 @@ CREATE TABLE tasks (
 
   PRIMARY KEY (id),
   INDEX (category_id),
+  INDEX (creator_id),
   INDEX (deadline)
 );
