@@ -9,8 +9,11 @@
    * Названия шаблонов view.
    */
   define('VIEW', [
-    // Основной контент index.html.
+    // Контент главной страницы.
     'contentIndex' => 'content-index.php',
+
+    // Контент страницы добавления задач.
+    'contentAddTask' => 'content-add-task.php',
 
     // Сайдбар со списком категорий (проектов).
     'sidebarCategories' => 'sidebar-categories.php',
@@ -29,8 +32,11 @@
    * Названия страниц сайта.
    */
   define('PAGE_TITLE', [
-    // Название index.html.
-    'index' => 'Дела в порядке — Главная'
+    // Главная страница.
+    'index' => 'Главная',
+
+    // Страница добавления задач.
+    'addTask' => 'Добавление задачи'
   ]);
 
   /**

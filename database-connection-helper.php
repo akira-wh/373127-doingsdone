@@ -33,10 +33,10 @@
    * @param string $requestString — строка запроса к СУБД
    * @return array — данные из БД, сконвертированные в массив
    */
-  function getDatabaseData($databaseConnection, $requestString) {
-    $receivedData = $databaseConnection->query($requestString);
+  function downloadData($databaseConnection, $requestString) {
+    $downloadedData = $databaseConnection->query($requestString);
 
-    $adaptedData = $receivedData->fetch_all(MYSQLI_ASSOC);
+    $adaptedData = $downloadedData->fetch_all(MYSQLI_ASSOC);
     $adaptedData = convertArrayStringsToNumbers($adaptedData);
 
     return $adaptedData;

@@ -1,4 +1,5 @@
 <?php
+
   // Установка таймзоны для Казахстана, г.Алматы.
   date_default_timezone_set('Asia/Almaty');
 
@@ -38,8 +39,8 @@
                       WHERE creator_id = {$userID}";
 
   // Получение, обработка и сохранение результатов запросов к СУБД.
-  $categories = getDatabaseData($databaseConnection, $requestForCategories);
-  $tasks = getDatabaseData($databaseConnection, $requestForTasks);
+  $categories = downloadData($databaseConnection, $requestForCategories);
+  $tasks = downloadData($databaseConnection, $requestForTasks);
 
   // Внедрение в данные виртуального раздела INBOX (под задачи без категорий).
   plugVirtualInbox($categories, $tasks);
