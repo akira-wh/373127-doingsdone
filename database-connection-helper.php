@@ -89,6 +89,16 @@
   }
 
   /**
+   * Передача необходимых данных в СУБД.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param string $requestString — строка запроса к СУБД
+   */
+  function uploadData($databaseConnection, $requestString) {
+    $outgoingData = $databaseConnection->query($requestString);
+  }
+
+  /**
    * Конвертация строковых элементов массива в числа.
    * Необходима для данных из БД (СУБД отдает числа в виде строк).
    *

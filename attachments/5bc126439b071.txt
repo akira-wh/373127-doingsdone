@@ -1,0 +1,54 @@
+date/time          : 2018-09-29, 22:31:17, 340ms
+computer name      : AKIRA-LAPTOP
+user name          : akira
+registered owner   : Пользователь Windows
+operating system   : Windows 10 x64 build 17134
+system language    : Russian
+system up time     : 1 day 19 hours
+program up time    : 1 day 17 hours
+processors         : 4x Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
+physical memory    : 3719/8114 MB (free/total)
+free disk space    : (C:) 31,81 GB
+display mode       : 1536x864, 32 bit
+process id         : $608
+allocated memory   : 92,59 MB
+largest free block : 1,34 GB
+executable         : heidisql.exe
+exec. date/time    : 2017-12-19 19:45
+version            : 9.5.0.5196
+compiled with      : Delphi XE5
+madExcept version  : 4.0.12
+callstack crc      : $e48ec0e1, $88dd12af, $88dd12af
+exception number   : 8
+exception class    : EAccessViolation
+exception message  : Access violation at address 0069E7EC in module 'heidisql.exe'. Read of address 0002FFD8.
+
+main thread ($b1c):
+0069e7ec heidisql.exe SynEditHighlighter  1177   +9 TSynCustomHighlighter.Next
+006be4ee heidisql.exe SynEdit             3665 +197 PaintLines
+006be80c heidisql.exe SynEdit             3746  +53 TCustomSynEdit.PaintTextLines
+006bc2f9 heidisql.exe SynEdit             2602  +61 TCustomSynEdit.Paint
+005bba37 heidisql.exe Vcl.Controls                  TCustomControl.PaintWindow
+005b5d71 heidisql.exe Vcl.Controls                  TWinControl.PaintHandler
+005ba017 heidisql.exe Vcl.Controls                  TWinControl.WMPrintClient
+005b1085 heidisql.exe Vcl.Controls                  TControl.WndProc
+005b5ba5 heidisql.exe Vcl.Controls                  TWinControl.WndProc
+006c3b6a heidisql.exe SynEdit             6330  +22 TCustomSynEdit.WndProc
+005b0cc0 heidisql.exe Vcl.Controls                  TControl.Perform
+005b65e7 heidisql.exe Vcl.Controls                  TWinControl.WMPaint
+005bb9d1 heidisql.exe Vcl.Controls                  TCustomControl.WMPaint
+005b1085 heidisql.exe Vcl.Controls                  TControl.WndProc
+005b7a68 heidisql.exe Vcl.Controls                  TWinControl.WMNCHitTest
+0070cb66 heidisql.exe VirtualTrees       17329   +1 TBaseVirtualTree.WMNCHitTest
+005b1085 heidisql.exe Vcl.Controls                  TControl.WndProc
+005b5ba5 heidisql.exe Vcl.Controls                  TWinControl.WndProc
+006c3b6a heidisql.exe SynEdit             6330  +22 TCustomSynEdit.WndProc
+005b51e8 heidisql.exe Vcl.Controls                  TWinControl.MainWndProc
+0053c6d4 heidisql.exe System.Classes                StdWndProc
+7766c6cb ntdll.dll                                  KiUserCallbackDispatcher
+752d8fef USER32.dll                                 PeekMessageW
+00686100 heidisql.exe Vcl.Forms                     TApplication.ProcessMessage
+00686222 heidisql.exe Vcl.Forms                     TApplication.HandleMessage
+0068655d heidisql.exe Vcl.Forms                     TApplication.Run
+74728482 KERNEL32.DLL                               BaseThreadInitThunk
+
