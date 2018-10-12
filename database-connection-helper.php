@@ -1,5 +1,9 @@
 <?php
 
+  // Подключение библиотеки констант:
+  // названия страниц, пути и названия шаблонов view, etc.
+  require_once('./constants.php');
+
   // Конфигурация соединения с СУБД.
   $configuration = [
     'host' => 'doingsdone',
@@ -9,7 +13,7 @@
     'charset' => 'utf-8'
   ];
 
-  // Создание соединения с СУБД.
+  // Соединение с СУБД.
   $databaseConnection = new mysqli(
     $configuration['host'],
     $configuration['user'],
@@ -17,8 +21,50 @@
     $configuration['database']
   );
 
-  // Кодировка данных.
+  // Выбор кодировки данных.
   $databaseConnection->set_charset($configuration['charset']);
+
+  /**
+   * Формирование SQL-запроса на получение данных категорий и количества привязанных задач.
+   *
+   * NB! В результирующий список добавляется виртуальный раздел INBOX (Входящие).
+   *     Он позволяет управлять задачами без категорий.
+   *
+   * @param integer $userID — ID пользователя по базе
+   * @return string — строка sql запроса
+   */
+  function compileRequestForCategories($userID) {
+    $virtualInbox = VIRTUAL_CATEGORY_ID['inbox'];
+
+    return "SELECT '{$virtualInbox}' as id, 'Входящие' as name, COUNT(tasks.id) as tasks_included
+            FROM tasks
+            WHERE tasks.creator_id = {$userID} AND tasks.category_id IS NULL
+
+            UNION
+
+            SELECT categories.id, categories.name, COUNT(tasks.id) as tasks_included
+            FROM categories
+            JOIN tasks ON tasks.category_id = categories.id
+            WHERE categories.creator_id = {$userID}
+            GROUP BY tasks.category_id";
+  }
+
+  /**
+   * Формирование SQL-запроса на получение задач.
+   *
+   * NB! Задачи без категорий определяются в виртуальный раздел INBOX (Входящие).
+   *
+   * @param integer $userID — ID пользователя по базе
+   * @return string — строка sql запроса
+   */
+  function compileRequestForTasks($userID) {
+    $virtualInbox = VIRTUAL_CATEGORY_ID['inbox'];
+
+    return "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
+                    deadline, attachment_name, attachment_filename, is_complete
+            FROM tasks
+            WHERE creator_id = {$userID}";
+  }
 
   /////////////////////////////////////////////////////////////////////////
   //
@@ -27,7 +73,7 @@
   /////////////////////////////////////////////////////////////////////////
 
   /**
-   * Получение необходимых данных из БД.
+   * Получение необходимых данных из СУБД.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param string $requestString — строка запроса к СУБД

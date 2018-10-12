@@ -19,6 +19,12 @@
   //
   /////////////////////////////////////////////////////////////////////////
 
+  // Получение идентификатора пользователя.
+  $userID = intval($_GET['user_id'] ?? 1);
+
+  // Получение категорий, задач и статистики по ним из БД.
+  $categories = downloadData($databaseConnection, compileRequestForCategories($userID));
+
   // Название страницы.
   $pageTitle = PAGE_TITLE['addTask'];
 

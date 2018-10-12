@@ -25,25 +25,9 @@
   // Получение идентификатора пользователя.
   $userID = intval($_GET['user_id'] ?? 1);
 
-  // Формирование запросов на получение категорий, задач, и статистики по ним из СУБД.
-  $requestForCategories = "SELECT categories.id, categories.name,
-                                  COUNT(tasks.category_id) as tasks_included
-                            FROM categories
-                            JOIN tasks ON categories.id = tasks.category_id
-                            WHERE categories.creator_id = {$userID}
-                            GROUP BY tasks.category_id";
-
-  $requestForTasks = "SELECT id, name, category_id, deadline,
-                              attachment_name, attachment_filename, is_complete
-                      FROM tasks
-                      WHERE creator_id = {$userID}";
-
-  // Получение, обработка и сохранение результатов запросов к СУБД.
-  $categories = downloadData($databaseConnection, $requestForCategories);
-  $tasks = downloadData($databaseConnection, $requestForTasks);
-
-  // Внедрение в данные виртуального раздела INBOX (под задачи без категорий).
-  plugVirtualInbox($categories, $tasks);
+  // Получение категорий, задач и статистики по ним из БД.
+  $categories = downloadData($databaseConnection, compileRequestForCategories($userID));
+  $tasks = downloadData($databaseConnection, compileRequestForTasks($userID));
 
   // Проверка ключа 'category_id' в массиве $_GET.
   //
