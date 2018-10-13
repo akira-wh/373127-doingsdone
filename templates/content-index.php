@@ -42,9 +42,9 @@
             </td>
 
             <td class="task__file">
-              <?php if (isset($taskData['attachment_name'])): ?>
+              <?php if (isset($taskData['attachment_label'])): ?>
                 <a class="download-link" href="attachments/<?= $taskData['attachment_filename']; ?>">
-                  <?= $taskData['attachment_name']; ?>
+                  <?= $taskData['attachment_label']; ?>
                 </a>
               <?php endif; ?>
             </td>

@@ -36,7 +36,7 @@ CREATE TABLE tasks (
   creator_id           INT          NOT NULL,
   creation             DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   deadline             DATETIME     DEFAULT NULL,
-  attachment_name      CHAR(255)    DEFAULT NULL,
+  attachment_label     CHAR(255)    DEFAULT NULL,
   attachment_filename  CHAR(255)    DEFAULT NULL,
   is_complete          TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
 

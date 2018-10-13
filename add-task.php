@@ -42,10 +42,10 @@
 
     // Обработка и сохранение прикрепленного файла (если передан).
     if (!empty($attachmentData['name'])) {
-      $attachmentName = $attachmentData['name'];
+      $attachmentLabel = $attachmentData['name'];
 
-      $nameParts = explode('.', $attachmentName);
-      $extension = array_pop($nameParts);
+      $labelParts = explode('.', $attachmentLabel);
+      $extension = array_pop($labelParts);
 
       $attachmentFilename = uniqid() . ".{$extension}";
 
@@ -54,7 +54,7 @@
       move_uploaded_file($tempPath, $newPath);
 
       // Добавление в форму данных обработанного файла.
-      $formData['attachment_name'] = $attachmentName;
+      $formData['attachment_label'] = $attachmentLabel;
       $formData['attachment_filename'] = $attachmentFilename;
     }
 

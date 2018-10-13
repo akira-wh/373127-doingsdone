@@ -61,7 +61,7 @@
     $virtualInbox = VIRTUAL_CATEGORY_ID['inbox'];
 
     return "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
-                    deadline, attachment_name, attachment_filename, is_complete
+                    deadline, attachment_label, attachment_filename, is_complete
             FROM tasks
             WHERE creator_id = {$userID}";
   }
