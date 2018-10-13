@@ -49,3 +49,17 @@
 
     return $timeReserveInHours <= TWENTY_FOUR_HOURS;
   }
+
+  /**
+   * Модификация строки с датой и временем (DATETIME).
+   *
+   * 1. Удаление времени (не используется в приложении).
+   * 2. Приведение даты к формату ДД.ММ.ГГГГ.
+   *
+   * @param string $datetime — дата и время
+   * @return string — дата в локальном формате
+   *
+   */
+  function getDateFormatDDMMYYYY($datetime) {
+    return date('d.m.Y', strtotime($datetime));
+  }

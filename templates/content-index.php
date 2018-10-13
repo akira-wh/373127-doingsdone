@@ -49,7 +49,7 @@
               <?php endif; ?>
             </td>
 
-            <td class="task__date"><?= explode(' ', $taskData['deadline'])[0]; ?></td>
+            <td class="task__date"><?= getDateFormatDDMMYYYY($taskData['deadline']); ?></td>
           </tr>
     <?php
         endif;
