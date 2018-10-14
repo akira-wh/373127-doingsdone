@@ -23,6 +23,12 @@
     $configuration['database']
   );
 
+  if ($databaseConnection->connect_errno) {
+    $errorMessage = "Ошибка подключения. ".
+                    "MYSQLI connect_errno: {$databaseConnection->connect_errno}";
+    require_once('./error.php');
+  }
+
   // Выбор кодировки данных.
   $databaseConnection->set_charset($configuration['charset']);
 
@@ -82,9 +88,15 @@
    * @return array — данные из БД, сконвертированные в массив
    */
   function downloadData($databaseConnection, $requestString) {
-    $downloadedData = $databaseConnection->query($requestString);
+    $receivedData = $databaseConnection->query($requestString);
 
-    $adaptedData = $downloadedData->fetch_all(MYSQLI_ASSOC);
+    if ($databaseConnection->errno) {
+      $errorMessage = "Во время получения данных произошла ошибка. ".
+                      "MYSQLI errno: {$databaseConnection->errno}";
+      require_once('./error.php');
+    }
+
+    $adaptedData = $receivedData->fetch_all(MYSQLI_ASSOC);
     $adaptedData = convertArrayStringsToNumbers($adaptedData);
 
     return $adaptedData;
@@ -97,5 +109,11 @@
    * @param string $requestString — строка запроса к СУБД
    */
   function uploadData($databaseConnection, $requestString) {
-    $outgoingData = $databaseConnection->query($requestString);
+    $sentData = $databaseConnection->query($requestString);
+
+    if ($databaseConnection->errno) {
+      $errorMessage = "Во время отправки данных произошла ошибка. ".
+                      "MYSQLI errno: {$databaseConnection->errno}";
+      require_once('./error.php');
+    }
   }

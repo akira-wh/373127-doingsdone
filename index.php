@@ -52,7 +52,8 @@
 
         if (!$hasSelectedCategoryExist) {
           http_response_code(404);
-          exit();
+          $errorMessage = 'Выбранная категория не найдена.';
+          require_once('./error.php');
         }
         break;
     }
