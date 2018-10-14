@@ -1,16 +1,12 @@
 <?php
 
-  // Установка таймзоны для Казахстана, г.Алматы.
-  date_default_timezone_set('Asia/Almaty');
-
-  // Подключение библиотеки констант:
-  // названия страниц, пути и названия шаблонов view, etc.
+  // Библиотека констант.
   require_once('./constants.php');
 
-  // Подключение конфигурации СУБД, объекта соединения и связанных утилит.
-  require_once('./database-connection-helper.php');
+  // Настройки и утитлиты для работы с моделью.
+  require_once('./model-workers.php');
 
-  // Подключение библиотеки функций-утилит общего назначения.
+  // Библиотека утилит общего назначения.
   require_once('./utils.php');
 
   /////////////////////////////////////////////////////////////////////////
@@ -26,21 +22,20 @@
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $formData = &$_POST;
-    $attachmentData = $_FILES['attachment'];
-
     // Валидация поля 'Название задачи'. Должно быть заполнено.
-    if (!strlen($formData['name'])) {
+    if (!strlen($_POST['name'])) {
       $errors['name'] = 'Необходимо указать название задачи';
     }
 
     // Валидация поля 'Дата выполнения'.
     // Если заполнено — должно иметь валидный формат даты.
-    if (strlen($formData['deadline']) && date_parse($formData['deadline'])['error_count']) {
+    if (strlen($_POST['deadline']) && date_parse($_POST['deadline'])['error_count']) {
       $errors['deadline'] = 'Дата должна быть в формате ДД.ММ.ГГГГ';
     }
 
     // Обработка и сохранение прикрепленного файла (если передан).
+    $attachmentData = $_FILES['attachment'];
+
     if (!empty($attachmentData['name'])) {
       $attachmentLabel = $attachmentData['name'];
 
@@ -54,27 +49,26 @@
       move_uploaded_file($tempPath, $newPath);
 
       // Добавление в форму данных обработанного файла.
-      $formData['attachment_label'] = $attachmentLabel;
-      $formData['attachment_filename'] = $attachmentFilename;
+      $_POST['attachment_label'] = $attachmentLabel;
+      $_POST['attachment_filename'] = $attachmentFilename;
     }
 
     // Если форма заполнена корректно — отправка данных в СУБД.
     if (empty($errors)) {
       // Запись в форму ID пользователя.
-      $formData['creator_id'] = $userID;
+      $_POST['creator_id'] = $userID;
 
       // Удаление из формы пустых необязательных полей.
       // Удаление ссылки на виртуальный раздел INBOX (Входящие).
-      foreach ($formData as $field => $value) {
-        if (empty($value) ||
-            ($field === 'category_id' && $value === VIRTUAL_CATEGORY_ID['inbox'])) {
-          unset($formData[$field]);
+      foreach ($_POST as $field => $value) {
+        if (empty($value) || ($field === 'category_id' && $value === VIRTUAL_CATEGORY_INBOX)) {
+          unset($_POST[$field]);
         }
       }
 
       // Конвертация данных формы в SQL-запрос.
-      $formKeys = implode(', ', array_keys($formData));
-      $formValues = implode("', '", $formData);
+      $formKeys = implode(', ', array_keys($_POST));
+      $formValues = implode("', '", $_POST);
       $requestString = "INSERT INTO tasks ({$formKeys}) VALUES ('{$formValues}')";
 
       // Отправка данных и автопереход на главную страницу.
@@ -86,31 +80,19 @@
   // Получение категорий, задач и статистики по ним из БД.
   $categories = downloadData($databaseConnection, compileRequestForCategories($userID));
 
-  // Название страницы.
-  $pageTitle = PAGE_TITLE['addTask'];
-
-  // Сборка header.
-  $pageHeader = fillView(VIEW['siteHeader']);
-
-  // Сборка sidebar (список категорий).
-  $pageSidebar = fillView(VIEW['sidebarCategories'], ['categories' => $categories]);
-
   // Сборка основного контента.
   $pageContent = fillView(VIEW['contentAddTask'], [
     'categories' => $categories,
     'errors' => $errors
   ]);
 
-  // Сборка footer.
-  $pageFooter = fillView(VIEW['siteFooter']);
-
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
-    'pageTitle' => $pageTitle,
-    'pageHeader' => $pageHeader,
-    'pageSidebar' => $pageSidebar,
+    'pageTitle' => PAGE_TITLE['addTask'],
+    'pageHeader' => fillView(VIEW['siteHeader']),
+    'pageSidebar' => fillView(VIEW['sidebarCategories'], ['categories' => $categories]),
     'pageContent' => $pageContent,
-    'pageFooter' => $pageFooter
+    'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 
   // Рендер страницы.

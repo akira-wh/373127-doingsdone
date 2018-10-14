@@ -14,20 +14,16 @@
 
     <div class="page-wrapper">
       <div class="container <?= isset($pageSidebar) ? 'container--with-sidebar' : ''; ?>">
-        <!-- HEADER -->
         <?= $pageHeader; ?>
 
         <div class="content">
-          <!-- SIDEBAR (ОПЦИОНАЛЬНО) -->
           <?= $pageSidebar ?? ''; ?>
-
-          <!-- CONTENT -->
           <?= $pageContent; ?>
         </div>
+
       </div>
     </div>
 
-    <!-- FOOTER -->
     <?= $pageFooter; ?>
 
     <script src="flatpickr.js"></script>

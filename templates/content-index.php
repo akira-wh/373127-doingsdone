@@ -25,7 +25,7 @@
 
     <?php
       foreach ($tasks as $taskData):
-        if (($selectedCategoryID === VIRTUAL_CATEGORY_ID['all'] || $selectedCategoryID === $taskData['category_id']) &&
+        if ((!isset($selectedCategoryID) || $selectedCategoryID === $taskData['category_id']) &&
             (!$taskData['is_complete'] || $shouldShowCompletedTasks)):
     ?>
           <tr class="tasks__item task
@@ -49,7 +49,7 @@
               <?php endif; ?>
             </td>
 
-            <td class="task__date"><?= getDateFormatDDMMYYYY($taskData['deadline']); ?></td>
+            <td class="task__date"><?= getEuropeanDateFormat($taskData['deadline']); ?></td>
           </tr>
     <?php
         endif;

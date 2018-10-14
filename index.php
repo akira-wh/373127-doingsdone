@@ -6,14 +6,13 @@
   // Показывать выполненные задачи? 1 || 0
   $shouldShowCompletedTasks = rand(0, 1);
 
-  // Подключение библиотеки констант:
-  // названия страниц, пути и названия шаблонов view, etc.
+  // Библиотека констант.
   require_once('./constants.php');
 
-  // Подключение конфигурации СУБД, объекта соединения и связанных утилит.
-  require_once('./database-connection-helper.php');
+  // Настройки и утитлиты для работы с моделью.
+  require_once('./model-workers.php');
 
-  // Подключение библиотеки функций-утилит общего назначения.
+  // Библиотека утилит общего назначения.
   require_once('./utils.php');
 
   /////////////////////////////////////////////////////////////////////////
@@ -31,38 +30,33 @@
 
   // Проверка ключа 'category_id' в массиве $_GET.
   //
+  // Если ничего не выбрано — отрисовка всех задач.
+  //
   // Если выбран виртуальный раздел INBOX — отрисовка задач без категории.
   //
-  // Если выбрана пользовательская категория —
-  // проверка существования данной категории и отрисовка связанных задач.
-  // Если категория не существует — код 404 'NOT FOUND'.
+  // Если выбрана пользовательская категория — проверка существования категории.
+  // Если категория существует — отрисовка связанных задач. Иначе код 404.
   //
-  // Если ни одна категория не выбрана — отрисовка всех задач пользователя.
+  $selectedCategoryID = null;
+
   if (isset($_GET['category_id'])) {
-    if ($_GET['category_id'] === VIRTUAL_CATEGORY_ID['inbox']) {
-      $selectedCategoryID = VIRTUAL_CATEGORY_ID['inbox'];
-    } else {
-      $selectedCategoryID = (integer) $_GET['category_id'];
-      $allCategoriesID = array_column($categories, 'id');
+    switch ($_GET['category_id']) {
+      case VIRTUAL_CATEGORY_INBOX:
+        $selectedCategoryID = VIRTUAL_CATEGORY_INBOX;
+        break;
 
-      $hasSelectedCategoryExist = in_array($selectedCategoryID, $allCategoriesID);
-      if (!$hasSelectedCategoryExist) {
-        http_response_code(404);
-        exit();
-      }
+      default:
+        $selectedCategoryID = (integer) $_GET['category_id'];
+        $allCategoriesID = array_column($categories, 'id');
+        $hasSelectedCategoryExist = in_array($selectedCategoryID, $allCategoriesID);
+
+        if (!$hasSelectedCategoryExist) {
+          http_response_code(404);
+          exit();
+        }
+        break;
     }
-  } else {
-    $selectedCategoryID = VIRTUAL_CATEGORY_ID['all'];
   }
-
-  // Название страницы.
-  $pageTitle = PAGE_TITLE['index'];
-
-  // Сборка header.
-  $pageHeader = fillView(VIEW['siteHeader']);
-
-  // Сборка sidebar (список категорий).
-  $pageSidebar = fillView(VIEW['sidebarCategories'], ['categories' => $categories]);
 
   // Сборка основного контента.
   $pageContent = fillView(VIEW['contentIndex'], [
@@ -71,16 +65,13 @@
     'tasks' => $tasks
   ]);
 
-  // Сборка footer.
-  $pageFooter = fillView(VIEW['siteFooter']);
-
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
-    'pageTitle' => $pageTitle,
-    'pageHeader' => $pageHeader,
-    'pageSidebar' => $pageSidebar,
+    'pageTitle' => PAGE_TITLE['index'],
+    'pageHeader' => fillView(VIEW['siteHeader']),
+    'pageSidebar' => fillView(VIEW['sidebarCategories'], ['categories' => $categories]),
     'pageContent' => $pageContent,
-    'pageFooter' => $pageFooter
+    'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 
   // Рендер страницы.

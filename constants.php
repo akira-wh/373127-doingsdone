@@ -40,19 +40,16 @@
   ]);
 
   /**
-   * Количество секунд в 1 часе (3600).
+   * Количество секунд в сутках (86400).
    */
-  define('SECONDS_IN_HOUR', 3600);
+  define('SECONDS_IN_DAY', 86400);
 
   /**
-   * Количество часов в сутках (24).
+   * 1 сутки.
    */
-  define('TWENTY_FOUR_HOURS', 24);
+  define('ONE_DAY', 1);
 
   /**
-   * Названия виртуальных разделов (категорий задач).
+   * Идентификатор виртуального раздела INBOX (Входящие).
    */
-  define('VIRTUAL_CATEGORY_ID', [
-    'inbox' => 'inbox',
-    'all' => 'all'
-  ]);
+  define('VIRTUAL_CATEGORY_INBOX', 'inbox');

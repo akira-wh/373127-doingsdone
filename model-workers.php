@@ -1,8 +1,10 @@
 <?php
 
-  // Подключение библиотеки констант:
-  // названия страниц, пути и названия шаблонов view, etc.
+  // Библиотека констант.
   require_once('./constants.php');
+
+  // Библиотека утилит общего назначения.
+  require_once('./utils.php');
 
   // Конфигурация соединения с СУБД.
   $configuration = [
@@ -13,7 +15,7 @@
     'charset' => 'utf-8'
   ];
 
-  // Соединение с СУБД.
+  // Создание соединения с СУБД.
   $databaseConnection = new mysqli(
     $configuration['host'],
     $configuration['user'],
@@ -34,11 +36,11 @@
    * @return string — строка sql запроса
    */
   function compileRequestForCategories($userID) {
-    $virtualInbox = VIRTUAL_CATEGORY_ID['inbox'];
+    $virtualInbox = VIRTUAL_CATEGORY_INBOX;
 
     return "SELECT '{$virtualInbox}' as id, 'Входящие' as name, COUNT(tasks.id) as tasks_included
             FROM tasks
-            WHERE tasks.creator_id = {$userID} AND tasks.category_id IS NULL
+            WHERE creator_id = {$userID} AND category_id IS NULL
 
             UNION
 
@@ -58,7 +60,7 @@
    * @return string — строка sql запроса
    */
   function compileRequestForTasks($userID) {
-    $virtualInbox = VIRTUAL_CATEGORY_ID['inbox'];
+    $virtualInbox = VIRTUAL_CATEGORY_INBOX;
 
     return "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
                     deadline, attachment_label, attachment_filename, is_complete
@@ -73,7 +75,7 @@
   /////////////////////////////////////////////////////////////////////////
 
   /**
-   * Получение необходимых данных из СУБД.
+   * Получение данных из СУБД.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param string $requestString — строка запроса к СУБД
@@ -89,35 +91,11 @@
   }
 
   /**
-   * Передача необходимых данных в СУБД.
+   * Передача данных в СУБД.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param string $requestString — строка запроса к СУБД
    */
   function uploadData($databaseConnection, $requestString) {
     $outgoingData = $databaseConnection->query($requestString);
-  }
-
-  /**
-   * Конвертация строковых элементов массива в числа.
-   * Необходима для данных из БД (СУБД отдает числа в виде строк).
-   *
-   * @param array $data — массив, элементы которого подлежат конвертации
-   * @return array — массив с конвертированными данными
-   */
-  function convertArrayStringsToNumbers($data) {
-    return array_map(function($item) {
-      // Если проверяется массив — рекурсивная проверка вглубь.
-      if (is_array($item)) {
-        return convertArrayStringsToNumbers($item);
-      }
-
-      // Если в строке находится число — преобразование к реальному числу.
-      if (is_numeric($item)) {
-        return is_integer($item + 0) ? (integer) $item : (float) $item;
-      }
-
-      // В иных случаях конвертация не производится.
-      return $item;
-    }, $data);
   }
