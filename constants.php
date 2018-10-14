@@ -8,9 +8,12 @@
   /**
    * Названия шаблонов view.
    */
-  define('VIEWS', [
-    // Основной контент index.html.
+  define('VIEW', [
+    // Контент главной страницы.
     'contentIndex' => 'content-index.php',
+
+    // Контент страницы добавления задач.
+    'contentAddTask' => 'content-add-task.php',
 
     // Сайдбар со списком категорий (проектов).
     'sidebarCategories' => 'sidebar-categories.php',
@@ -28,9 +31,12 @@
   /**
    * Названия страниц сайта.
    */
-  define('PAGES_TITLES', [
-    // Название index.html.
-    'index' => 'Дела в порядке — Главная'
+  define('PAGE_TITLE', [
+    // Главная страница.
+    'index' => 'Главная',
+
+    // Страница добавления задач.
+    'addTask' => 'Добавление задачи'
   ]);
 
   /**
@@ -42,3 +48,11 @@
    * Количество часов в сутках (24).
    */
   define('TWENTY_FOUR_HOURS', 24);
+
+  /**
+   * Названия виртуальных разделов (категорий задач).
+   */
+  define('VIRTUAL_CATEGORY_ID', [
+    'inbox' => 'inbox',
+    'all' => 'all'
+  ]);

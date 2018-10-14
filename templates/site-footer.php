@@ -5,7 +5,7 @@
       <p>Веб-приложение для удобного ведения списка дел.</p>
     </div>
 
-    <a class="main-footer__button button button--plus" href="pages/form-task.html">
+    <a class="main-footer__button button button--plus" href="add-task.php">
       Добавить задачу
     </a>
 

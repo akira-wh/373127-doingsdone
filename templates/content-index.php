@@ -25,7 +25,7 @@
 
     <?php
       foreach ($tasks as $taskData):
-        if (($selectedCategoryID === null || $taskData['category_id'] === $selectedCategoryID) &&
+        if (($selectedCategoryID === VIRTUAL_CATEGORY_ID['all'] || $selectedCategoryID === $taskData['category_id']) &&
             (!$taskData['is_complete'] || $shouldShowCompletedTasks)):
     ?>
           <tr class="tasks__item task
@@ -42,14 +42,14 @@
             </td>
 
             <td class="task__file">
-              <?php if (isset($taskData['attachment_name'])): ?>
+              <?php if (isset($taskData['attachment_label'])): ?>
                 <a class="download-link" href="attachments/<?= $taskData['attachment_filename']; ?>">
-                  <?= $taskData['attachment_name']; ?>
+                  <?= $taskData['attachment_label']; ?>
                 </a>
               <?php endif; ?>
             </td>
 
-            <td class="task__date"><?= $taskData['deadline']; ?></td>
+            <td class="task__date"><?= getDateFormatDDMMYYYY($taskData['deadline']); ?></td>
           </tr>
     <?php
         endif;

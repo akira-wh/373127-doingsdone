@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title><?= $pageTitle; ?></title>
+    <title>Дела в порядке — <?= $pageTitle; ?></title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/flatpickr.min.css">
@@ -14,20 +14,20 @@
 
     <div class="page-wrapper">
       <div class="container <?= isset($pageSidebar) ? 'container--with-sidebar' : ''; ?>">
-        <!-- HEADER HERE -->
+        <!-- HEADER -->
         <?= $pageHeader; ?>
 
         <div class="content">
-          <!-- SIDEBAR HERE (OPTIONAL) -->
+          <!-- SIDEBAR (ОПЦИОНАЛЬНО) -->
           <?= $pageSidebar ?? ''; ?>
 
-          <!-- CONTENT HERE -->
+          <!-- CONTENT -->
           <?= $pageContent; ?>
         </div>
       </div>
     </div>
 
-    <!-- FOOTER HERE -->
+    <!-- FOOTER -->
     <?= $pageFooter; ?>
 
     <script src="flatpickr.js"></script>

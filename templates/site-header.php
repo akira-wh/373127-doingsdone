@@ -4,7 +4,7 @@
   </a>
 
   <div class="main-header__side">
-    <a class="main-header__side-item button button--plus open-modal" href="pages/form-task.html">
+    <a class="main-header__side-item button button--plus open-modal" href="add-task.php">
       Добавить задачу
     </a>
 
