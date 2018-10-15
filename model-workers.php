@@ -101,6 +101,8 @@
    * @return array — данные из БД, сконвертированные в массив
    */
   function getUser($databaseConnection, $userEmail) {
+    $userEmail = $databaseConnection->real_escape_string($userEmail);
+
     $requestString = "SELECT * FROM users WHERE email = '{$userEmail}'";
 
     return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
@@ -114,6 +116,7 @@
    */
   function saveUser($databaseConnection, $formData) {
     list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
+
     $requestString = "INSERT INTO users ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
@@ -127,6 +130,7 @@
    */
   function saveTask($databaseConnection, $formData) {
     list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
+
     $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
