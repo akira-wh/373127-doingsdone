@@ -38,16 +38,15 @@
     }
 
     if (empty($errors)) {
-      $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
       // Проверка пользователя на существование в БД.
-      $isUserRegistred = downloadData($databaseConnection, getCheckUserRequest($_POST['email']));
-      $isUserRegistred = $isUserRegistred[0]['is_registred'];
+      $isUserRegistred = downloadData($databaseConnection, getUserCheckRequest($_POST['email']), PARSE_DATA_ROW);
 
-      if ($isUserRegistred) {
+      if ($isUserRegistred['is_registred']) {
         $errors['email'] = 'Данный email уже зарегистрирован в системе. Укажите другой email.';
       } else {
-        // Отправка данных и автопереход на главную страницу.
+        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+        // Отправка данных и редирект на главную страницу.
         uploadData($databaseConnection, getAddUserRequest($_POST), $_POST);
         header('Location: index.php');
       }
