@@ -23,8 +23,11 @@
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['guest'],
+
     'pageHeader' => fillView(VIEW['siteHeader']),
+
     'pageContent' => fillView(VIEW['contentGuest']),
+
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 

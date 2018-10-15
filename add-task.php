@@ -83,18 +83,21 @@
   // Получение списка категорий.
   $categories = getCategories($databaseConnection, $userID);
 
-  // Сборка основного контента.
-  $pageContent = fillView(VIEW['contentAddTask'], [
-    'categories' => $categories,
-    'errors' => $errors
-  ]);
-
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['addTask'],
+
     'pageHeader' => fillView(VIEW['siteHeader']),
-    'pageSidebar' => fillView(VIEW['sidebarCategories'], ['categories' => $categories]),
-    'pageContent' => $pageContent,
+
+    'pageSidebar' => fillView(VIEW['sidebarCategories'], [
+      'categories' => $categories
+    ]),
+
+    'pageContent' => fillView(VIEW['contentAddTask'], [
+      'categories' => $categories,
+      'errors' => $errors
+    ]),
+
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 

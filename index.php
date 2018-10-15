@@ -67,19 +67,22 @@
     }
   }
 
-  // Сборка основного контента.
-  $pageContent = fillView(VIEW['contentIndex'], [
-    'selectedCategoryID' => $selectedCategoryID,
-    'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
-    'tasks' => $tasks
-  ]);
-
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['index'],
+
     'pageHeader' => fillView(VIEW['siteHeader']),
-    'pageSidebar' => fillView(VIEW['sidebarCategories'], ['categories' => $categories]),
-    'pageContent' => $pageContent,
+
+    'pageSidebar' => fillView(VIEW['sidebarCategories'], [
+      'categories' => $categories
+    ]),
+
+    'pageContent' => fillView(VIEW['contentIndex'], [
+      'selectedCategoryID' => $selectedCategoryID,
+      'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
+      'tasks' => $tasks
+    ]),
+
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 

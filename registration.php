@@ -64,9 +64,15 @@
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['registration'],
+
     'pageHeader' => fillView(VIEW['siteHeader']),
+
     'pageSidebar' => fillView(VIEW['sidebarLogin']),
-    'pageContent' => fillView(VIEW['contentRegistration'], ['errors' => $errors]),
+
+    'pageContent' => fillView(VIEW['contentRegistration'], [
+      'errors' => $errors
+    ]),
+
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 
