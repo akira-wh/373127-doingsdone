@@ -1,5 +1,8 @@
 <?php
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 
@@ -17,7 +20,7 @@
 
   // Если пользователь уже авторизирован — редирект на главную страницу.
   if (isset($_SESSION['user'])) {
-    header('Location: /');
+    header('Location: index.php');
   }
 
   // Ошибки валидации формы.
@@ -60,11 +63,10 @@
     }
 
     // Если аутентификация пройдена —
-    // открытие сессии и редирект на главную страницу.
+    // запись данных пользователя в сессию и редирект на главную страницу.
     if (empty($errors)) {
-      session_start();
       $_SESSION['user'] = $comparedUserData;
-      header('Location: /');
+      header('Location: index.php');
     }
   }
 

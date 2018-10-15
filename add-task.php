@@ -1,5 +1,8 @@
 <?php
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 
@@ -17,7 +20,7 @@
 
   // Если пользователь неавторизирован — редирект на гостевую страницу.
   if (!isset($_SESSION['user'])) {
-    header('Location: /guest.php');
+    header('Location: guest.php');
   }
 
   // Получение идентификатора пользователя.
@@ -73,7 +76,7 @@
 
       // Сохранение задачи и редирект на главную страницу.
       saveTask($databaseConnection, $_POST);
-      header('Location: /');
+      header('Location: index.php');
     }
   }
 

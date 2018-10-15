@@ -1,5 +1,8 @@
 <?php
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 
@@ -17,7 +20,7 @@
 
   // Если пользователь уже авторизирован — редирект на главную страницу.
   if (isset($_SESSION['user'])) {
-    header('Location: /');
+    header('Location: index.php');
   }
 
   // Ошибки валидации формы.
@@ -53,7 +56,7 @@
 
         // Сохранение пользователя и редирект на главную страницу.
         saveUser($databaseConnection, $_POST);
-        header('Location: /');
+        header('Location: index.php');
       }
     }
   }

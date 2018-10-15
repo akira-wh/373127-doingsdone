@@ -1,5 +1,8 @@
 <?php
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 

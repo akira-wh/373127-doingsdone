@@ -6,6 +6,9 @@
   // Показывать выполненные задачи? 1 || 0
   $shouldShowCompletedTasks = rand(0, 1);
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 
@@ -23,7 +26,7 @@
 
   // Если пользователь неавторизирован — редирект на гостевую страницу.
   if (!isset($_SESSION['user'])) {
-    header('Location: /guest.php');
+    header('Location: guest.php');
   }
 
   // Получение идентификатора пользователя.

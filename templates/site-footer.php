@@ -6,7 +6,7 @@
     </div>
 
     <?php if (isset($_SESSION['user'])): ?>
-      <a class="main-footer__button button button--plus" href="/add-task.php">
+      <a class="main-footer__button button button--plus" href="add-task.php">
         Добавить задачу
       </a>
     <?php endif; ?>
