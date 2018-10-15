@@ -84,7 +84,7 @@
    * Получение данных из СУБД.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
-   * @param string $requestString — строка запроса к СУБД
+   * @param string $requestString — SQL-запрос
    * @return array — данные из БД, сконвертированные в массив
    */
   function downloadData($databaseConnection, $requestString) {
@@ -106,7 +106,7 @@
    * Передача данных в СУБД.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
-   * @param string $requestString — строка запроса к СУБД
+   * @param string $requestString — SQL-запрос
    */
   function uploadData($databaseConnection, $requestString) {
     $sentData = $databaseConnection->query($requestString);
@@ -116,4 +116,43 @@
                       "MYSQLI errno: {$databaseConnection->errno}";
       require_once('./error.php');
     }
+  }
+
+  /**
+   * Создание подготовленного выражения на основе SQL запроса и переданных данных
+   *
+   * @param object $databaseConnection — объект подключения к СУБД
+   * @param string $requestString — SQL-запрос с плейсхолдерами вместо значений
+   * @param array $data — данные для вставки в плейсхолдеры
+   *
+   * @return object $statement — подготовленное выражение
+   */
+  function getPrepareStatement($databaseConnection, $requestString, $data = []) {
+    $statement = $databaseConnection->prepare($requestString);
+
+    if ($data) {
+      $types = '';
+      $values = [];
+
+      foreach ($data as $value) {
+        $type = null;
+
+        if (is_int($value)) {
+          $type = 'i';
+        } else if (is_string($value)) {
+          $type = 's';
+        } else if (is_double($value)) {
+          $type = 'd';
+        }
+
+        if ($type) {
+          $types .= $type;
+          $values[] = $value;
+        }
+      }
+
+      $statement->bind_param($types, ...$values);
+    }
+
+    return $statement;
   }
