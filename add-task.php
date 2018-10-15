@@ -68,7 +68,7 @@
 
       // Сохранение задачи и редирект на главную страницу.
       saveTask($databaseConnection, $_POST);
-      header('Location: index.php');
+      header('Location: /');
     }
   }
 

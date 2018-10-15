@@ -48,7 +48,7 @@
 
         // Сохранение пользователя и редирект на главную страницу.
         saveUser($databaseConnection, $_POST);
-        header('Location: index.php');
+        header('Location: /');
       }
     }
   }
