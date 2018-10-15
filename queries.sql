@@ -17,12 +17,12 @@ INSERT INTO users
 INSERT INTO users
   SET name = 'Довакин',
       email = 'doingsdone01@inbox.ru',
-      password = '$2y$10$3Y8bk7P7WGP005OpodF1/ebO.zMzTlHJPIUFslTKfH3uwk7v2T3SS'; -- powerfulPassword13
+      password = '$2y$10$qNKMNmYsOcfmH04WTnJQguNFxgqYgCW5Ftk8UfEWMDXWkOgrLd6sO'; -- 12345
 
 INSERT INTO users
   SET name = 'Канэда',
       email = 'doingsdone02@inbox.ru',
-      password = '$2y$10$3Y8bk7P7WGP005OpodF1/ebO.zMzTlHJPIUFslTKfH3uwk7v2T3SS'; -- powerfulPassword13
+      password = '$2y$10$qNKMNmYsOcfmH04WTnJQguNFxgqYgCW5Ftk8UfEWMDXWkOgrLd6sO'; -- 12345
 
 /** Моделирование таблицы категорий. */
 INSERT INTO categories

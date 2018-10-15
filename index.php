@@ -21,12 +21,17 @@
   //
   /////////////////////////////////////////////////////////////////////////
 
+  // Если пользователь неавторизирован — редирект на гостевую страницу.
+  if (!isset($_SESSION['user'])) {
+    header('Location: /guest.php');
+  }
+
   // Получение идентификатора пользователя.
-  $userID = intval($_GET['user_id'] ?? 1);
+  $userID = $_SESSION['user']['id'];
 
   // Получение категорий, задач и статистики по ним из БД.
-  $categories = downloadData($databaseConnection, getCategoriesRequest($userID));
-  $tasks = downloadData($databaseConnection, getTasksRequest($userID));
+  $categories = getCategories($databaseConnection, $userID);
+  $tasks = getTasks($databaseConnection, $userID);
 
   // Проверка ключа 'category_id' в массиве $_GET.
   //

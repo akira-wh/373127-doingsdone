@@ -15,8 +15,13 @@
   //
   /////////////////////////////////////////////////////////////////////////
 
+  // Если пользователь неавторизирован — редирект на гостевую страницу.
+  if (!isset($_SESSION['user'])) {
+    header('Location: /guest.php');
+  }
+
   // Получение идентификатора пользователя.
-  $userID = intval($_GET['user_id'] ?? 1);
+  $userID = $_SESSION['user']['id'];
 
   // Ошибки валидации формы.
   $errors = [];
@@ -66,14 +71,14 @@
         }
       }
 
-      // Отправка данных и автопереход на главную страницу.
-      uploadData($databaseConnection, getAddTaskRequest($_POST), $_POST);
-      header('Location: index.php');
+      // Сохранение задачи и редирект на главную страницу.
+      saveTask($databaseConnection, $_POST);
+      header('Location: /');
     }
   }
 
-  // Получение категорий, задач и статистики по ним из БД.
-  $categories = downloadData($databaseConnection, getCategoriesRequest($userID));
+  // Получение списка категорий.
+  $categories = getCategories($databaseConnection, $userID);
 
   // Сборка основного контента.
   $pageContent = fillView(VIEW['contentAddTask'], [

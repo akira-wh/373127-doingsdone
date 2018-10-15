@@ -3,13 +3,13 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Дела в порядке — <?= $pageTitle; ?></title>
+    <title>Дела в порядке <?= $pageTitle; ?></title>
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/flatpickr.min.css">
   </head>
 
-  <body>
+  <body <?= isset($_SESSION['user']) ? '' : 'class="body-background"'; ?>>
     <h1 class="visually-hidden">Дела в порядке</h1>
 
     <div class="page-wrapper">
