@@ -12,6 +12,9 @@
     // Контент главной страницы.
     'contentIndex' => 'content-index.php',
 
+    // Контент страницы регистрации пользователя.
+    'contentRegistration' => 'content-registration.php',
+
     // Контент страницы добавления задач.
     'contentAddTask' => 'content-add-task.php',
 
@@ -20,6 +23,9 @@
 
     // Сайдбар со списком категорий (проектов).
     'sidebarCategories' => 'sidebar-categories.php',
+
+    // Сайдбар с предложением авторизироваться.
+    'sidebarLogin' => 'sidebar-login.php',
 
     // Сетка-каркас всех страниц сайта.
     'siteLayout' => 'site-layout.php',
@@ -40,6 +46,9 @@
 
     // Страница добавления задач.
     'addTask' => 'Добавление задачи',
+
+    // Страница регистрации.
+    'registration' => 'Регистрация нового пользователя',
 
     // Страница отображения ошибки.
     'error' => 'Ошибка'

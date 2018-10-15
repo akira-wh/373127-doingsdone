@@ -41,7 +41,7 @@
    * @param integer $userID — ID пользователя по базе
    * @return string — строка sql запроса
    */
-  function compileRequestForCategories($userID) {
+  function getCategoriesRequest($userID) {
     $virtualInbox = VIRTUAL_CATEGORY_INBOX;
 
     return "SELECT '{$virtualInbox}' as id, 'Входящие' as name, COUNT(tasks.id) as tasks_included
@@ -65,7 +65,7 @@
    * @param integer $userID — ID пользователя по базе
    * @return string — строка sql запроса
    */
-  function compileRequestForTasks($userID) {
+  function getTasksRequest($userID) {
     $virtualInbox = VIRTUAL_CATEGORY_INBOX;
 
     return "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
@@ -80,13 +80,38 @@
    * @param array $formData — данные формы
    * @return string — строка sql запроса
    */
-  function compileRequestForAddTask($formData) {
+  function getAddTaskRequest($formData) {
     $keys = join(', ', array_keys($formData));
 
     $placeholders = array_fill(0, count($formData), '?');
     $placeholders = join(', ', $placeholders);
 
     return "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
+  }
+
+  /**
+   * Формирование SQL-запроса на проверку существования пользователя в БД.
+   *
+   * @param string $userEmail — email адрес для проверки
+   * @return string — строка sql запроса
+   */
+  function getCheckUserRequest($userEmail) {
+    return "SELECT COUNT(id) as is_registred FROM users WHERE email = '{$userEmail}'";
+  }
+
+  /**
+   * Формирование SQL-запроса на регистрацию нового пользователя.
+   *
+   * @param array $formData — данные формы
+   * @return string — строка sql запроса
+   */
+  function getAddUserRequest($formData) {
+    $keys = join(', ', array_keys($formData));
+
+    $placeholders = array_fill(0, count($formData), '?');
+    $placeholders = join(', ', $placeholders);
+
+    return "INSERT INTO users ({$keys}) VALUES ({$placeholders})";
   }
 
   /////////////////////////////////////////////////////////////////////////
