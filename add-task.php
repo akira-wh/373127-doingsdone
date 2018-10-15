@@ -72,9 +72,12 @@
     }
   }
 
+  // Получение списка категорий.
+  $categories = getCategories($databaseConnection, $userID);
+
   // Сборка основного контента.
   $pageContent = fillView(VIEW['contentAddTask'], [
-    'categories' => getCategories($databaseConnection, $userID),
+    'categories' => $categories,
     'errors' => $errors
   ]);
 

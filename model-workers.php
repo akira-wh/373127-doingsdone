@@ -100,11 +100,7 @@
    * @param array $formData — данные формы регистрации
    */
   function saveUser($databaseConnection, $formData) {
-    $keys = join(', ', array_keys($formData));
-
-    $placeholders = array_fill(0, count($formData), '?');
-    $placeholders = join(', ', $placeholders);
-
+    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
     $requestString = "INSERT INTO users ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
@@ -117,11 +113,7 @@
    * @param array $formData — данные формы добавления задачи
    */
   function saveTask($databaseConnection, $formData) {
-    $keys = join(', ', array_keys($formData));
-
-    $placeholders = array_fill(0, count($formData), '?');
-    $placeholders = join(', ', $placeholders);
-
+    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
     $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
@@ -221,4 +213,19 @@
                       "MYSQLI errno: {$statement->errno}";
       require_once('./error.php');
     }
+  }
+
+  /**
+   * Получение из данных формы ключей и плейсхолдеров для SQL-запроса.
+   *
+   * @param array $formData — данные формы
+   * @return array — массив с ключами и плейсхолдерами (2 строки)
+   */
+  function parseKeysAndPlaceholders($formData) {
+    $keys = join(', ', array_keys($formData));
+
+    $placeholders = array_fill(0, count($formData), '?');
+    $placeholders = join(', ', $placeholders);
+
+    return [$keys, $placeholders];
   }
