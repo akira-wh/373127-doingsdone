@@ -1,5 +1,8 @@
 <?php
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 
@@ -15,10 +18,13 @@
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['error'],
+
     'pageHeader' => fillView(VIEW['siteHeader']),
+
     'pageContent' => fillView(VIEW['contentError'], [
       'errorMessage' => $errorMessage ?? 'Ошибок нет, полет нормальный :)'
     ]),
+
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 

@@ -1,5 +1,8 @@
 <?php
 
+  // Сессия.
+  require_once('./session.php');
+
   // Библиотека констант.
   require_once('./constants.php');
 
@@ -17,7 +20,7 @@
 
   // Если пользователь неавторизирован — редирект на гостевую страницу.
   if (!isset($_SESSION['user'])) {
-    header('Location: /guest.php');
+    header('Location: guest.php');
   }
 
   // Получение идентификатора пользователя.
@@ -73,25 +76,28 @@
 
       // Сохранение задачи и редирект на главную страницу.
       saveTask($databaseConnection, $_POST);
-      header('Location: /');
+      header('Location: index.php');
     }
   }
 
   // Получение списка категорий.
   $categories = getCategories($databaseConnection, $userID);
 
-  // Сборка основного контента.
-  $pageContent = fillView(VIEW['contentAddTask'], [
-    'categories' => $categories,
-    'errors' => $errors
-  ]);
-
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['addTask'],
+
     'pageHeader' => fillView(VIEW['siteHeader']),
-    'pageSidebar' => fillView(VIEW['sidebarCategories'], ['categories' => $categories]),
-    'pageContent' => $pageContent,
+
+    'pageSidebar' => fillView(VIEW['sidebarCategories'], [
+      'categories' => $categories
+    ]),
+
+    'pageContent' => fillView(VIEW['contentAddTask'], [
+      'categories' => $categories,
+      'errors' => $errors
+    ]),
+
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 
