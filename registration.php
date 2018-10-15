@@ -39,7 +39,7 @@
 
     if (empty($errors)) {
       // Проверка пользователя на существование в БД.
-      $isUserRegistred = (boolean) checkUserRegistred($databaseConnection, $_POST['email']);
+      $isUserRegistred = (boolean) getUser($databaseConnection, $_POST['email']);
 
       if ($isUserRegistred) {
         $errors['email'] = 'Данный email уже зарегистрирован в системе. Укажите другой email.';

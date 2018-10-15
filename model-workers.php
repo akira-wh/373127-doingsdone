@@ -94,6 +94,19 @@
   }
 
   /**
+   * Получение данных пользователя.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param string $userEmail — email адрес пользователя
+   * @return array — данные из БД, сконвертированные в массив
+   */
+  function getUser($databaseConnection, $userEmail) {
+    $requestString = "SELECT * FROM users WHERE email = '{$userEmail}'";
+
+    return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
+  }
+
+  /**
    * Сохранение данных нового пользователя.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
@@ -117,19 +130,6 @@
     $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
-  }
-
-  /**
-   * Проверка существования пользователя в БД.
-   *
-   * @param object $databaseConnecion — объект подключения к СУБД
-   * @param string $userEmail — email адрес пользователя
-   * @return array — данные из БД, сконвертированные в массив
-   */
-  function checkUserRegistred($databaseConnection, $userEmail) {
-    $requestString = "SELECT id FROM users WHERE email = '{$userEmail}'";
-
-    return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
   }
 
   /////////////////////////////////////////////////////////////////////////
