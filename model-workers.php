@@ -127,9 +127,7 @@
    * @return array — данные из БД, сконвертированные в массив
    */
   function checkUserRegistred($databaseConnection, $userEmail) {
-    $requestString = "SELECT COUNT(id) as is_registred
-                      FROM users
-                      WHERE email = '{$userEmail}'";
+    $requestString = "SELECT id FROM users WHERE email = '{$userEmail}'";
 
     return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
   }
@@ -167,7 +165,7 @@
         break;
     }
 
-    $adaptedData = convertArrayStringsToNumbers($adaptedData);
+    $adaptedData = $adaptedData ? convertArrayStringsToNumbers($adaptedData) : [];
 
     return $adaptedData;
   }
