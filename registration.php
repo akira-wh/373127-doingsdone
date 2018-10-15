@@ -26,9 +26,12 @@
       'name'
     ];
 
+    // Валидация полей.
     foreach ($requiredFields as $field) {
+      // Проверка на заполненность.
       if (!strlen($_POST[$field])) {
         $errors[$field] = 'Это поле необходимо заполнить';
+        // Проверка email адреса на валидность.
       } else if ($field === 'email' && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Укажите корректный email';
       }
@@ -37,6 +40,7 @@
     if (empty($errors)) {
       $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
+      // Проверка пользователя на существование в БД.
       $isUserRegistred = downloadData($databaseConnection, getCheckUserRequest($_POST['email']));
       $isUserRegistred = $isUserRegistred[0]['is_registred'];
 
