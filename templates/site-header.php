@@ -4,6 +4,8 @@
   </a>
 
   <div class="main-header__side">
+    <!-- <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a> -->
+
     <a class="main-header__side-item button button--plus open-modal" href="add-task.php">
       Добавить задачу
     </a>

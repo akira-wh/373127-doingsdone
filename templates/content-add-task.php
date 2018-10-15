@@ -1,7 +1,3 @@
-<?php
-  $formData = $_POST;
-?>
-
 <main class="content__main">
   <h2 class="content__main-heading">Добавление задачи</h2>
 
@@ -13,17 +9,18 @@
               type="text"
               name="name"
               placeholder="Введите название"
-              value="<?= $formData['name'] ?? ''; ?>">
+              value="<?= $_POST['name'] ?? ''; ?>">
 
       <?php if (isset($errors['name'])): ?>
         <p class="form__message">
           <span class="form__message error-message"><?= $errors['name']; ?></span>
         </p>
       <?php endif; ?>
+
     </div>
 
     <div class="form__row">
-      <label class="form__label" for="category_id">Проект <sup>*</sup></label>
+      <label class="form__label" for="category_id">Проект</label>
       <select class="form__input form__input--select" id="category_id" name="category_id">
 
         <?php foreach ($categories as $categoryData): ?>
@@ -40,13 +37,14 @@
               type="date"
               name="deadline"
               placeholder="Введите дату в формате ДД.ММ.ГГГГ"
-              value="<?= $formData['deadline'] ?? ''; ?>">
+              value="<?= $_POST['deadline'] ?? ''; ?>">
 
       <?php if (isset($errors['deadline'])): ?>
         <p class="form__message">
           <span class="form__message error-message"><?= $errors['deadline']; ?></span>
         </p>
       <?php endif; ?>
+
     </div>
 
     <div class="form__row">

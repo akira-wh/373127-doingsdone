@@ -1,7 +1,6 @@
 <?php
 
-  // Подключение библиотеки констант:
-  // названия страниц, пути и названия шаблонов view, etc.
+  // Библиотека констант.
   require_once('./constants.php');
 
   /**
@@ -14,7 +13,7 @@
    * 5. Выгрузка собранного контента.
    *
    * @param string $viewFilename — название файла с шаблоном view
-   * @param array $data — входные данные, упакованные в массив
+   * @param array $data — входные данные в массиве
    * @return string — собранная разметка view
    */
   function fillView($viewFilename, $data = []) {
@@ -32,34 +31,62 @@
   }
 
   /**
-   * Проверка необходимости выделить|подсветить задачу с приближающимся дедлайном.
-   * Если до дедлайна <= 24 часа, задача должна быть выделена|подсвечена.
+   * Проверка необходимости подсветить задачу с приближающимся дедлайном.
+   * Если до дедлайна <= 1 сутки, задача должна быть подсвечена.
    *
-   * @param string $deadline — дата/время дедлайна в человекочитаемом формате
+   * @param string $datetime — DATETIME дедлайна в валидном формате
    * @return boolean — выделить задачу над остальными? true || false
    */
-  function shouldHighlightTask($deadline) {
-    if (!$deadline) {
+  function shouldHighlightTask($datetime) {
+    if (!$datetime) {
       return false;
     }
 
-    $deadlineTime = strtotime($deadline);
+    $deadlineTime = strtotime($datetime);
     $currentTime = time();
-    $timeReserveInHours = floor(($deadlineTime - $currentTime) / SECONDS_IN_HOUR);
+    $timeReserveInDays = floor(($deadlineTime - $currentTime) / SECONDS_IN_DAY);
 
-    return $timeReserveInHours <= TWENTY_FOUR_HOURS;
+    return $timeReserveInDays <= ONE_DAY;
   }
 
   /**
-   * Модификация строки с датой и временем (DATETIME).
+   * Приведение DATETIME к дате в европейском формате (ДД.ММ.ГГГГ).
    *
    * 1. Удаление времени (не используется в приложении).
-   * 2. Приведение даты к формату ДД.ММ.ГГГГ.
+   * 2. Приведение даты к нужному формату отображения.
    *
    * @param string $datetime — дата и время
-   * @return string — дата в локальном формате
+   * @return string — дата (или пустая строка, если DATETIME невалидный)
    *
    */
-  function getDateFormatDDMMYYYY($datetime) {
+  function getEuropeanDateFormat($datetime) {
+    if (date_parse($datetime)['error_count']) {
+      return '';
+    }
+
     return date('d.m.Y', strtotime($datetime));
+  }
+
+  /**
+   * Конвертация строковых элементов массива в числа.
+   * Необходима для данных из БД (СУБД отдает числа в виде строк).
+   *
+   * @param array $data — массив, элементы которого подлежат конвертации
+   * @return array — массив с конвертированными данными
+   */
+  function convertArrayStringsToNumbers($data) {
+    return array_map(function($item) {
+      // Если проверяется массив — рекурсивная проверка вглубь.
+      if (is_array($item)) {
+        return convertArrayStringsToNumbers($item);
+      }
+
+      // Если в строке находится число — преобразование к реальному числу.
+      if (is_numeric($item)) {
+        return is_integer($item + 0) ? (integer) $item : (float) $item;
+      }
+
+      // В иных случаях конвертация не производится.
+      return $item;
+    }, $data);
   }
