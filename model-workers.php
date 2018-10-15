@@ -6,6 +6,18 @@
   // Библиотека утилит общего назначения.
   require_once('./utils.php');
 
+  /**
+   * Метод обработки данных из СУБД.
+   * Парсить только 1 строку.
+   */
+  define('PARSE_DATA_ROW', 'parseDataRow');
+
+  /**
+   * Метод обработки данных из СУБД.
+   * Парсить все строки.
+   */
+  define('PARSE_DATA_ALL', 'parseDataAll');
+
   // Конфигурация соединения с СУБД.
   $configuration = [
     'host' => 'doingsdone',
@@ -95,7 +107,7 @@
    * @param string $userEmail — email адрес для проверки
    * @return string — строка sql запроса
    */
-  function getCheckUserRequest($userEmail) {
+  function getUserCheckRequest($userEmail) {
     return "SELECT COUNT(id) as is_registred FROM users WHERE email = '{$userEmail}'";
   }
 
@@ -125,9 +137,10 @@
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param string $requestString — SQL-запрос
+   * @param string $parseMethod — метод обработки полученных данных
    * @return array — данные из БД, сконвертированные в массив
    */
-  function downloadData($databaseConnection, $requestString) {
+  function downloadData($databaseConnection, $requestString, $parseMethod = PARSE_DATA_ALL) {
     $receivedData = $databaseConnection->query($requestString);
 
     if ($databaseConnection->errno) {
@@ -136,7 +149,16 @@
       require_once('./error.php');
     }
 
-    $adaptedData = $receivedData->fetch_all(MYSQLI_ASSOC);
+    switch ($parseMethod) {
+      case PARSE_DATA_ALL:
+        $adaptedData = $receivedData->fetch_all(MYSQLI_ASSOC);
+        break;
+
+      case PARSE_DATA_ROW:
+        $adaptedData = $receivedData->fetch_array(MYSQLI_ASSOC);
+        break;
+    }
+
     $adaptedData = convertArrayStringsToNumbers($adaptedData);
 
     return $adaptedData;
