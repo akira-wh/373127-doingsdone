@@ -27,8 +27,7 @@
     // Список полей, обязательных к заполнению.
     $requiredFields = [
       'email',
-      'password',
-      'name'
+      'password'
     ];
 
     // Валидация полей.
@@ -42,28 +41,39 @@
       }
     }
 
+    // Получение данных сверяемого польвателя и сверка email.
     if (empty($errors)) {
-      // Проверка пользователя на существование в БД.
-      $isUserRegistred = (boolean) getUser($databaseConnection, $_POST['email']);
+      $comparedUserData = getUser($databaseConnection, $_POST['email']);
 
-      if ($isUserRegistred) {
-        $errors['email'] = 'Данный email уже зарегистрирован в системе. Укажите другой email.';
-      } else {
-        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-        // Сохранение пользователя и редирект на главную страницу.
-        saveUser($databaseConnection, $_POST);
-        header('Location: /');
+      $isComparedUserExist = (boolean) $comparedUserData;
+      if (!$isComparedUserExist) {
+        $errors['email'] = 'Указанный email не зарегистрирован в системе';
       }
+    }
+
+    // Сверка паролей.
+    if (empty($errors)) {
+      $isPasswordCorrest = password_verify($_POST['password'], $comparedUserData['password']);
+      if (!$isPasswordCorrest) {
+        $errors['password'] = 'Вы ввели неверный пароль';
+      }
+    }
+
+    // Если аутентификация пройдена —
+    // открытие сессии и редирект на главную страницу.
+    if (empty($errors)) {
+      session_start();
+      $_SESSION['user'] = $comparedUserData;
+      header('Location: /');
     }
   }
 
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
-    'pageTitle' => PAGE_TITLE['registration'],
+    'pageTitle' => PAGE_TITLE['login'],
     'pageHeader' => fillView(VIEW['siteHeader']),
     'pageSidebar' => fillView(VIEW['sidebarLogin']),
-    'pageContent' => fillView(VIEW['contentRegistration'], ['errors' => $errors]),
+    'pageContent' => fillView(VIEW['contentLogin'], ['errors' => $errors]),
     'pageFooter' => fillView(VIEW['siteFooter'])
   ]);
 

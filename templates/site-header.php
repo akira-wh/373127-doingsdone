@@ -4,21 +4,25 @@
   </a>
 
   <div class="main-header__side">
-    <!-- <a class="main-header__side-item button button--transparent" href="form-authorization.html">Войти</a> -->
 
-    <a class="main-header__side-item button button--plus open-modal" href="add-task.php">
-      Добавить задачу
-    </a>
+    <?php if (isset($_SESSION['user'])): ?>
+      <a class="main-header__side-item button button--plus open-modal" href="/add-task.php">
+        Добавить задачу
+      </a>
 
-    <div class="main-header__side-item user-menu">
-      <div class="user-menu__image">
-        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
+      <div class="main-header__side-item user-menu">
+        <div class="user-menu__image">
+          <img src="img/user-pic.jpg" width="40" height="40" alt="<?= $_SESSION['user']['name']; ?>">
+        </div>
+
+        <div class="user-menu__data">
+          <p><?= $_SESSION['user']['name']; ?></p>
+          <a href="/logout.php">Выйти</a>
+        </div>
       </div>
+    <? else: ?>
+      <a class="main-header__side-item button button--transparent" href="/login.php">Войти</a>
+    <? endif; ?>
 
-      <div class="user-menu__data">
-        <p><?= strip_tags('Константин'); ?></p>
-        <a href="#">Выйти</a>
-      </div>
-    </div>
   </div>
 </header>
