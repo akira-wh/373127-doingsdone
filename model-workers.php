@@ -45,85 +45,101 @@
   $databaseConnection->set_charset($configuration['charset']);
 
   /**
-   * Формирование SQL-запроса на получение данных категорий и количества привязанных задач.
+   * Получение категорий и количества привязанных к ним задач.
    *
    * NB! В результирующий список добавляется виртуальный раздел INBOX (Входящие).
    *     Он позволяет управлять задачами без категорий.
    *
+   * @param object $databaseConnecion — объект подключения к СУБД
    * @param integer $userID — ID пользователя по базе
-   * @return string — строка sql запроса
+   * @return array — данные из БД, сконвертированные в массив
    */
-  function getCategoriesRequest($userID) {
+  function getCategories($databaseConnection, $userID) {
     $virtualInbox = VIRTUAL_CATEGORY_INBOX;
 
-    return "SELECT '{$virtualInbox}' as id, 'Входящие' as name, COUNT(tasks.id) as tasks_included
-            FROM tasks
-            WHERE creator_id = {$userID} AND category_id IS NULL
+    $requestString = "SELECT '{$virtualInbox}' as id, 'Входящие' as name,
+                              COUNT(tasks.id) as tasks_included
+                      FROM tasks
+                      WHERE creator_id = {$userID} AND category_id IS NULL
 
-            UNION
+                      UNION
 
-            SELECT categories.id, categories.name, COUNT(tasks.id) as tasks_included
-            FROM categories
-            JOIN tasks ON tasks.category_id = categories.id
-            WHERE categories.creator_id = {$userID}
-            GROUP BY tasks.category_id";
+                      SELECT categories.id, categories.name, COUNT(tasks.id) as tasks_included
+                      FROM categories
+                      JOIN tasks ON tasks.category_id = categories.id
+                      WHERE categories.creator_id = {$userID}
+                      GROUP BY tasks.category_id";
+
+    return downloadData($databaseConnection, $requestString);
   }
 
   /**
-   * Формирование SQL-запроса на получение задач.
+   * Получение задач.
    *
    * NB! Задачи без категорий определяются в виртуальный раздел INBOX (Входящие).
    *
+   * @param object $databaseConnecion — объект подключения к СУБД
    * @param integer $userID — ID пользователя по базе
-   * @return string — строка sql запроса
+   * @return array — данные из БД, сконвертированные в массив
    */
-  function getTasksRequest($userID) {
+  function getTasks($databaseConnection, $userID) {
     $virtualInbox = VIRTUAL_CATEGORY_INBOX;
 
-    return "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
-                    deadline, attachment_label, attachment_filename, is_complete
-            FROM tasks
-            WHERE creator_id = {$userID}";
+    $requestString = "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
+                              deadline, attachment_label, attachment_filename, is_complete
+                      FROM tasks
+                      WHERE creator_id = {$userID}";
+
+    return downloadData($databaseConnection, $requestString);
   }
 
   /**
-   * Формирование SQL-запроса на создание новой задачи.
+   * Сохранение данных нового пользователя.
    *
-   * @param array $formData — данные формы
-   * @return string — строка sql запроса
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param array $formData — данные формы регистрации
    */
-  function getAddTaskRequest($formData) {
+  function saveUser($databaseConnection, $formData) {
     $keys = join(', ', array_keys($formData));
 
     $placeholders = array_fill(0, count($formData), '?');
     $placeholders = join(', ', $placeholders);
 
-    return "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
+    $requestString = "INSERT INTO users ({$keys}) VALUES ({$placeholders})";
+
+    uploadData($databaseConnection, $requestString, $formData);
   }
 
   /**
-   * Формирование SQL-запроса на проверку существования пользователя в БД.
+   * Сохранение данных новой задачи.
    *
-   * @param string $userEmail — email адрес для проверки
-   * @return string — строка sql запроса
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param array $formData — данные формы добавления задачи
    */
-  function getUserCheckRequest($userEmail) {
-    return "SELECT COUNT(id) as is_registred FROM users WHERE email = '{$userEmail}'";
-  }
-
-  /**
-   * Формирование SQL-запроса на регистрацию нового пользователя.
-   *
-   * @param array $formData — данные формы
-   * @return string — строка sql запроса
-   */
-  function getAddUserRequest($formData) {
+  function saveTask($databaseConnection, $formData) {
     $keys = join(', ', array_keys($formData));
 
     $placeholders = array_fill(0, count($formData), '?');
     $placeholders = join(', ', $placeholders);
 
-    return "INSERT INTO users ({$keys}) VALUES ({$placeholders})";
+    $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
+
+    uploadData($databaseConnection, $requestString, $formData);
+  }
+
+  /**
+   * Проверка существования пользователя в БД.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param string $userEmail — email адрес пользователя
+   * @return array — данные из БД, сконвертированные в массив
+   */
+  function checkUserRegistred($databaseConnection, $userEmail) {
+    $requestString = "SELECT COUNT(id) as is_registred
+                      FROM users
+                      WHERE email = '{$userEmail}'";
+
+    return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
   }
 
   /////////////////////////////////////////////////////////////////////////

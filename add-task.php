@@ -66,18 +66,15 @@
         }
       }
 
-      // Отправка данных и автопереход на главную страницу.
-      uploadData($databaseConnection, getAddTaskRequest($_POST), $_POST);
+      // Сохранение задачи и редирект на главную страницу.
+      saveTask($databaseConnection, $_POST);
       header('Location: index.php');
     }
   }
 
-  // Получение категорий, задач и статистики по ним из БД.
-  $categories = downloadData($databaseConnection, getCategoriesRequest($userID));
-
   // Сборка основного контента.
   $pageContent = fillView(VIEW['contentAddTask'], [
-    'categories' => $categories,
+    'categories' => getCategories($databaseConnection, $userID),
     'errors' => $errors
   ]);
 

@@ -25,8 +25,8 @@
   $userID = intval($_GET['user_id'] ?? 1);
 
   // Получение категорий, задач и статистики по ним из БД.
-  $categories = downloadData($databaseConnection, getCategoriesRequest($userID));
-  $tasks = downloadData($databaseConnection, getTasksRequest($userID));
+  $categories = getCategories($databaseConnection, $userID);
+  $tasks = getTasks($databaseConnection, $userID);
 
   // Проверка ключа 'category_id' в массиве $_GET.
   //

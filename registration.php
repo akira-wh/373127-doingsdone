@@ -39,15 +39,15 @@
 
     if (empty($errors)) {
       // Проверка пользователя на существование в БД.
-      $isUserRegistred = downloadData($databaseConnection, getUserCheckRequest($_POST['email']), PARSE_DATA_ROW);
+      $isUserRegistred = checkUserRegistred($databaseConnection, $_POST['email']);
 
       if ($isUserRegistred['is_registred']) {
         $errors['email'] = 'Данный email уже зарегистрирован в системе. Укажите другой email.';
       } else {
         $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-        // Отправка данных и редирект на главную страницу.
-        uploadData($databaseConnection, getAddUserRequest($_POST), $_POST);
+        // Сохранение пользователя и редирект на главную страницу.
+        saveUser($databaseConnection, $_POST);
         header('Location: index.php');
       }
     }
