@@ -66,13 +66,8 @@
         }
       }
 
-      // Конвертация данных формы в SQL-запрос.
-      $formKeys = implode(', ', array_keys($_POST));
-      $formValues = implode("', '", $_POST);
-      $requestString = "INSERT INTO tasks ({$formKeys}) VALUES ('{$formValues}')";
-
       // Отправка данных и автопереход на главную страницу.
-      uploadData($databaseConnection, $requestString);
+      uploadData($databaseConnection, compileRequestForAddTask($_POST), $_POST);
       header('Location: index.php');
     }
   }

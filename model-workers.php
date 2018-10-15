@@ -74,6 +74,21 @@
             WHERE creator_id = {$userID}";
   }
 
+  /**
+   * Формирование SQL-запроса на создание новой задачи.
+   *
+   * @param array $formData — данные формы
+   * @return string — строка sql запроса
+   */
+  function compileRequestForAddTask($formData) {
+    $keys = join(', ', array_keys($formData));
+
+    $placeholders = array_fill(0, count($formData), '?');
+    $placeholders = join(', ', $placeholders);
+
+    return "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
+  }
+
   /////////////////////////////////////////////////////////////////////////
   //
   // Утилиты для работы с СУБД.
@@ -103,31 +118,13 @@
   }
 
   /**
-   * Передача данных в СУБД.
-   *
-   * @param object $databaseConnecion — объект подключения к СУБД
-   * @param string $requestString — SQL-запрос
-   */
-  function uploadData($databaseConnection, $requestString) {
-    $sentData = $databaseConnection->query($requestString);
-
-    if ($databaseConnection->errno) {
-      $errorMessage = "Во время отправки данных произошла ошибка. ".
-                      "MYSQLI errno: {$databaseConnection->errno}";
-      require_once('./error.php');
-    }
-  }
-
-  /**
-   * Создание подготовленного выражения на основе SQL запроса и переданных данных
+   * Передача данных в СУБД с помощью подготовленных выражений.
    *
    * @param object $databaseConnection — объект подключения к СУБД
    * @param string $requestString — SQL-запрос с плейсхолдерами вместо значений
-   * @param array $data — данные для вставки в плейсхолдеры
-   *
-   * @return object $statement — подготовленное выражение
+   * @param array $data — данные
    */
-  function getPrepareStatement($databaseConnection, $requestString, $data = []) {
+  function uploadData($databaseConnection, $requestString, $data = []) {
     $statement = $databaseConnection->prepare($requestString);
 
     if ($data) {
@@ -135,14 +132,14 @@
       $values = [];
 
       foreach ($data as $value) {
-        $type = null;
-
-        if (is_int($value)) {
+        if (is_integer($value)) {
           $type = 'i';
+        } else if (is_float($value)) {
+          $type = 'd';
         } else if (is_string($value)) {
           $type = 's';
-        } else if (is_double($value)) {
-          $type = 'd';
+        } else {
+          $type = null;
         }
 
         if ($type) {
@@ -154,5 +151,11 @@
       $statement->bind_param($types, ...$values);
     }
 
-    return $statement;
+    $statement->execute();
+
+    if ($statement->errno) {
+      $errorMessage = "Во время передачи данных произошла ошибка. ".
+                      "MYSQLI errno: {$statement->errno}";
+      require_once('./error.php');
+    }
   }

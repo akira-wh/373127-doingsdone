@@ -56,10 +56,14 @@
    * 2. Приведение даты к нужному формату отображения.
    *
    * @param string $datetime — дата и время
-   * @return string — дата
+   * @return string — дата (или пустая строка, если DATETIME невалидный)
    *
    */
   function getEuropeanDateFormat($datetime) {
+    if (date_parse($datetime)['error_count']) {
+      return '';
+    }
+
     return date('d.m.Y', strtotime($datetime));
   }
 
