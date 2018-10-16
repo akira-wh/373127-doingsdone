@@ -35,6 +35,8 @@
   // Получение категорий, задач и статистики по ним из БД.
   $categories = getCategories($databaseConnection, $userID);
   $tasks = getTasks($databaseConnection, $userID);
+  plugVirtualInbox($categories, $tasks);
+  plugStatistic($categories, $tasks);
 
   // Проверка ключа 'category_id' в массиве $_GET.
   //

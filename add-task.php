@@ -80,8 +80,11 @@
     }
   }
 
-  // Получение списка категорий.
+  // Получение категорий, задач и статистики по ним из БД.
   $categories = getCategories($databaseConnection, $userID);
+  $tasks = getTasks($databaseConnection, $userID);
+  plugVirtualInbox($categories, $tasks);
+  plugStatistic($categories, $tasks);
 
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
