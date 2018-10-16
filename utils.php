@@ -119,7 +119,7 @@
   }
 
   /**
-   * Добавление категориям счетчика привязанных задач.
+   * Добавление категориям счетчика привязанных, актуальных задач.
    *
    * NB! Список категорий модифицируется ПО ССЫЛКЕ (знак &).
    *
@@ -128,11 +128,16 @@
    */
   function plugStatistic(&$categories, $tasks) {
     foreach ($categories as &$categoryData) {
-      $tasksIncluded = array_reduce($tasks, function($accum, $taskData) use ($categoryData) {
-        return ($taskData['category_id'] === $categoryData['id']) ? ++$accum : $accum;
+
+      $activeTasks = array_reduce($tasks, function($accum, $taskData) use ($categoryData) {
+        if ($taskData['category_id'] === $categoryData['id'] && !$taskData['is_complete']) {
+          return ++$accum;
+        }
+
+        return $accum;
       }, ZERO_COUNT);
 
-      $categoryData['tasks_included'] = $tasksIncluded;
+      $categoryData['active_tasks'] = $activeTasks;
     }
   }
 
