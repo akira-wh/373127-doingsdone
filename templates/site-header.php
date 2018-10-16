@@ -16,7 +16,7 @@
         </div>
 
         <div class="user-menu__data">
-          <p><?= $_SESSION['user']['name']; ?></p>
+          <p><?= stripString($_SESSION['user']['name'], 20); ?></p>
           <a href="logout.php">Выйти</a>
         </div>
       </div>

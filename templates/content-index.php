@@ -56,7 +56,7 @@
             <td class="task__file">
               <?php if (isset($taskData['attachment_label'])): ?>
                 <a class="download-link" href="attachments/<?= $taskData['attachment_filename']; ?>">
-                  <?= $taskData['attachment_label']; ?>
+                  <?= stripString($taskData['attachment_label'], 20); ?>
                 </a>
               <?php endif; ?>
             </td>

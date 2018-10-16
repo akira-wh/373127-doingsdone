@@ -129,3 +129,20 @@
       $categoryData['tasks_included'] = $tasksIncluded;
     }
   }
+
+  /**
+   * Подрезка строки до указанной длины с добавлением многоточия.
+   *
+   * NB! Многоточие увеличивает длину результирующей строки на 3 символа.
+   *
+   * @param string $string — Входная строка
+   * @param integer $lengthLimit — Длина результирующей строки
+   * @return string — результирующая строка
+   */
+  function stripString($string, $lengthLimit) {
+    if (strlen($string) > $lengthLimit) {
+      return mb_substr($string, 0, $lengthLimit, 'UTF-8') . '...';
+    }
+
+    return $string;
+  }
