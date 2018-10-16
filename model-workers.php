@@ -45,52 +45,55 @@
   $databaseConnection->set_charset($configuration['charset']);
 
   /**
-   * Получение категорий и количества привязанных к ним задач.
-   *
-   * NB! В результирующий список добавляется виртуальный раздел INBOX (Входящие).
-   *     Он позволяет управлять задачами без категорий.
+   * Получение категорий пользователя, отсортированных по алфавиту.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param integer $userID — ID пользователя по базе
    * @return array — данные из БД, сконвертированные в массив
    */
   function getCategories($databaseConnection, $userID) {
-    $virtualInbox = VIRTUAL_CATEGORY_INBOX;
-
-    $requestString = "SELECT '{$virtualInbox}' as id, 'Входящие' as name,
-                              COUNT(tasks.id) as tasks_included
-                      FROM tasks
-                      WHERE creator_id = {$userID} AND category_id IS NULL
-
-                      UNION
-
-                      SELECT categories.id, categories.name, COUNT(tasks.id) as tasks_included
+    $requestString = "SELECT id, name
                       FROM categories
-                      JOIN tasks ON tasks.category_id = categories.id
-                      WHERE categories.creator_id = {$userID}
-                      GROUP BY tasks.category_id";
+                      WHERE creator_id = {$userID}";
 
     return downloadData($databaseConnection, $requestString);
   }
 
   /**
-   * Получение задач.
-   *
-   * NB! Задачи без категорий определяются в виртуальный раздел INBOX (Входящие).
+   * Получение задач пользователя.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param integer $userID — ID пользователя по базе
    * @return array — данные из БД, сконвертированные в массив
    */
   function getTasks($databaseConnection, $userID) {
-    $virtualInbox = VIRTUAL_CATEGORY_INBOX;
-
-    $requestString = "SELECT id, name, IFNULL(category_id, '{$virtualInbox}') as category_id,
-                              deadline, attachment_label, attachment_filename, is_complete
+    $requestString = "SELECT id,
+                              name,
+                              category_id,
+                              deadline,
+                              attachment_label,
+                              attachment_filename,
+                              is_complete
                       FROM tasks
                       WHERE creator_id = {$userID}";
 
     return downloadData($databaseConnection, $requestString);
+  }
+
+  /**
+   * Получение одной конкретной задачи пользователя.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param integer $userID — ID пользователя по базе
+   * @param integer $taskID — ID задачи по базе
+   * @return array — данные из БД, сконвертированные в массив
+   */
+  function getTask($databaseConnection, $userID, $taskID) {
+    $requestString = "SELECT name
+                      FROM tasks
+                      WHERE id = {$taskID} AND creator_id = {$userID}";
+
+    return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
   }
 
   /**
@@ -123,6 +126,20 @@
   }
 
   /**
+   * Сохранение данных новой категории.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param array $formData — данные формы регистрации
+   */
+  function saveCategory($databaseConnection, $formData) {
+    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
+
+    $requestString = "INSERT INTO categories ({$keys}) VALUES ({$placeholders})";
+
+    uploadData($databaseConnection, $requestString, $formData);
+  }
+
+  /**
    * Сохранение данных новой задачи.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
@@ -134,6 +151,22 @@
     $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
+  }
+
+  /**
+   * Обновления статуса задачи (выполнена|не выполнена).
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param integer $userID — ID пользователя по базе
+   * @param integer $taskID — ID задачи по базе
+   * @param integer $taskExecutionStatus — новый статус задачи
+   */
+  function updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus) {
+    $requestString = "UPDATE tasks
+                      SET is_complete = ?
+                      WHERE id = {$taskID} AND creator_id = {$userID}";
+
+    uploadData($databaseConnection, $requestString, [$taskExecutionStatus]);
   }
 
   /////////////////////////////////////////////////////////////////////////

@@ -76,3 +76,8 @@
    * Идентификатор виртуального раздела INBOX (Входящие).
    */
   define('VIRTUAL_CATEGORY_INBOX', 'inbox');
+
+  /**
+   * НОЛЬ — начало отсчета.
+   */
+  define('ZERO_COUNT', 0);

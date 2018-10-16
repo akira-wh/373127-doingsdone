@@ -30,6 +30,11 @@
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Защита строк от влияния обрамляющих пробелов.
+    foreach ($_POST as $key => $value) {
+      $_POST[$key] = trim($value);
+    }
+
     // Валидация поля 'Название задачи'. Должно быть заполнено.
     if (!strlen($_POST['name'])) {
       $errors['name'] = 'Необходимо указать название задачи';
@@ -80,8 +85,11 @@
     }
   }
 
-  // Получение списка категорий.
+  // Получение категорий, задач и статистики по ним из БД.
   $categories = getCategories($databaseConnection, $userID);
+  $tasks = getTasks($databaseConnection, $userID);
+  plugVirtualInbox($categories, $tasks);
+  plugStatistic($categories, $tasks);
 
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
