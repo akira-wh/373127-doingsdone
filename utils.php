@@ -4,6 +4,12 @@
   require_once('./constants.php');
 
   /**
+   * Длина подстроки с многоточием (3).
+   * Многоточием обрезаются длинные пользовательские строки.
+   */
+  define('THREE_DOTS_LENGTH', 3);
+
+  /**
    * Сборка разметки View по переданному шаблону.
    *
    * 1. Проверка на существование и доступность шаблона view.
@@ -131,15 +137,18 @@
   }
 
   /**
-   * Подрезка строки до указанной длины с добавлением многоточия.
+   * Контроль длины строки.
+   * Если длина превышает установленный лимит — строка сокращается.
    *
-   * NB! Многоточие увеличивает длину результирующей строки на 3 символа.
+   * NB! Результирующую строку завершает многоточие (входит в лимит длины).
    *
    * @param string $string — Входная строка
-   * @param integer $lengthLimit — Длина результирующей строки
+   * @param integer $lengthLimit — Лимит длины
    * @return string — результирующая строка
    */
-  function stripString($string, $lengthLimit) {
+  function controlStringLength($string, $lengthLimit) {
+    $lengthLimit -= THREE_DOTS_LENGTH;
+
     if (strlen($string) > $lengthLimit) {
       return mb_substr($string, 0, $lengthLimit, 'UTF-8') . '...';
     }

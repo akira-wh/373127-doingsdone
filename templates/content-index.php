@@ -8,19 +8,23 @@
 
   <div class="tasks-controls">
     <nav class="tasks-switch">
-      <a class="tasks-switch__item <?= $_SESSION['task_filter'] === 'all' ? 'tasks-switch__item--active' : ''; ?>"
+      <a class="tasks-switch__item
+                <?= $_SESSION['tasks_filter'] === 'all' ? 'tasks-switch__item--active' : ''; ?>"
           href="index.php?filter=all">
         Все задачи
       </a>
-      <a class="tasks-switch__item <?= $_SESSION['task_filter'] === 'today' ? 'tasks-switch__item--active' : ''; ?>"
+      <a class="tasks-switch__item
+                <?= $_SESSION['tasks_filter'] === 'today' ? 'tasks-switch__item--active' : ''; ?>"
           href="index.php?filter=today">
         Повестка дня
       </a>
-      <a class="tasks-switch__item <?= $_SESSION['task_filter'] === 'tomorrow' ? 'tasks-switch__item--active' : ''; ?>"
+      <a class="tasks-switch__item
+                <?= $_SESSION['tasks_filter'] === 'tomorrow' ? 'tasks-switch__item--active' : ''; ?>"
           href="index.php?filter=tomorrow">
         Завтра
       </a>
-      <a class="tasks-switch__item <?= $_SESSION['task_filter'] === 'expired' ? 'tasks-switch__item--active' : ''; ?>"
+      <a class="tasks-switch__item
+                <?= $_SESSION['tasks_filter'] === 'expired' ? 'tasks-switch__item--active' : ''; ?>"
           href="index.php?filter=expired">
         Просроченные
       </a>
@@ -56,7 +60,7 @@
             <td class="task__file">
               <?php if (isset($taskData['attachment_label'])): ?>
                 <a class="download-link" href="attachments/<?= $taskData['attachment_filename']; ?>">
-                  <?= stripString($taskData['attachment_label'], 20); ?>
+                  <?= controlStringLength($taskData['attachment_label'], 22); ?>
                 </a>
               <?php endif; ?>
             </td>

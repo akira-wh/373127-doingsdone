@@ -88,12 +88,12 @@
 
   // Фильтрация списка задач с учетом пользовательского выбора.
   // Запись фильтра и последующее обновление.
-  if (!isset($_GET['filter']) && !isset($_SESSION['task_filter'])) {
-    $_SESSION['task_filter'] = 'all';
+  if (!isset($_GET['filter']) && !isset($_SESSION['tasks_filter'])) {
+    $_SESSION['tasks_filter'] = 'all';
   } else if (isset($_GET['filter'])) {
     switch ($_GET['filter']) {
       case 'today':
-        $_SESSION['task_filter'] = 'today';
+        $_SESSION['tasks_filter'] = 'today';
 
         $today = date('d.m.Y', time());
         $tasks = array_filter($tasks, function($taskData) use ($today) {
@@ -106,7 +106,7 @@
         break;
 
       case 'tomorrow':
-        $_SESSION['task_filter'] = 'tomorrow';
+        $_SESSION['tasks_filter'] = 'tomorrow';
 
         $tomorrow = date('d.m.Y', strtotime('+1 day'));
         $tasks = array_filter($tasks, function($taskData) use ($tomorrow) {
@@ -119,7 +119,7 @@
         break;
 
       case 'expired':
-        $_SESSION['task_filter'] = 'expired';
+        $_SESSION['tasks_filter'] = 'expired';
 
         $yesterday = strtotime('-1 day');
         $tasks = array_filter($tasks, function($taskData) use ($yesterday) {
@@ -132,7 +132,7 @@
         break;
 
       default:
-        $_SESSION['task_filter'] = 'all';
+        $_SESSION['tasks_filter'] = 'all';
         break;
     }
   }
