@@ -3,9 +3,6 @@
   // Установка таймзоны для Казахстана, г.Алматы.
   date_default_timezone_set('Asia/Almaty');
 
-  // Показывать выполненные задачи? 1 || 0
-  $shouldShowCompletedTasks = rand(0, 1);
-
   // Сессия.
   require_once('./session.php');
 
@@ -81,7 +78,7 @@
 
     'pageContent' => fillView(VIEW['contentIndex'], [
       'selectedCategoryID' => $selectedCategoryID,
-      'shouldShowCompletedTasks' => $shouldShowCompletedTasks,
+      'shouldShowCompletedTasks' => $_GET['show_completed'] ?? 0,
       'tasks' => $tasks
     ]),
 
