@@ -34,6 +34,11 @@
       'name'
     ];
 
+    // Защита строк от влияния обрамляющих пробелов.
+    foreach ($_POST as $key => $value) {
+      $_POST[$key] = trim($value);
+    }
+
     // Валидация полей.
     foreach ($requiredFields as $field) {
       // Проверка на заполненность.
