@@ -15,6 +15,11 @@
   // Библиотека утилит общего назначения.
   require_once('./utils.php');
 
+  /**
+   * Максимально допустимая длина названия задачи.
+   */
+  define('MAX_TASK_NAME_LENGTH', 255);
+
   /////////////////////////////////////////////////////////////////////////
   //
   // Сборка и рендер страницы.
@@ -29,6 +34,12 @@
   // Получение идентификатора пользователя.
   $userID = $_SESSION['user']['id'];
 
+  // Получение категорий, задач и статистики по ним из БД.
+  $categories = getCategories($databaseConnection, $userID);
+  $tasks = getTasks($databaseConnection, $userID);
+  plugVirtualInbox($categories, $tasks);
+  plugStatistic($categories, $tasks);
+
   // Ошибки валидации формы.
   $errors = [];
 
@@ -40,6 +51,17 @@
 
     // Валидация поля 'Название задачи'. Должно быть заполнено.
     if (!strlen($_POST['name'])) {
+      $errors['name'] = 'Необходимо указать название задачи';
+      // Длина названия не должна превышать объем ячейки в таблице пользователей.
+    } else if (strlen($_POST['name']) > MAX_TASK_NAME_LENGTH) {
+      $errors['name'] = 'Максимально допустимая длина названия задачи '.
+                        MAX_TASK_NAME_LENGTH.
+                        ' символов';
+    }
+
+    // Валидация поля 'Выбор категории (проекта)'.
+    // У пользователя должна существовать указанная категория.
+    if (!strlen($_POST['category_id'])) {
       $errors['name'] = 'Необходимо указать название задачи';
     }
 
@@ -93,12 +115,6 @@
       header('Location: index.php');
     }
   }
-
-  // Получение категорий, задач и статистики по ним из БД.
-  $categories = getCategories($databaseConnection, $userID);
-  $tasks = getTasks($databaseConnection, $userID);
-  plugVirtualInbox($categories, $tasks);
-  plugStatistic($categories, $tasks);
 
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
