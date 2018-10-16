@@ -41,8 +41,8 @@
   }
 
   /**
-   * Проверка необходимости подсветить задачу с приближающимся дедлайном.
-   * Если до дедлайна <= 1 сутки, задача должна быть подсвечена.
+   * Проверка необходимости подсветить задачу с подошедшим дедлайном.
+   * Если дедлайн сегодня — задача будет быть подсвечена.
    *
    * @param string $datetime — DATETIME дедлайна в валидном формате
    * @return boolean — выделить задачу над остальными? true || false
@@ -52,11 +52,10 @@
       return false;
     }
 
-    $deadlineTime = strtotime($datetime);
-    $currentTime = time();
-    $timeReserveInDays = floor(($deadlineTime - $currentTime) / SECONDS_IN_DAY);
+    $deadlineDate = date('d.m.Y', strtotime($datetime));
+    $currentDate = date('d.m.Y', time());
 
-    return $timeReserveInDays <= ONE_DAY;
+    return $deadlineDate === $currentDate;
   }
 
   /**

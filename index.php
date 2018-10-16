@@ -29,7 +29,8 @@
   // Получение идентификатора пользователя.
   $userID = $_SESSION['user']['id'];
 
-  // Запись и последующее обновление режима отображения задач (показывать выполненные?).
+  // Режим отображения задач (показывать выполненные или нет?).
+  // Запись и последующее обновление.
   if (!isset($_GET['show_completed']) && !isset($_SESSION['show_completed_tasks'])) {
     $_SESSION['show_completed_tasks'] = 0;
   } else if (isset($_GET['show_completed'])) {
@@ -41,8 +42,8 @@
     $taskID = (integer) $_GET['task_id'];
     $taskExecutionStatus = (integer) $_GET['check'];
 
-    $isTaskExist = (boolean) getTask($databaseConnection, $userID, $taskID);
-    if ($isTaskExist) {
+    $isSelectedTaskExist = (boolean) getTask($databaseConnection, $userID, $taskID);
+    if ($isSelectedTaskExist) {
       updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus);
     } else {
       header('Location: index.php');
@@ -65,7 +66,6 @@
   // Если категория существует — отрисовка связанных задач. Иначе код 404.
   //
   $selectedCategoryID = null;
-
   if (isset($_GET['category_id'])) {
     switch ($_GET['category_id']) {
       case VIRTUAL_CATEGORY_INBOX:
@@ -86,6 +86,57 @@
     }
   }
 
+  // Фильтрация списка задач с учетом пользовательского выбора.
+  // Запись фильтра и последующее обновление.
+  if (!isset($_GET['filter']) && !isset($_SESSION['task_filter'])) {
+    $_SESSION['task_filter'] = 'all';
+  } else if (isset($_GET['filter'])) {
+    switch ($_GET['filter']) {
+      case 'today':
+        $_SESSION['task_filter'] = 'today';
+
+        $today = date('d.m.Y', time());
+        $tasks = array_filter($tasks, function($taskData) use ($today) {
+          if (!$taskData['deadline']) {
+            return false;
+          }
+
+          return date('d.m.Y', strtotime($taskData['deadline'])) === $today;
+        });
+        break;
+
+      case 'tomorrow':
+        $_SESSION['task_filter'] = 'tomorrow';
+
+        $tomorrow = date('d.m.Y', strtotime('+1 day'));
+        $tasks = array_filter($tasks, function($taskData) use ($tomorrow) {
+          if (!$taskData['deadline']) {
+            return false;
+          }
+
+          return date('d.m.Y', strtotime($taskData['deadline'])) === $tomorrow;
+        });
+        break;
+
+      case 'expired':
+        $_SESSION['task_filter'] = 'expired';
+
+        $yesterday = strtotime('-1 day');
+        $tasks = array_filter($tasks, function($taskData) use ($yesterday) {
+          if (!$taskData['deadline']) {
+            return false;
+          }
+
+          return strtotime($taskData['deadline']) <= $yesterday;
+        });
+        break;
+
+      default:
+        $_SESSION['task_filter'] = 'all';
+        break;
+    }
+  }
+
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [
     'pageTitle' => PAGE_TITLE['index'],
@@ -98,7 +149,6 @@
 
     'pageContent' => fillView(VIEW['contentIndex'], [
       'selectedCategoryID' => $selectedCategoryID,
-      'shouldShowCompletedTasks' => $_SESSION['show_completed_tasks'],
       'tasks' => $tasks
     ]),
 
