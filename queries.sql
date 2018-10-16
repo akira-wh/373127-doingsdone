@@ -69,14 +69,6 @@ INSERT INTO categories
   SET name = 'Ремонт',
       creator_id = 5; -- Канэда
 
-
-
-
-
-
-
-
-
 /** Моделирование таблицы задач. */
 INSERT INTO tasks
   SET name = 'Встреча с другом',
