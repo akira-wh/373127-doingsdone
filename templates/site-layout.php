@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/flatpickr.min.css">
   </head>
 
-  <body <?= isset($_SESSION['user']) ? '' : 'class="body-background"'; ?>>
+  <body <?= basename($_SERVER['PHP_SELF']) === 'guest.php' ? 'class="body-background"' : ''; ?>>
     <h1 class="visually-hidden">Дела в порядке</h1>
 
     <div class="page-wrapper">
