@@ -29,6 +29,26 @@
   // Получение идентификатора пользователя.
   $userID = $_SESSION['user']['id'];
 
+  // Запись и последующее обновление режима отображения задач (показывать выполненные?).
+  if (!isset($_GET['show_completed']) && !isset($_SESSION['show_completed_tasks'])) {
+    $_SESSION['show_completed_tasks'] = 0;
+  } else if (isset($_GET['show_completed'])) {
+    $_SESSION['show_completed_tasks'] = (integer) $_GET['show_completed'];
+  }
+
+  // Изменение статуса задачи по клику на чекбоксе.
+  if (isset($_GET['task_id']) && isset($_GET['check'])) {
+    $taskID = (integer) $_GET['task_id'];
+    $taskExecutionStatus = (integer) $_GET['check'];
+
+    $isTaskExist = (boolean) getTask($databaseConnection, $userID, $taskID);
+    if ($isTaskExist) {
+      updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus);
+    } else {
+      header('Location: index.php');
+    }
+  }
+
   // Получение категорий, задач и статистики по ним из БД.
   $categories = getCategories($databaseConnection, $userID);
   $tasks = getTasks($databaseConnection, $userID);
@@ -78,7 +98,7 @@
 
     'pageContent' => fillView(VIEW['contentIndex'], [
       'selectedCategoryID' => $selectedCategoryID,
-      'shouldShowCompletedTasks' => $_GET['show_completed'] ?? 0,
+      'shouldShowCompletedTasks' => $_SESSION['show_completed_tasks'],
       'tasks' => $tasks
     ]),
 

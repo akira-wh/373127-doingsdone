@@ -35,7 +35,7 @@
               <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden task__checkbox"
                         type="checkbox"
-                        value="1"
+                        value="<?= $taskData['id']; ?>"
                         <?= $taskData['is_complete'] ? 'checked' : ''; ?>>
                 <span class="checkbox__text"><?= strip_tags($taskData['name']); ?></span>
               </label>

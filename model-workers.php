@@ -81,6 +81,22 @@
   }
 
   /**
+   * Получение одной конкретной задачи пользователя.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param integer $userID — ID пользователя по базе
+   * @param integer $taskID — ID задачи по базе
+   * @return array — данные из БД, сконвертированные в массив
+   */
+  function getTask($databaseConnection, $userID, $taskID) {
+    $requestString = "SELECT name
+                      FROM tasks
+                      WHERE id = {$taskID} AND creator_id = {$userID}";
+
+    return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
+  }
+
+  /**
    * Получение данных пользователя.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
@@ -135,6 +151,22 @@
     $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
 
     uploadData($databaseConnection, $requestString, $formData);
+  }
+
+  /**
+   * Обновления статуса задачи (выполнена|не выполнена).
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param integer $userID — ID пользователя по базе
+   * @param integer $taskID — ID задачи по базе
+   * @param integer $taskExecutionStatus — новый статус задачи
+   */
+  function updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus) {
+    $requestString = "UPDATE tasks
+                      SET is_complete = ?
+                      WHERE id = {$taskID} AND creator_id = {$userID}";
+
+    uploadData($databaseConnection, $requestString, [$taskExecutionStatus]);
   }
 
   /////////////////////////////////////////////////////////////////////////
