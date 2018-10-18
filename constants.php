@@ -87,15 +87,25 @@
    */
   define('MAX_TASK_NAME_LENGTH', 255);
 
+  /**
+   * Максимально допустимая длина названия категории.
+   */
+  define('MAX_CATEGORY_NAME_LENGTH', 64);
+
   define('FORM_ERROR_MESSAGE', [
     'integrityBroken' => 'Нарушена целостность и безопасность данных формы.<br>Повторите отправку позже.',
 
     'valueMissing' => 'Это поле необходимо заполнить',
 
-    'taskNameTooLong' => 'Название задачи превышает максимально разрешенную длину в '.
+    'taskNameTooLong' => 'Название задачи превышает максимально допустимую длину в '.
                           MAX_TASK_NAME_LENGTH.' символов',
 
+    'categoryNameTooLong' => 'Название категории превышает максимально допустимую длину в '.
+                              MAX_CATEGORY_NAME_LENGTH.' символов',
+
     'selectedCategoryNotExist' => 'Выбранная категория не существует',
+
+    'categoryAlreadyExist' => 'Указанная категория уже существует',
 
     'incorrectDateFormat' => 'Дата должна быть в формате ДД.ММ.ГГГГ',
 
