@@ -8,7 +8,7 @@ USE doingsdone;
 /** Таблица пользователей. */
 CREATE TABLE users (
   id            INT         AUTO_INCREMENT,
-  name          CHAR(64)    NOT NULL,
+  name          CHAR(50)    NOT NULL,
   email         CHAR(64)    NOT NULL,
   password      CHAR(255)   NOT NULL,
   registration  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -21,7 +21,7 @@ CREATE TABLE users (
 /** Таблица категорий (проектов). */
 CREATE TABLE categories (
   id          INT         AUTO_INCREMENT,
-  name        CHAR(255)   NOT NULL,
+  name        CHAR(64)   NOT NULL,
   creator_id  INT         NOT NULL,
 
   PRIMARY KEY (id),
