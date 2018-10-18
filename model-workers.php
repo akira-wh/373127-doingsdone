@@ -39,6 +39,7 @@
     $errorMessage = "Ошибка подключения. ".
                     "MYSQLI connect_errno: {$databaseConnection->connect_errno}";
     require_once('./error.php');
+    die();
   }
 
   // Выбор кодировки данных.
@@ -184,6 +185,7 @@
       $errorMessage = "Во время получения данных произошла ошибка. ".
                       "MYSQLI errno: {$databaseConnection->errno}";
       require_once('./error.php');
+      die();
     }
 
     switch ($parseMethod) {
@@ -241,6 +243,7 @@
       $errorMessage = "Во время передачи данных произошла ошибка. ".
                       "MYSQLI errno: {$statement->errno}";
       require_once('./error.php');
+      die();
     }
   }
 
