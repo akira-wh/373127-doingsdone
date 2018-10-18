@@ -160,3 +160,45 @@
 
     return $string;
   }
+
+  /**
+   * Подрезка пробелов у отдельных строк или строк массива.
+   *
+   * @param string|array $data — строка или строки массива
+   * @return string|array — подрезанная строка или строки массива
+   */
+  function trimStringsSpaces($data) {
+    if (is_array($data)) {
+      foreach ($data as $key => $value) {
+        $data[$key] = trim($value);
+      }
+    } else {
+      $data = trim($data);
+    }
+
+    return $data;
+  }
+
+  /**
+   * Проверка целостности отправленной формы.
+   * Количество и названия полей должны соответствовать оригинальным значениям.
+   *
+   * @param array $originalFieldsNames — названия оригинальных полей формы
+   * @param array $formFields — фактические названия и значения полей формы
+   * @return boolean — целостность формы нарушена? true | false
+   */
+  function isFormIntegrityBroken($originalFieldsNames, $formFields) {
+    $formFieldsNames = array_keys($formFields);
+
+    if (count($formFieldsNames) !== count($originalFieldsNames)) {
+      return true;
+    }
+
+    foreach ($formFieldsNames as $formFieldName) {
+      if (!in_array($formFieldName, $originalFieldsNames)) {
+        return true;
+      }
+    }
+
+    return false;
+  }

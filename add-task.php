@@ -15,11 +15,6 @@
   // Библиотека утилит общего назначения.
   require_once('./utils.php');
 
-  /**
-   * Максимально допустимая длина названия задачи.
-   */
-  define('MAX_TASK_NAME_LENGTH', 255);
-
   /////////////////////////////////////////////////////////////////////////
   //
   // Сборка и рендер страницы.
@@ -44,61 +39,72 @@
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Защита строк от влияния обрамляющих пробелов.
-    foreach ($_POST as $key => $value) {
-      $_POST[$key] = trim($value);
+    // Оригинальные названия полей формы.
+    // Используются для проверки целостности формы.
+    $originalFieldsNames = [
+      'name',
+      'category_id',
+      'deadline'
+    ];
+
+    // Проверка целостности формы.
+    // Если заводские поля отсутствуют или присутствуют инородные — отображение ошибки.
+    if (isFormIntegrityBroken($originalFieldsNames, $_POST)) {
+      $errorMessage = FORM_ERROR_MESSAGE['integrityBroken'];
+      require_once('./error.php');
+      die();
     }
 
-    // Валидация поля 'Название задачи'. Должно быть заполнено.
+    // Обрезка обрамляющих пробелов у полей.
+    $_POST = trimStringsSpaces($_POST);
+
+    // Валидация поля 'Название задачи' —  должно быть заполнено.
     if (!strlen($_POST['name'])) {
-      $errors['name'] = 'Необходимо указать название задачи';
-      // Длина названия не должна превышать объем ячейки в таблице пользователей.
+      $errors['name'] = FORM_ERROR_MESSAGE['valueMissing'];
+      // Длина не должна превышать объем ячейки в таблице пользователей.
     } else if (strlen($_POST['name']) > MAX_TASK_NAME_LENGTH) {
-      $errors['name'] = 'Максимально допустимая длина названия задачи '.
-                        MAX_TASK_NAME_LENGTH.
-                        ' символов';
+      $errors['name'] = FORM_ERROR_MESSAGE['taskNameTooLong'];
     }
 
     // Валидация поля 'Выбор категории (проекта)'.
-    // У пользователя должна существовать указанная категория.
-    if (!strlen($_POST['category_id'])) {
-      $errors['name'] = 'Необходимо указать название задачи';
+    // У пользователя должна существовать выбранная категория.
+    $userCategoriesID = array_column($categories, 'id');
+    if (!in_array($_POST['category_id'], $userCategoriesID)) {
+      $errors['category_id'] = FORM_ERROR_MESSAGE['selectedCategoryNotExist'];
     }
 
     // Валидация поля 'Дата выполнения' (если заполнено).
     if (strlen($_POST['deadline'])) {
-      // Поле должно иметь валидный формат даты.
+      // Дата должна иметь валидный формат.
       if (date_parse($_POST['deadline'])['error_count']) {
-        $errors['deadline'] = 'Дата должна быть в формате ДД.ММ.ГГГГ';
-
-        // Дата выполнения задачи не должна быть раньше, чем дата создания.
+        $errors['deadline'] = FORM_ERROR_MESSAGE['incorrectDateFormat'];
+          // Нельзя наметить выполнение задачи на дату из прошлого.
       } else if (strtotime($_POST['deadline']) <= strtotime('-1 day')) {
-        $errors['deadline'] = 'Дата выполнения задачи не должна быть раньше, чем дата создания';
+        $errors['deadline'] = FORM_ERROR_MESSAGE['dateFromThePast'];
       }
     }
 
-    // Обработка и сохранение прикрепленного файла (если передан).
-    $attachmentData = $_FILES['attachment'];
-
-    if (!empty($attachmentData['name'])) {
-      $attachmentLabel = $attachmentData['name'];
-
-      $labelParts = explode('.', $attachmentLabel);
-      $extension = array_pop($labelParts);
-
-      $attachmentFilename = uniqid() . ".{$extension}";
-
-      $tempPath = $attachmentData['tmp_name'];
-      $newPath = __DIR__ . '/attachments/' . $attachmentFilename;
-      move_uploaded_file($tempPath, $newPath);
-
-      // Добавление в форму данных обработанного файла.
-      $_POST['attachment_label'] = $attachmentLabel;
-      $_POST['attachment_filename'] = $attachmentFilename;
-    }
-
-    // Если форма заполнена корректно — отправка данных в СУБД.
+    // Если форма заполнена корректно — формирование и отправка данных в СУБД.
     if (empty($errors)) {
+      // Обработка прикрепленного файла (если передан).
+      if (isset($_FILES['attachment']) && !empty($_FILES['attachment']['name'])) {
+        $attachmentData = $_FILES['attachment'];
+
+        $attachmentLabel = $attachmentData['name'];
+        $labelParts = explode('.', $attachmentLabel);
+        $extension = array_pop($labelParts);
+
+        $attachmentFilename = uniqid() . ".{$extension}";
+
+        $tempPath = $attachmentData['tmp_name'];
+        $newPath = __DIR__ . '/attachments/' . $attachmentFilename;
+        move_uploaded_file($tempPath, $newPath);
+
+        // Добавление в форму данных обработанного файла.
+        $_POST['attachment_label'] = $attachmentLabel;
+        $_POST['attachment_filename'] = $attachmentFilename;
+      }
+
       // Запись в форму ID пользователя.
       $_POST['creator_id'] = $userID;
 
