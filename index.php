@@ -81,6 +81,7 @@
           http_response_code(404);
           $errorMessage = 'Выбранная категория не найдена.';
           require_once('./error.php');
+          die();
         }
         break;
     }
