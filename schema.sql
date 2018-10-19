@@ -12,7 +12,6 @@ CREATE TABLE users (
   email         CHAR(100)   NOT NULL,
   password      CHAR(255)   NOT NULL,
   registration  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  contact_info  CHAR(255)   DEFAULT NULL,
 
   PRIMARY KEY (id),
   UNIQUE INDEX (email)
@@ -21,7 +20,7 @@ CREATE TABLE users (
 /** Таблица категорий (проектов). */
 CREATE TABLE categories (
   id          INT         AUTO_INCREMENT,
-  name        CHAR(64)   NOT NULL,
+  name        CHAR(64)    NOT NULL,
   creator_id  INT         NOT NULL,
 
   PRIMARY KEY (id),
