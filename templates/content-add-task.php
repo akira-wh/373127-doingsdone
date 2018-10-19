@@ -28,6 +28,12 @@
         <?php endforeach; ?>
 
       </select>
+
+      <?php if (isset($errors['category_id'])): ?>
+        <p class="form__message">
+          <span class="form__message error-message"><?= $errors['category_id']; ?></span>
+        </p>
+      <?php endif; ?>
     </div>
 
     <div class="form__row">

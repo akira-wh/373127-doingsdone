@@ -39,6 +39,7 @@
     $errorMessage = "Ошибка подключения. ".
                     "MYSQLI connect_errno: {$databaseConnection->connect_errno}";
     require_once('./error.php');
+    die();
   }
 
   // Выбор кодировки данных.
@@ -57,6 +58,20 @@
                       WHERE creator_id = {$userID}";
 
     return downloadData($databaseConnection, $requestString);
+  }
+
+  /**
+   * Сохранение данных новой категории.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param array $formData — данные формы регистрации
+   */
+  function saveCategory($databaseConnection, $formData) {
+    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
+
+    $requestString = "INSERT INTO categories ({$keys}) VALUES ({$placeholders})";
+
+    uploadData($databaseConnection, $requestString, $formData);
   }
 
   /**
@@ -81,19 +96,51 @@
   }
 
   /**
-   * Получение одной конкретной задачи пользователя.
+   * Сохранение данных новой задачи.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param array $formData — данные формы добавления задачи
+   */
+  function saveTask($databaseConnection, $formData) {
+    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
+
+    $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
+
+    uploadData($databaseConnection, $requestString, $formData);
+  }
+
+  /**
+   * Обновления статуса задачи (выполнена|не выполнена).
    *
    * @param object $databaseConnecion — объект подключения к СУБД
    * @param integer $userID — ID пользователя по базе
    * @param integer $taskID — ID задачи по базе
-   * @return array — данные из БД, сконвертированные в массив
+   * @param integer $taskExecutionStatus — новый статус задачи
    */
-  function getTask($databaseConnection, $userID, $taskID) {
-    $requestString = "SELECT name
+  function updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus) {
+    $requestString = "UPDATE tasks
+                      SET is_complete = ?
+                      WHERE id = ? AND creator_id = ?";
+
+    uploadData($databaseConnection, $requestString, [$taskExecutionStatus, $taskID, $userID]);
+  }
+
+  /**
+   * Проверка существования определенной задачи пользователя.
+   *
+   * @param object $databaseConnecion — объект подключения к СУБД
+   * @param integer $userID — ID пользователя по базе
+   * @param integer $taskID — ID задачи по базе
+   * @return boolean — задача существует? true || false
+   */
+  function doesTaskExist($databaseConnection, $userID, $taskID) {
+    $requestString = "SELECT COUNT(id) as verdict
                       FROM tasks
                       WHERE id = {$taskID} AND creator_id = {$userID}";
 
-    return downloadData($databaseConnection, $requestString, PARSE_DATA_ROW);
+    $verdict = downloadData($databaseConnection, $requestString, PARSE_DATA_ROW)['verdict'];
+
+    return (boolean) $verdict;
   }
 
   /**
@@ -126,54 +173,23 @@
   }
 
   /**
-   * Сохранение данных новой категории.
+   * Проверка существования пользователя.
    *
    * @param object $databaseConnecion — объект подключения к СУБД
-   * @param array $formData — данные формы регистрации
+   * @param string $userEmail — email адрес пользователя
+   * @return boolean — пользователь существует? true || false
    */
-  function saveCategory($databaseConnection, $formData) {
-    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
+  function doesUserExist($databaseConnection, $userEmail) {
+    $userEmail = $databaseConnection->real_escape_string($userEmail);
 
-    $requestString = "INSERT INTO categories ({$keys}) VALUES ({$placeholders})";
+    $requestString = "SELECT COUNT(id) as verdict
+                      FROM users
+                      WHERE email = '{$userEmail}'";
 
-    uploadData($databaseConnection, $requestString, $formData);
+    $verdict = downloadData($databaseConnection, $requestString, PARSE_DATA_ROW)['verdict'];
+
+    return (boolean) $verdict;
   }
-
-  /**
-   * Сохранение данных новой задачи.
-   *
-   * @param object $databaseConnecion — объект подключения к СУБД
-   * @param array $formData — данные формы добавления задачи
-   */
-  function saveTask($databaseConnection, $formData) {
-    list($keys, $placeholders) = parseKeysAndPlaceholders($formData);
-
-    $requestString = "INSERT INTO tasks ({$keys}) VALUES ({$placeholders})";
-
-    uploadData($databaseConnection, $requestString, $formData);
-  }
-
-  /**
-   * Обновления статуса задачи (выполнена|не выполнена).
-   *
-   * @param object $databaseConnecion — объект подключения к СУБД
-   * @param integer $userID — ID пользователя по базе
-   * @param integer $taskID — ID задачи по базе
-   * @param integer $taskExecutionStatus — новый статус задачи
-   */
-  function updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus) {
-    $requestString = "UPDATE tasks
-                      SET is_complete = ?
-                      WHERE id = {$taskID} AND creator_id = {$userID}";
-
-    uploadData($databaseConnection, $requestString, [$taskExecutionStatus]);
-  }
-
-  /////////////////////////////////////////////////////////////////////////
-  //
-  // Утилиты для работы с СУБД.
-  //
-  /////////////////////////////////////////////////////////////////////////
 
   /**
    * Получение данных из СУБД.
@@ -190,6 +206,7 @@
       $errorMessage = "Во время получения данных произошла ошибка. ".
                       "MYSQLI errno: {$databaseConnection->errno}";
       require_once('./error.php');
+      die();
     }
 
     switch ($parseMethod) {
@@ -247,6 +264,7 @@
       $errorMessage = "Во время передачи данных произошла ошибка. ".
                       "MYSQLI errno: {$statement->errno}";
       require_once('./error.php');
+      die();
     }
   }
 

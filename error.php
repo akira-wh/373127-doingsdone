@@ -30,4 +30,3 @@
 
   // Рендер страницы.
   print($pageLayout);
-  die();

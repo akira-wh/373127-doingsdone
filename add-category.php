@@ -36,25 +36,41 @@
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Защита строк от влияния обрамляющих пробелов.
-    $_POST['name'] = trim($_POST['name']);
+    // Оригинальные названия полей формы.
+    // Используются для проверки целостности формы.
+    $originalFieldsNames = ['name'];
 
-    // Проверка на заполненность.
+    // Проверка целостности формы.
+    // Если заводские поля отсутствуют или присутствуют инородные — отображение ошибки.
+    if (isFormIntegrityBroken($originalFieldsNames, $_POST)) {
+      $errorMessage = FORM_ERROR_MESSAGE['integrityBroken'];
+      require_once('./error.php');
+      die();
+    }
+
+    // Обрезка обрамляющих пробелов у полей.
+    $_POST = trimStringsSpaces($_POST);
+
+    // Валидация поля 'Название категории' —  должно быть заполнено.
     if (!strlen($_POST['name'])) {
-      $errors['name'] = 'Придумайте название проекта';
+      $errors['name'] = FORM_ERROR_MESSAGE['valueMissing'];
+      // Длина не должна превышать объем ячейки в таблице пользователей.
+    } else if (strlen($_POST['name']) > MAX_CATEGORY_NAME_LENGTH) {
+      $errors['name'] = FORM_ERROR_MESSAGE['categoryNameTooLong'];
     }
 
     // Проверка категории на существование в БД.
+    // Категория не должна ранее существовать.
     if (empty($errors)) {
       foreach ($categories as $categoryData) {
-        if ($categoryData['name'] === $_POST['name']) {
-          $errors['name'] = 'Данная категория уже существует';
+        if ($_POST['name'] === $categoryData['name']) {
+          $errors['name'] = FORM_ERROR_MESSAGE['categoryAlreadyExist'];
           break;
         }
       }
     }
 
-    // Если валидация пройдена — отправка данных в СУБД.
+    // Если форма заполнена корректно — формирование и отправка данных в СУБД.
     if (empty($errors)) {
       // Запись в форму ID пользователя.
       $_POST['creator_id'] = $userID;

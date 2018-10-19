@@ -4,6 +4,17 @@
   require_once('./constants.php');
 
   /**
+   * Длина подстроки с многоточием (3).
+   * Многоточием обрезаются длинные пользовательские строки.
+   */
+  define('THREE_DOTS_LENGTH', 3);
+
+  /**
+   * НОЛЬ — начало отсчета.
+   */
+  define('ZERO_COUNT', 0);
+
+  /**
    * Сборка разметки View по переданному шаблону.
    *
    * 1. Проверка на существование и доступность шаблона view.
@@ -113,7 +124,7 @@
   }
 
   /**
-   * Добавление категориям счетчика привязанных задач.
+   * Добавление категориям счетчика привязанных, актуальных задач.
    *
    * NB! Список категорий модифицируется ПО ССЫЛКЕ (знак &).
    *
@@ -122,10 +133,135 @@
    */
   function plugStatistic(&$categories, $tasks) {
     foreach ($categories as &$categoryData) {
-      $tasksIncluded = array_reduce($tasks, function($accum, $taskData) use ($categoryData) {
-        return ($taskData['category_id'] === $categoryData['id']) ? ++$accum : $accum;
+
+      $activeTasks = array_reduce($tasks, function($accum, $taskData) use ($categoryData) {
+        if ($taskData['category_id'] === $categoryData['id'] && !$taskData['is_complete']) {
+          return ++$accum;
+        }
+
+        return $accum;
       }, ZERO_COUNT);
 
-      $categoryData['tasks_included'] = $tasksIncluded;
+      $categoryData['active_tasks'] = $activeTasks;
     }
+  }
+
+  /**
+   * Контроль длины строки.
+   * Если длина превышает установленный лимит — строка сокращается.
+   *
+   * NB! Результирующую строку завершает многоточие (входит в лимит длины).
+   *
+   * @param string $string — Входная строка
+   * @param integer $lengthLimit — Лимит длины
+   * @return string — результирующая строка
+   */
+  function controlStringLength($string, $lengthLimit) {
+    $lengthLimit -= THREE_DOTS_LENGTH;
+
+    if (strlen($string) > $lengthLimit) {
+      return mb_substr($string, 0, $lengthLimit, 'UTF-8') . '...';
+    }
+
+    return $string;
+  }
+
+  /**
+   * Подрезка пробелов у отдельных строк или строк массива.
+   *
+   * @param string|array $data — строка или строки массива
+   * @return string|array — подрезанная строка или строки массива
+   */
+  function trimStringsSpaces($data) {
+    if (is_array($data)) {
+      foreach ($data as $key => $value) {
+        $data[$key] = trim($value);
+      }
+    } else {
+      $data = trim($data);
+    }
+
+    return $data;
+  }
+
+  /**
+   * Проверка целостности отправленной формы.
+   * Количество и названия полей должны соответствовать оригинальным значениям.
+   *
+   * @param array $originalFieldsNames — названия оригинальных полей формы
+   * @param array $formFields — фактические названия и значения полей формы
+   * @return boolean — целостность формы нарушена? true | false
+   */
+  function isFormIntegrityBroken($originalFieldsNames, $formFields) {
+    $formFieldsNames = array_keys($formFields);
+
+    if (count($formFieldsNames) !== count($originalFieldsNames)) {
+      return true;
+    }
+
+    foreach ($formFieldsNames as $formFieldName) {
+      if (!in_array($formFieldName, $originalFieldsNames)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Подбор задач определенной категории.
+   *
+   * @param integer|string $selectedCategoryID — идентификатор выбранной категории
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterCategoryTasks($selectedCategoryID, $tasks) {
+    return array_filter($tasks, function($taskData) use ($selectedCategoryID) {
+      return $taskData['category_id'] === $selectedCategoryID;
+    });
+  }
+
+  /**
+   * Подбор задач на сегодняшний день.
+   *
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterTodayTasks($tasks) {
+    $today = date('d.m.Y', time());
+
+    return array_filter($tasks, function($taskData) use ($today) {
+      return $taskData['deadline'] &&
+              date('d.m.Y', strtotime($taskData['deadline'])) === $today;
+    });
+  }
+
+  /**
+   * Подбор задач на завтрашний день.
+   *
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterTomorrowTasks($tasks) {
+    $tomorrow = date('d.m.Y', strtotime('+1 day'));
+
+    return array_filter($tasks, function($taskData) use ($tomorrow) {
+      return $taskData['deadline'] &&
+              date('d.m.Y', strtotime($taskData['deadline'])) === $tomorrow;
+    });
+  }
+
+  /**
+   * Подбор задач с истекшим дедлайном.
+   *
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterExpiredTasks($tasks) {
+    $yesterday = strtotime('-1 day');
+
+    return array_filter($tasks, function($taskData) use ($yesterday) {
+      return $taskData['deadline'] &&
+              strtotime($taskData['deadline']) <= $yesterday;
+    });
   }

@@ -10,7 +10,7 @@
             <?= strip_tags($categoryData['name']); ?>
           </a>
           <span class="main-navigation__list-item-count">
-            <?= $categoryData['tasks_included']; ?>
+            <?= $categoryData['active_tasks']; ?>
           </span>
         </li>
       <?php endforeach; ?>

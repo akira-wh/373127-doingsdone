@@ -27,42 +27,60 @@
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Список полей, обязательных к заполнению.
-    $requiredFields = [
+    // Оригинальные названия полей формы.
+    // Используются для проверки целостности формы.
+    $originalFieldsNames = [
       'email',
       'password',
       'name'
     ];
 
-    // Защита строк от влияния обрамляющих пробелов.
-    foreach ($_POST as $key => $value) {
-      $_POST[$key] = trim($value);
+    // Проверка целостности формы.
+    // Если заводские поля отсутствуют или присутствуют инородные — отображение ошибки.
+    if (isFormIntegrityBroken($originalFieldsNames, $_POST)) {
+      $errorMessage = FORM_ERROR_MESSAGE['integrityBroken'];
+      require_once('./error.php');
+      die();
     }
 
-    // Валидация полей.
-    foreach ($requiredFields as $field) {
-      // Проверка на заполненность.
-      if (!strlen($_POST[$field])) {
-        $errors[$field] = 'Это поле необходимо заполнить';
-        // Проверка email адреса на валидность.
-      } else if ($field === 'email' && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Укажите корректный email';
-      }
+    // Обрезка обрамляющих пробелов у полей.
+    $_POST = trimStringsSpaces($_POST);
+
+    // Валидация поля 'Email' —  должно быть заполнено.
+    if (!strlen($_POST['email'])) {
+      $errors['email'] = FORM_ERROR_MESSAGE['valueMissing'];
+      // Длина не должна превышать объем ячейки в таблице пользователей.
+    } else if (strlen($_POST['email']) > MAX_EMAIL_LENGTH) {
+      $errors['email'] = FORM_ERROR_MESSAGE['emailTooLong'];
+      // Должен иметь валидный формат.
+    } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      $errors['email'] = FORM_ERROR_MESSAGE['incorrectEmailFormat'];
+      // Пользователь с указанным email не должен существовать в базе.
+    } else if (doesUserExist($databaseConnection, $_POST['email'])) {
+      $errors['email'] = FORM_ERROR_MESSAGE['userAlreadyRegistred'];
     }
 
+    // Валидация поля 'Пароль' —  должно быть заполнено.
+    if (!strlen($_POST['password'])) {
+      $errors['password'] = FORM_ERROR_MESSAGE['valueMissing'];
+    }
+
+    // Валидация поля 'Имя пользователя' —  должно быть заполнено.
+    if (!strlen($_POST['name'])) {
+      $errors['name'] = FORM_ERROR_MESSAGE['valueMissing'];
+      // Длина не должна превышать объем ячейки в таблице пользователей.
+    } else if (strlen($_POST['name']) > MAX_USERNAME_LENGTH) {
+      $errors['name'] = FORM_ERROR_MESSAGE['usernameTooLong'];
+    }
+
+    // Если форма заполнена корректно — формирование и отправка данных в СУБД.
     if (empty($errors)) {
-      // Проверка пользователя на существование в БД.
-      $isUserRegistred = (boolean) getUser($databaseConnection, $_POST['email']);
+      // Запись в форму хеш-пароля пользователя.
+      $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-      if ($isUserRegistred) {
-        $errors['email'] = 'Данный email уже зарегистрирован в системе. Укажите другой email.';
-      } else {
-        $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-        // Сохранение пользователя и редирект на главную страницу.
-        saveUser($databaseConnection, $_POST);
-        header('Location: index.php');
-      }
+      // Сохранение пользователя и редирект на главную страницу.
+      saveUser($databaseConnection, $_POST);
+      header('Location: index.php');
     }
   }
 

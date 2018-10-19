@@ -27,51 +27,55 @@
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Список полей, обязательных к заполнению.
-    $requiredFields = [
+    // Оригинальные названия полей формы.
+    // Используются для проверки целостности формы.
+    $originalFieldsNames = [
       'email',
       'password'
     ];
 
-    // Защита строк от влияния обрамляющих пробелов.
-    foreach ($_POST as $key => $value) {
-      $_POST[$key] = trim($value);
+    // Проверка целостности формы.
+    // Если заводские поля отсутствуют или присутствуют инородные — отображение ошибки.
+    if (isFormIntegrityBroken($originalFieldsNames, $_POST)) {
+      $errorMessage = FORM_ERROR_MESSAGE['integrityBroken'];
+      require_once('./error.php');
+      die();
     }
 
-    // Валидация полей.
-    foreach ($requiredFields as $field) {
-      // Проверка на заполненность.
-      if (!strlen($_POST[$field])) {
-        $errors[$field] = 'Это поле необходимо заполнить';
-        // Проверка email адреса на валидность.
-      } else if ($field === 'email' && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = 'Укажите корректный email';
-      }
+    // Обрезка обрамляющих пробелов у полей.
+    $_POST = trimStringsSpaces($_POST);
+
+    // Валидация поля 'Email' —  должно быть заполнено.
+    if (!strlen($_POST['email'])) {
+      $errors['email'] = FORM_ERROR_MESSAGE['valueMissing'];
+      // Контроль максимальной длины, чтобы не гонять лишние запросы к СУБД
+    } else if (strlen($_POST['email']) > MAX_EMAIL_LENGTH) {
+      $errors['email'] = FORM_ERROR_MESSAGE['emailTooLong'];
+      // Должен иметь валидный формат.
+    } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      $errors['email'] = FORM_ERROR_MESSAGE['incorrectEmailFormat'];
+      // Пользователь с указанным email должен существовать в системе.
+    } else if (!doesUserExist($databaseConnection, $_POST['email'])) {
+      $errors['email'] = FORM_ERROR_MESSAGE['userNotRegistred'];
     }
 
-    // Получение данных сверяемого польвателя и сверка email.
+    // Валидация поля 'Пароль' —  должно быть заполнено.
+    if (!strlen($_POST['password'])) {
+      $errors['password'] = FORM_ERROR_MESSAGE['valueMissing'];
+    }
+
+    // Получение данных сверяемого польвателя, сверка паролей.
     if (empty($errors)) {
       $comparedUserData = getUser($databaseConnection, $_POST['email']);
 
-      $isComparedUserExist = (boolean) $comparedUserData;
-      if (!$isComparedUserExist) {
-        $errors['email'] = 'Указанный email не зарегистрирован в системе';
+      // Если аутентификация пройдена —
+      // запись данных пользователя в сессию и редирект на главную страницу.
+      if (password_verify($_POST['password'], $comparedUserData['password'])) {
+        $_SESSION['user'] = $comparedUserData;
+        header('Location: index.php');
+      } else {
+        $errors['password'] = FORM_ERROR_MESSAGE['incorrectPassword'];
       }
-    }
-
-    // Сверка паролей.
-    if (empty($errors)) {
-      $isPasswordCorrest = password_verify($_POST['password'], $comparedUserData['password']);
-      if (!$isPasswordCorrest) {
-        $errors['password'] = 'Вы ввели неверный пароль';
-      }
-    }
-
-    // Если аутентификация пройдена —
-    // запись данных пользователя в сессию и редирект на главную страницу.
-    if (empty($errors)) {
-      $_SESSION['user'] = $comparedUserData;
-      header('Location: index.php');
     }
   }
 

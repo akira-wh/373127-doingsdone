@@ -78,6 +78,58 @@
   define('VIRTUAL_CATEGORY_INBOX', 'inbox');
 
   /**
-   * НОЛЬ — начало отсчета.
+   * Максимально допустимая длина имени пользователя.
    */
-  define('ZERO_COUNT', 0);
+  define('MAX_USERNAME_LENGTH', 64);
+
+  /**
+   * Максимально допустимая длина названия задачи.
+   */
+  define('MAX_TASK_NAME_LENGTH', 255);
+
+  /**
+   * Максимально допустимая длина названия категории.
+   */
+  define('MAX_CATEGORY_NAME_LENGTH', 64);
+
+  /**
+   * Максимально допустимая длина пользовательского email.
+   */
+  define('MAX_EMAIL_LENGTH', 100);
+
+  /**
+   * Сообщения об ошибках валидации форм.
+   */
+  define('FORM_ERROR_MESSAGE', [
+    'integrityBroken' => 'Нарушена целостность и безопасность данных формы.<br>Повторите отправку позже.',
+
+    'valueMissing' => 'Это поле необходимо заполнить',
+
+    'usernameTooLong' => 'Имя превышает максимально допустимую длину в '.
+                          MAX_USERNAME_LENGTH.' символов',
+
+    'taskNameTooLong' => 'Название задачи превышает максимально допустимую длину в '.
+                          MAX_TASK_NAME_LENGTH.' символов',
+
+    'categoryNameTooLong' => 'Название категории превышает максимально допустимую длину в '.
+                              MAX_CATEGORY_NAME_LENGTH.' символов',
+
+    'emailTooLong' => 'Email превышает максимально допустимую длину в '.
+                        MAX_EMAIL_LENGTH.' символов',
+
+    'userAlreadyRegistred' => 'Пользователь с указаным почтовым ящиком уже зарегистрирован',
+
+    'userNotRegistred' => 'Пользователь с указаным почтовым ящиком не зарегистрирован',
+
+    'selectedCategoryNotExist' => 'Выбранная категория не существует',
+
+    'categoryAlreadyExist' => 'Указанная категория уже существует',
+
+    'incorrectDateFormat' => 'Дата должна быть в формате ДД.ММ.ГГГГ',
+
+    'incorrectEmailFormat' => 'Введенный email имеет некорректный формат',
+
+    'incorrectPassword' => 'Вы ввели неверный пароль',
+
+    'dateFromThePast' => 'Нельзя наметить выполнение задачи на дату из прошлого'
+  ]);

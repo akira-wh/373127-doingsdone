@@ -9,7 +9,7 @@ USE doingsdone;
 CREATE TABLE users (
   id            INT         AUTO_INCREMENT,
   name          CHAR(64)    NOT NULL,
-  email         CHAR(64)    NOT NULL,
+  email         CHAR(100)   NOT NULL,
   password      CHAR(255)   NOT NULL,
   registration  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   contact_info  CHAR(255)   DEFAULT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE users (
 /** Таблица категорий (проектов). */
 CREATE TABLE categories (
   id          INT         AUTO_INCREMENT,
-  name        CHAR(255)   NOT NULL,
+  name        CHAR(64)   NOT NULL,
   creator_id  INT         NOT NULL,
 
   PRIMARY KEY (id),
@@ -41,6 +41,7 @@ CREATE TABLE tasks (
   is_complete          TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
 
   PRIMARY KEY (id),
+  FULLTEXT INDEX (name),
   INDEX (category_id),
   INDEX (creator_id),
   INDEX (deadline)

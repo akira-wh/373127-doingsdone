@@ -16,7 +16,7 @@
         </div>
 
         <div class="user-menu__data">
-          <p><?= $_SESSION['user']['name']; ?></p>
+          <p><?= controlStringLength($_SESSION['user']['name'], 23); ?></p>
           <a href="logout.php">Выйти</a>
         </div>
       </div>

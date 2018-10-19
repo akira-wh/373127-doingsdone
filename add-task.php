@@ -1,5 +1,8 @@
 <?php
 
+  // Установка таймзоны для Казахстана, г.Алматы.
+  date_default_timezone_set('Asia/Almaty');
+
   // Сессия.
   require_once('./session.php');
 
@@ -26,48 +29,82 @@
   // Получение идентификатора пользователя.
   $userID = $_SESSION['user']['id'];
 
+  // Получение категорий, задач и статистики по ним из БД.
+  $categories = getCategories($databaseConnection, $userID);
+  $tasks = getTasks($databaseConnection, $userID);
+  plugVirtualInbox($categories, $tasks);
+  plugStatistic($categories, $tasks);
+
   // Ошибки валидации формы.
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Защита строк от влияния обрамляющих пробелов.
-    foreach ($_POST as $key => $value) {
-      $_POST[$key] = trim($value);
+    // Оригинальные названия полей формы.
+    // Используются для проверки целостности формы.
+    $originalFieldsNames = [
+      'name',
+      'category_id',
+      'deadline'
+    ];
+
+    // Проверка целостности формы.
+    // Если заводские поля отсутствуют или присутствуют инородные — отображение ошибки.
+    if (isFormIntegrityBroken($originalFieldsNames, $_POST)) {
+      $errorMessage = FORM_ERROR_MESSAGE['integrityBroken'];
+      require_once('./error.php');
+      die();
     }
 
-    // Валидация поля 'Название задачи'. Должно быть заполнено.
+    // Обрезка обрамляющих пробелов у полей.
+    $_POST = trimStringsSpaces($_POST);
+
+    // Валидация поля 'Название задачи' —  должно быть заполнено.
     if (!strlen($_POST['name'])) {
-      $errors['name'] = 'Необходимо указать название задачи';
+      $errors['name'] = FORM_ERROR_MESSAGE['valueMissing'];
+      // Длина не должна превышать объем ячейки в таблице пользователей.
+    } else if (strlen($_POST['name']) > MAX_TASK_NAME_LENGTH) {
+      $errors['name'] = FORM_ERROR_MESSAGE['taskNameTooLong'];
     }
 
-    // Валидация поля 'Дата выполнения'.
-    // Если заполнено — должно иметь валидный формат даты.
-    if (strlen($_POST['deadline']) && date_parse($_POST['deadline'])['error_count']) {
-      $errors['deadline'] = 'Дата должна быть в формате ДД.ММ.ГГГГ';
+    // Валидация поля 'Выбор категории (проекта)'.
+    // У пользователя должна существовать выбранная категория.
+    $userCategoriesID = array_column($categories, 'id');
+    if (!in_array($_POST['category_id'], $userCategoriesID)) {
+      $errors['category_id'] = FORM_ERROR_MESSAGE['selectedCategoryNotExist'];
     }
 
-    // Обработка и сохранение прикрепленного файла (если передан).
-    $attachmentData = $_FILES['attachment'];
-
-    if (!empty($attachmentData['name'])) {
-      $attachmentLabel = $attachmentData['name'];
-
-      $labelParts = explode('.', $attachmentLabel);
-      $extension = array_pop($labelParts);
-
-      $attachmentFilename = uniqid() . ".{$extension}";
-
-      $tempPath = $attachmentData['tmp_name'];
-      $newPath = __DIR__ . '/attachments/' . $attachmentFilename;
-      move_uploaded_file($tempPath, $newPath);
-
-      // Добавление в форму данных обработанного файла.
-      $_POST['attachment_label'] = $attachmentLabel;
-      $_POST['attachment_filename'] = $attachmentFilename;
+    // Валидация поля 'Дата выполнения' (если заполнено).
+    if (strlen($_POST['deadline'])) {
+      // Дата должна иметь валидный формат.
+      if (date_parse($_POST['deadline'])['error_count']) {
+        $errors['deadline'] = FORM_ERROR_MESSAGE['incorrectDateFormat'];
+          // Нельзя наметить выполнение задачи на дату из прошлого.
+      } else if (strtotime($_POST['deadline']) <= strtotime('-1 day')) {
+        $errors['deadline'] = FORM_ERROR_MESSAGE['dateFromThePast'];
+      }
     }
 
-    // Если форма заполнена корректно — отправка данных в СУБД.
+    // Если форма заполнена корректно — формирование и отправка данных в СУБД.
     if (empty($errors)) {
+      // Обработка прикрепленного файла (если передан).
+      if (isset($_FILES['attachment']) && !empty($_FILES['attachment']['name'])) {
+        $attachmentData = $_FILES['attachment'];
+
+        $attachmentLabel = $attachmentData['name'];
+        $labelParts = explode('.', $attachmentLabel);
+        $extension = array_pop($labelParts);
+
+        $attachmentFilename = uniqid() . ".{$extension}";
+
+        $tempPath = $attachmentData['tmp_name'];
+        $newPath = __DIR__ . '/attachments/' . $attachmentFilename;
+        move_uploaded_file($tempPath, $newPath);
+
+        // Добавление в форму данных обработанного файла.
+        $_POST['attachment_label'] = $attachmentLabel;
+        $_POST['attachment_filename'] = $attachmentFilename;
+      }
+
       // Запись в форму ID пользователя.
       $_POST['creator_id'] = $userID;
 
@@ -84,12 +121,6 @@
       header('Location: index.php');
     }
   }
-
-  // Получение категорий, задач и статистики по ним из БД.
-  $categories = getCategories($databaseConnection, $userID);
-  $tasks = getTasks($databaseConnection, $userID);
-  plugVirtualInbox($categories, $tasks);
-  plugStatistic($categories, $tasks);
 
   // Сборка основной раскладки и метаинформации страницы.
   $pageLayout = fillView(VIEW['siteLayout'], [

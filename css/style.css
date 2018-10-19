@@ -32,11 +32,13 @@ input.visually-hidden {
 html,
 body {
   height: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .page-wrapper {
   min-height: 100%;
-  margin-bottom: -120px;
   display: flex;
 }
 
@@ -204,7 +206,7 @@ a:focus {
 .main-header {
   display: flex;
   justify-content: space-between;
-  padding: 20px 0 26px;
+  padding: 30px 0;
 }
 
 .modal__heading {
@@ -252,7 +254,7 @@ a:focus {
 
 .content {
   display: flex;
-  margin-bottom: 120px;
+  margin-bottom: 40px;
 }
 
 .content__side {
@@ -573,6 +575,7 @@ a:focus {
 }
 
 .download-link {
+  display: inline-block;
   position: relative;
 
   padding-left: 18px;
@@ -760,7 +763,7 @@ a:focus {
 
 .welcome {
   width: 540px;
-  margin: 75px auto 0;
+  margin: 65px auto 0;
 
   text-align: center;
 }
@@ -784,7 +787,8 @@ a:focus {
 
 .error {
   box-sizing: border-box;
-  min-height: 350px;
+  min-height: 450px;
+  height: 100%;
   padding: 25px 0;
 
   display: flex;
@@ -793,13 +797,18 @@ a:focus {
 }
 
 .error__heading {
-  margin: 0;
-  margin-bottom: 25px;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  font-size: 40px;
   text-align: center;
 }
 
 .error__message {
   max-width: 500px;
-  margin: 0 auto;
+  margin: 0 auto 40px;
   text-align: center;
+}
+
+.error__button {
+  margin: 0 auto;
 }

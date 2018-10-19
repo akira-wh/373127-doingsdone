@@ -69,14 +69,6 @@ INSERT INTO categories
   SET name = 'Ремонт',
       creator_id = 5; -- Канэда
 
-
-
-
-
-
-
-
-
 /** Моделирование таблицы задач. */
 INSERT INTO tasks
   SET name = 'Встреча с другом',
@@ -100,8 +92,8 @@ INSERT INTO tasks
       category_id = 1, -- Учеба
       creator_id = 1, -- Игнат
       deadline = '2018-10-15',
-      attachment_label = 'manual.pdf',
-      attachment_filename = 'manual.pdf';
+      attachment_label = 'test.txt',
+      attachment_filename = 'test.txt';
 
 INSERT INTO tasks
   SET name = 'Настроить xdebug для Atom и VS Code',
@@ -145,8 +137,8 @@ INSERT INTO tasks
       category_id = 4, -- Мой магазин
       creator_id = 2, -- Леночка
       deadline = '2018-10-10',
-      attachment_label = 'sketches.pdf',
-      attachment_filename = 'sketches.pdf';
+      attachment_label = 'test.txt',
+      attachment_filename = 'test.txt';
 
 INSERT INTO tasks
   SET name = 'Провести инвентаризацию',
@@ -172,8 +164,8 @@ INSERT INTO tasks
       category_id = 6, -- Сервис ProjectX
       creator_id = 3, -- Руслан
       deadline = '2018-09-20',
-      attachment_label = 'specification.pdf',
-      attachment_filename = 'specification.pdf',
+      attachment_label = 'test.txt',
+      attachment_filename = 'test.txt',
       is_complete = 1;
 
 INSERT INTO tasks
@@ -193,8 +185,8 @@ INSERT INTO tasks
       category_id = 7, -- Тур по Европе
       creator_id = 3, -- Руслан
       deadline = '2018-11-01',
-      attachment_label = 'documents.zip',
-      attachment_filename = 'documents.zip';
+      attachment_label = 'test.txt',
+      attachment_filename = 'test.txt';
 
 INSERT INTO tasks
   SET name = 'Подобрать отели (Барселона, Рим, Париж, Дублин)',
@@ -259,8 +251,8 @@ INSERT INTO tasks
       category_id = 10, -- Umbrella Corp.
       creator_id = 5, -- Канэда
       deadline = '2019-02-01',
-      attachment_label = 'coords.txt',
-      attachment_filename = 'coords.txt';
+      attachment_label = 'test.txt',
+      attachment_filename = 'test.txt';
 
 INSERT INTO tasks
   SET name = 'Заклинивает гильзу (проверить боек)',
