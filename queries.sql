@@ -92,8 +92,8 @@ INSERT INTO tasks
       category_id = 1, -- Учеба
       creator_id = 1, -- Игнат
       deadline = '2018-10-15',
-      attachment_label = 'manual.pdf',
-      attachment_filename = 'manual.pdf';
+      attachment_label = 'coords.txt',
+      attachment_filename = 'coords.txt';
 
 INSERT INTO tasks
   SET name = 'Настроить xdebug для Atom и VS Code',
@@ -137,8 +137,8 @@ INSERT INTO tasks
       category_id = 4, -- Мой магазин
       creator_id = 2, -- Леночка
       deadline = '2018-10-10',
-      attachment_label = 'sketches.pdf',
-      attachment_filename = 'sketches.pdf';
+      attachment_label = 'coords.txt',
+      attachment_filename = 'coords.txt';
 
 INSERT INTO tasks
   SET name = 'Провести инвентаризацию',
@@ -164,8 +164,8 @@ INSERT INTO tasks
       category_id = 6, -- Сервис ProjectX
       creator_id = 3, -- Руслан
       deadline = '2018-09-20',
-      attachment_label = 'specification.pdf',
-      attachment_filename = 'specification.pdf',
+      attachment_label = 'coords.txt',
+      attachment_filename = 'coords.txt',
       is_complete = 1;
 
 INSERT INTO tasks
@@ -185,8 +185,8 @@ INSERT INTO tasks
       category_id = 7, -- Тур по Европе
       creator_id = 3, -- Руслан
       deadline = '2018-11-01',
-      attachment_label = 'documents.zip',
-      attachment_filename = 'documents.zip';
+      attachment_label = 'coords.txt',
+      attachment_filename = 'coords.txt';
 
 INSERT INTO tasks
   SET name = 'Подобрать отели (Барселона, Рим, Париж, Дублин)',
