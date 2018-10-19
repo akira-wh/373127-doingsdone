@@ -50,7 +50,11 @@
   if (!isset($_GET['show_completed']) && !isset($_SESSION['show_completed_tasks'])) {
     $_SESSION['show_completed_tasks'] = 0;
   } else if (isset($_GET['show_completed'])) {
-    $_SESSION['show_completed_tasks'] = (integer) $_GET['show_completed'];
+    $newShowStatus = (integer) $_GET['show_completed'];
+
+    if ($newShowStatus >= 0 && $newShowStatus <= 1) {
+      $_SESSION['show_completed_tasks'] = $newShowStatus;
+    }
   }
 
   // Фильтрация списка задач с учетом выбранной категории (проекта).
