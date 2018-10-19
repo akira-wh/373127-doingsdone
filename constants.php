@@ -78,11 +78,6 @@
   define('VIRTUAL_CATEGORY_INBOX', 'inbox');
 
   /**
-   * НОЛЬ — начало отсчета.
-   */
-  define('ZERO_COUNT', 0);
-
-  /**
    * Максимально допустимая длина имени пользователя.
    */
   define('MAX_USERNAME_LENGTH', 64);

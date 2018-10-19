@@ -10,6 +10,11 @@
   define('THREE_DOTS_LENGTH', 3);
 
   /**
+   * НОЛЬ — начало отсчета.
+   */
+  define('ZERO_COUNT', 0);
+
+  /**
    * Сборка разметки View по переданному шаблону.
    *
    * 1. Проверка на существование и доступность шаблона view.
@@ -211,11 +216,9 @@
    * @return array — данные отфильтрованных задач
    */
   function filterCategoryTasks($selectedCategoryID, $tasks) {
-    $filteredTasks = array_filter($tasks, function($taskData) use ($selectedCategoryID) {
+    return array_filter($tasks, function($taskData) use ($selectedCategoryID) {
       return $taskData['category_id'] === $selectedCategoryID;
     });
-
-    return $filteredTasks;
   }
 
   /**
@@ -227,12 +230,10 @@
   function filterTodayTasks($tasks) {
     $today = date('d.m.Y', time());
 
-    $filteredTasks = array_filter($tasks, function($taskData) use ($today) {
+    return array_filter($tasks, function($taskData) use ($today) {
       return $taskData['deadline'] &&
               date('d.m.Y', strtotime($taskData['deadline'])) === $today;
     });
-
-    return $filteredTasks;
   }
 
   /**
@@ -244,12 +245,10 @@
   function filterTomorrowTasks($tasks) {
     $tomorrow = date('d.m.Y', strtotime('+1 day'));
 
-    $filteredTasks = array_filter($tasks, function($taskData) use ($tomorrow) {
+    return array_filter($tasks, function($taskData) use ($tomorrow) {
       return $taskData['deadline'] &&
               date('d.m.Y', strtotime($taskData['deadline'])) === $tomorrow;
     });
-
-    return $filteredTasks;
   }
 
   /**
@@ -261,10 +260,8 @@
   function filterExpiredTasks($tasks) {
     $yesterday = strtotime('-1 day');
 
-    $filteredTasks = array_filter($tasks, function($taskData) use ($yesterday) {
+    return array_filter($tasks, function($taskData) use ($yesterday) {
       return $taskData['deadline'] &&
               strtotime($taskData['deadline']) <= $yesterday;
     });
-
-    return $filteredTasks;
   }
