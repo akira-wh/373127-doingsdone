@@ -74,8 +74,8 @@
 
       default:
         $selectedCategoryID = (integer) $_GET['category_id'];
-        $allCategoriesID = array_column($categories, 'id');
-        $hasSelectedCategoryExist = in_array($selectedCategoryID, $allCategoriesID);
+        $userCategoriesID = array_column($categories, 'id');
+        $hasSelectedCategoryExist = in_array($selectedCategoryID, $userCategoriesID);
 
         if (!$hasSelectedCategoryExist) {
           http_response_code(404);
