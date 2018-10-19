@@ -48,12 +48,15 @@
     // Валидация поля 'Email' —  должно быть заполнено.
     if (!strlen($_POST['email'])) {
       $errors['email'] = FORM_ERROR_MESSAGE['valueMissing'];
-      // Контроль длины, чтобы не гонять запросы к СУБД ради чьего-то баловства :)
+      // Контроль максимальной длины, чтобы не гонять лишние запросы к СУБД
     } else if (strlen($_POST['email']) > MAX_EMAIL_LENGTH) {
       $errors['email'] = FORM_ERROR_MESSAGE['emailTooLong'];
       // Должен иметь валидный формат.
     } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
       $errors['email'] = FORM_ERROR_MESSAGE['incorrectEmailFormat'];
+      // Пользователь с указанным email должен существовать в системе.
+    } else if (!doesUserExist($databaseConnection, $_POST['email'])) {
+      $errors['email'] = FORM_ERROR_MESSAGE['userNotRegistred'];
     }
 
     // Валидация поля 'Пароль' —  должно быть заполнено.
@@ -61,25 +64,18 @@
       $errors['password'] = FORM_ERROR_MESSAGE['valueMissing'];
     }
 
-    // Получение данных сверяемого польвателя и сверка email.
+    // Получение данных сверяемого польвателя, сверка паролей.
     if (empty($errors)) {
       $comparedUserData = getUser($databaseConnection, $_POST['email']);
 
-      if (!$comparedUserData) {
-        $errors['email'] = FORM_ERROR_MESSAGE['emailNotRegistred'];
+      // Если аутентификация пройдена —
+      // запись данных пользователя в сессию и редирект на главную страницу.
+      if (password_verify($_POST['password'], $comparedUserData['password'])) {
+        $_SESSION['user'] = $comparedUserData;
+        header('Location: index.php');
+      } else {
+        $errors['password'] = FORM_ERROR_MESSAGE['incorrectPassword'];
       }
-    }
-
-    // Сверка паролей.
-    if (empty($errors) && !password_verify($_POST['password'], $comparedUserData['password'])) {
-      $errors['password'] = FORM_ERROR_MESSAGE['incorrectPassword'];
-    }
-
-    // Если аутентификация пройдена —
-    // запись данных пользователя в сессию и редирект на главную страницу.
-    if (empty($errors)) {
-      $_SESSION['user'] = $comparedUserData;
-      header('Location: index.php');
     }
   }
 

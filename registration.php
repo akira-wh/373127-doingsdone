@@ -56,8 +56,8 @@
     } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
       $errors['email'] = FORM_ERROR_MESSAGE['incorrectEmailFormat'];
       // Пользователь с указанным email не должен существовать в базе.
-    } else if (getUser($databaseConnection, $_POST['email'])) {
-      $errors['email'] = FORM_ERROR_MESSAGE['emailAlreadyRegistred'];
+    } else if (doesUserExist($databaseConnection, $_POST['email'])) {
+      $errors['email'] = FORM_ERROR_MESSAGE['userAlreadyRegistred'];
     }
 
     // Валидация поля 'Пароль' —  должно быть заполнено.

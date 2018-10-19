@@ -60,6 +60,7 @@
     }
 
     // Проверка категории на существование в БД.
+    // Категория не должна ранее существовать.
     if (empty($errors)) {
       foreach ($categories as $categoryData) {
         if ($_POST['name'] === $categoryData['name']) {

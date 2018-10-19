@@ -39,14 +39,11 @@
 
   // Изменение статуса задачи по клику на чекбоксе.
   if (isset($_GET['task_id']) && isset($_GET['check'])) {
-    $taskID = (integer) $_GET['task_id'];
-    $taskExecutionStatus = (integer) $_GET['check'];
+    $selectedTaskID = (integer) $_GET['task_id'];
+    $newExecutionStatus = (integer) $_GET['check'];
 
-    $isSelectedTaskExist = (boolean) getTask($databaseConnection, $userID, $taskID);
-    if ($isSelectedTaskExist) {
-      updateTaskStatus($databaseConnection, $userID, $taskID, $taskExecutionStatus);
-    } else {
-      header('Location: index.php');
+    if (doesTaskExist($databaseConnection, $userID, $selectedTaskID)) {
+      updateTaskStatus($databaseConnection, $userID, $selectedTaskID, $newExecutionStatus);
     }
   }
 
