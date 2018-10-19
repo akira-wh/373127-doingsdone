@@ -10,14 +10,14 @@
     <nav class="tasks-switch">
 
       <?php
-        $filterKeyToTitle = [
+        $filterToTitle = [
           'all' => 'Все задачи',
           'today' => 'Повестка дня',
           'tomorrow' => 'Завтра',
           'expired' => 'Просроченные'
         ];
 
-        foreach ($filterKeyToTitle as $filter => $title) {
+        foreach ($filterToTitle as $filter => $title) {
           $currentQueryParameters = [];
 
           if (isset($_GET['category_id'])) {
