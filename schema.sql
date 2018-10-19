@@ -41,6 +41,7 @@ CREATE TABLE tasks (
   is_complete          TINYINT(1)   NOT NULL DEFAULT 0, -- 1 || 0 (true || false)
 
   PRIMARY KEY (id),
+  FULLTEXT INDEX (name),
   INDEX (category_id),
   INDEX (creator_id),
   INDEX (deadline)
