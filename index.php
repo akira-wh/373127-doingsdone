@@ -29,14 +29,6 @@
   // Получение идентификатора пользователя.
   $userID = $_SESSION['user']['id'];
 
-  // Режим отображения задач (показывать выполненные или нет?).
-  // Запись и последующее обновление.
-  if (!isset($_GET['show_completed']) && !isset($_SESSION['show_completed_tasks'])) {
-    $_SESSION['show_completed_tasks'] = 0;
-  } else if (isset($_GET['show_completed'])) {
-    $_SESSION['show_completed_tasks'] = (integer) $_GET['show_completed'];
-  }
-
   // Изменение статуса задачи по клику на чекбоксе.
   if (isset($_GET['task_id']) && isset($_GET['check'])) {
     $selectedTaskID = (integer) $_GET['task_id'];
@@ -53,82 +45,50 @@
   plugVirtualInbox($categories, $tasks);
   plugStatistic($categories, $tasks);
 
-  // Проверка ключа 'category_id' в массиве $_GET.
-  //
-  // Если ничего не выбрано — отрисовка всех задач.
-  //
-  // Если выбран виртуальный раздел INBOX — отрисовка задач без категории.
-  //
-  // Если выбрана пользовательская категория — проверка существования категории.
-  // Если категория существует — отрисовка связанных задач. Иначе код 404.
-  //
-  $selectedCategoryID = null;
+  // Режим отображения задач (показывать выполненные или нет?).
+  // Запись и последующее обновление.
+  if (!isset($_GET['show_completed']) && !isset($_SESSION['show_completed_tasks'])) {
+    $_SESSION['show_completed_tasks'] = 0;
+  } else if (isset($_GET['show_completed'])) {
+    $_SESSION['show_completed_tasks'] = (integer) $_GET['show_completed'];
+  }
+
+  // Фильтрация списка задач с учетом выбранной категории (проекта).
+  // Если категория не выбрана — задачи не фильтруются.
   if (isset($_GET['category_id'])) {
-    switch ($_GET['category_id']) {
-      case VIRTUAL_CATEGORY_INBOX:
-        $selectedCategoryID = VIRTUAL_CATEGORY_INBOX;
-        break;
+    $userCategoriesID = array_column($categories, 'id');
+    $selectedCategoryID = ($_GET['category_id'] === VIRTUAL_CATEGORY_INBOX) ? VIRTUAL_CATEGORY_INBOX :
+                                                                              (integer) $_GET['category_id'];
 
-      default:
-        $selectedCategoryID = (integer) $_GET['category_id'];
-        $userCategoriesID = array_column($categories, 'id');
-        $hasSelectedCategoryExist = in_array($selectedCategoryID, $userCategoriesID);
-
-        if (!$hasSelectedCategoryExist) {
-          http_response_code(404);
-          $errorMessage = 'Выбранная категория не найдена.';
-          require_once('./error.php');
-          die();
-        }
-        break;
+    // Проверка существования выбранной категории у пользователя.
+    if (in_array($selectedCategoryID, $userCategoriesID)) {
+      $tasks = filterCategoryTasks($selectedCategoryID, $tasks);
+    } else {
+      http_response_code(404);
+      $errorMessage = 'Выбранная категория не найдена.';
+      require_once('./error.php');
+      die();
     }
   }
 
-  // Фильтрация списка задач с учетом пользовательского выбора.
-  // Запись фильтра и последующее обновление.
+  // Фильтрация списка задач с учетом доп.фильтра (задачи на завтра, просроченные, etc).
+  // Фильтр активен всегда, поэтому он сохраняется в $_SESSION.
   if (!isset($_GET['filter']) && !isset($_SESSION['tasks_filter'])) {
     $_SESSION['tasks_filter'] = 'all';
-  } else if (isset($_GET['filter'])) {
-    switch ($_GET['filter']) {
+  } else {
+    switch ($_GET['filter'] ?? $_SESSION['tasks_filter']) {
       case 'today':
         $_SESSION['tasks_filter'] = 'today';
-
-        $today = date('d.m.Y', time());
-        $tasks = array_filter($tasks, function($taskData) use ($today) {
-          if (!$taskData['deadline']) {
-            return false;
-          }
-
-          return date('d.m.Y', strtotime($taskData['deadline'])) === $today;
-        });
+        $tasks = filterTodayTasks($tasks);
         break;
-
       case 'tomorrow':
         $_SESSION['tasks_filter'] = 'tomorrow';
-
-        $tomorrow = date('d.m.Y', strtotime('+1 day'));
-        $tasks = array_filter($tasks, function($taskData) use ($tomorrow) {
-          if (!$taskData['deadline']) {
-            return false;
-          }
-
-          return date('d.m.Y', strtotime($taskData['deadline'])) === $tomorrow;
-        });
+        $tasks = filterTomorrowTasks($tasks);
         break;
-
       case 'expired':
         $_SESSION['tasks_filter'] = 'expired';
-
-        $yesterday = strtotime('-1 day');
-        $tasks = array_filter($tasks, function($taskData) use ($yesterday) {
-          if (!$taskData['deadline']) {
-            return false;
-          }
-
-          return strtotime($taskData['deadline']) <= $yesterday;
-        });
+        $tasks = filterExpiredTasks($tasks);
         break;
-
       default:
         $_SESSION['tasks_filter'] = 'all';
         break;
@@ -146,7 +106,6 @@
     ]),
 
     'pageContent' => fillView(VIEW['contentIndex'], [
-      'selectedCategoryID' => $selectedCategoryID,
       'tasks' => $tasks
     ]),
 

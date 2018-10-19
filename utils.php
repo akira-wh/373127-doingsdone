@@ -202,3 +202,69 @@
 
     return false;
   }
+
+  /**
+   * Подбор задач определенной категории.
+   *
+   * @param integer|string $selectedCategoryID — идентификатор выбранной категории
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterCategoryTasks($selectedCategoryID, $tasks) {
+    $filteredTasks = array_filter($tasks, function($taskData) use ($selectedCategoryID) {
+      return $taskData['category_id'] === $selectedCategoryID;
+    });
+
+    return $filteredTasks;
+  }
+
+  /**
+   * Подбор задач на сегодняшний день.
+   *
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterTodayTasks($tasks) {
+    $today = date('d.m.Y', time());
+
+    $filteredTasks = array_filter($tasks, function($taskData) use ($today) {
+      return $taskData['deadline'] &&
+              date('d.m.Y', strtotime($taskData['deadline'])) === $today;
+    });
+
+    return $filteredTasks;
+  }
+
+  /**
+   * Подбор задач на завтрашний день.
+   *
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterTomorrowTasks($tasks) {
+    $tomorrow = date('d.m.Y', strtotime('+1 day'));
+
+    $filteredTasks = array_filter($tasks, function($taskData) use ($tomorrow) {
+      return $taskData['deadline'] &&
+              date('d.m.Y', strtotime($taskData['deadline'])) === $tomorrow;
+    });
+
+    return $filteredTasks;
+  }
+
+  /**
+   * Подбор задач с истекшим дедлайном.
+   *
+   * @param array $tasks — данные всех задач
+   * @return array — данные отфильтрованных задач
+   */
+  function filterExpiredTasks($tasks) {
+    $yesterday = strtotime('-1 day');
+
+    $filteredTasks = array_filter($tasks, function($taskData) use ($yesterday) {
+      return $taskData['deadline'] &&
+              strtotime($taskData['deadline']) <= $yesterday;
+    });
+
+    return $filteredTasks;
+  }

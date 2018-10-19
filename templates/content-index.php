@@ -8,26 +8,31 @@
 
   <div class="tasks-controls">
     <nav class="tasks-switch">
-      <a class="tasks-switch__item
-                <?= $_SESSION['tasks_filter'] === 'all' ? 'tasks-switch__item--active' : ''; ?>"
-          href="index.php?filter=all">
-        Все задачи
-      </a>
-      <a class="tasks-switch__item
-                <?= $_SESSION['tasks_filter'] === 'today' ? 'tasks-switch__item--active' : ''; ?>"
-          href="index.php?filter=today">
-        Повестка дня
-      </a>
-      <a class="tasks-switch__item
-                <?= $_SESSION['tasks_filter'] === 'tomorrow' ? 'tasks-switch__item--active' : ''; ?>"
-          href="index.php?filter=tomorrow">
-        Завтра
-      </a>
-      <a class="tasks-switch__item
-                <?= $_SESSION['tasks_filter'] === 'expired' ? 'tasks-switch__item--active' : ''; ?>"
-          href="index.php?filter=expired">
-        Просроченные
-      </a>
+
+      <?php
+        $filterKeyToTitle = [
+          'all' => 'Все задачи',
+          'today' => 'Повестка дня',
+          'tomorrow' => 'Завтра',
+          'expired' => 'Просроченные'
+        ];
+
+        foreach ($filterKeyToTitle as $filter => $title) {
+          $currentQueryParameters = [];
+
+          if (isset($_GET['category_id'])) {
+            $currentQueryParameters['category_id'] = $_GET['category_id'];
+          }
+
+          $currentQueryParameters['filter'] = $filter;
+      ?>
+          <a class="tasks-switch__item
+                    <?= $_SESSION['tasks_filter'] === $filter ? 'tasks-switch__item--active' : ''; ?>"
+              href="index.php?<?= http_build_query($currentQueryParameters); ?>">
+            <?= $title; ?>
+          </a>
+        <?php } ?>
+
     </nav>
 
     <label class="checkbox">
@@ -41,8 +46,7 @@
 
     <?php
       foreach ($tasks as $taskData):
-        if ((!isset($selectedCategoryID) || $selectedCategoryID === $taskData['category_id']) &&
-            (!$taskData['is_complete'] || $_SESSION['show_completed_tasks'])):
+        if (!$taskData['is_complete'] || $_SESSION['show_completed_tasks']):
     ?>
           <tr class="tasks__item task
                     <?= shouldHighlightTask($taskData['deadline']) ? 'task--important' : ''; ?>
